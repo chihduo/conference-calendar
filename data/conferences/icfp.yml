@@ -1,0 +1,77 @@
+id: icfp
+name: ICFP
+areas: [PL]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/icfp.yml}
+  - {tier: 2, adapter: researchr, ref: icfp-2027, track: ICFP Papers}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: icfp-2027
+    timezone: AoE
+    milestones:
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: submission, date: 2027-02-25}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: rebuttal_start, date: 2027-04-19}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: rebuttal_end, date: 2027-04-22}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: notification, date: 2027-05-07}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: final_notification, date: 2027-06-11}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: camera_ready, date: 2027-07-01}
+    link: https://conf.researchr.org/home/icfp-2027
+    status: confirmed
+    needs_review: true
+  - year: 2026
+    id: icfp-2026
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2026-02-19
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icfp.yml
+      - {kind: notification, date: 2026-05-14, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=191072}
+    link: https://icfp26.sigplan.org/
+    place: Indianapolis, Indiana, USA
+    dates: August 24 - 29, 2026
+    start_date: 2026-08-24
+    end_date: 2026-08-29
+    status: past
+  - year: 2025
+    id: icfp-2025
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2025-02-27
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icfp.yml
+    link: https://icfp25.sigplan.org/
+    place: Singapore
+    dates: October 12-18, 2025
+    status: past
+  - year: 2024
+    id: icfp-2024
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2024-02-28, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=177544}
+      - {kind: notification, date: 2024-05-20, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=177544}
+    place: Milan, Italy
+    start_date: 2024-09-02
+    end_date: 2024-09-07
+    status: past
+  - year: 2023
+    id: icfp-2023
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2023-03-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170677}
+      - {kind: notification, date: 2023-05-18, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170677}
+      - {kind: camera_ready, date: 2023-07-20, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170677}
+    place: Seattle, WA
+    start_date: 2023-09-04
+    end_date: 2023-09-09
+    status: past
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 1037
+  checked_on: 2026-08-23
+full_name: International Conference on Functional Programming

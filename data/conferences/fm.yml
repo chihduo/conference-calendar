@@ -1,0 +1,72 @@
+id: fm
+name: FM
+areas: [FM]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/fm.yml}
+  - {tier: 2, adapter: researchr, ref: fm-2026, track: Research Track}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: fm-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-05-19 ~ 2027-05-21 (estimated)
+    start_date: 2027-05-19
+    end_date: 2027-05-21
+    milestones:
+      - {kind: abstract, date: 2026-11-24, confidence: estimated, derived_from: fm-2026/abstract}
+      - {kind: submission, date: 2026-12-01, confidence: estimated, derived_from: fm-2026/submission}
+      - {kind: notification, date: 2027-02-05, confidence: estimated, derived_from: fm-2026/notification}
+      - {kind: camera_ready, date: 2027-03-01, confidence: estimated, derived_from: fm-2026/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: fm-2026
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2025-11-25, time: '23:59:00', confidence: confirmed, source_url: https://conf.researchr.org/dates/fm-2026}
+      - {kind: submission, date: 2025-12-02, time: '23:59:00', confidence: confirmed, source_url: https://conf.researchr.org/dates/fm-2026}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/fm-2026, kind: notification, date: 2026-02-06}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/fm-2026, kind: camera_ready, date: 2026-03-02}
+    link: https://conf.researchr.org/home/fm-2026
+    place: Tokyo, Japan
+    dates: May 18-22, 2026
+    start_date: 2026-05-20
+    end_date: 2026-05-22
+    status: past
+  - year: 2024
+    id: fm-2024
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2024-04-05, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176354}
+      - kind: submission
+        date: 2024-04-15
+        time: '23:59:00'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/fm.yml
+      - {kind: notification, date: 2024-06-03, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176354}
+      - {kind: camera_ready, date: 2024-07-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176354}
+    link: https://www.fm24.polimi.it/
+    place: Milan, Italy
+    dates: September 09-13, 2024
+    start_date: 2024-09-09
+    end_date: 2024-09-13
+    status: past
+  - year: 2023
+    id: fm-2023
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2022-09-04, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=159325}
+      - {kind: submission, date: 2022-09-11, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=159325}
+      - {kind: notification, date: 2022-11-15, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=159325}
+    place: Lübeck, Germany
+    start_date: 2023-03-07
+    end_date: 2023-03-09
+    status: past
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 540
+  checked_on: 2026-08-23
+full_name: International Symposium on Formal Methods (was Formal Methods Europe FME)

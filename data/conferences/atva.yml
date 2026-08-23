@@ -1,0 +1,63 @@
+id: atva
+name: ATVA
+full_name: International Symposium on Automated Technology for Verification and Analysis
+areas: [FM]
+dblp: atva
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 1357
+  checked_on: 2026-08-24
+sources:
+  - {tier: 3, adapter: wikicfp}
+  - {tier: 2, adapter: researchr, ref: aplas-atva-2026}
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/atva.yml}
+editions:
+  - year: 2027
+    id: atva-2027
+    timezone: AoE
+    place: TBD
+    dates: Nov 30 - Dec 4, 2027 (estimated)
+    start_date: 2027-11-30
+    end_date: 2027-12-04
+    status: estimated
+    milestones:
+      - {kind: abstract, date: 2027-05-18, confidence: estimated, derived_from: atva-2026/abstract}
+      - {kind: submission, date: 2027-05-20, confidence: estimated, derived_from: atva-2026/submission}
+      - {kind: artifact_submission, date: 2027-08-05, confidence: estimated, derived_from: atva-2026/artifact_submission}
+      - {kind: notification, confidence: estimated, date: 2027-07-22, derived_from: atva-2026/notification}
+      - {kind: camera_ready, confidence: estimated, date: 2027-09-09, derived_from: atva-2026/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: atva-2026
+    link: https://conf.researchr.org/home/aplas-atva-2026
+    timezone: AoE
+    place: Hong Kong
+    dates: Dec 1-5, 2026
+    start_date: 2026-12-01
+    end_date: 2026-12-05
+    status: past
+    milestones:
+      - {kind: abstract, date: 2026-05-19, confidence: confirmed}
+      - {kind: submission, date: 2026-05-21, confidence: confirmed}
+      - {kind: tool_artifact_submission, date: 2026-05-28, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
+      - {kind: artifact_submission, date: 2026-08-06, confidence: confirmed, note: voluntary post-acceptance artifact for regular papers}
+      - {kind: rebuttal_start, date: 2026-07-02, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
+      - {kind: rebuttal_end, date: 2026-07-09, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
+      - {kind: early_rejection_notification, date: 2026-06-11, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
+      - {kind: notification, date: 2026-07-23, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
+      - {kind: camera_ready, date: 2026-09-10, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
+    note: Co-located with APLAS 2026.
+  - year: 2025
+    id: atva-2025
+    timezone: AoE
+    status: announced
+    milestones:
+      - kind: submission
+        date: 2025-04-25
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/atva.yml
+    link: https://conf.researchr.org/home/atva-2025
+    place: Bengaluru, India
+    dates: October 27-31, 2025

@@ -1,0 +1,87 @@
+id: issta
+name: ISSTA
+areas: [SE]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/issta.yml}
+  - {tier: 2, adapter: researchr, ref: issta-2027, track: Research Papers}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: issta-2027
+    timezone: AoE
+    milestones:
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: abstract, date: 2027-01-08}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: submission, date: 2027-01-11}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: rebuttal_start, date: 2027-03-25}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: early_rejection_notification, date: 2027-04-20}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: revision, date: 2027-05-20}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: final_notification, date: 2027-06-17}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: camera_ready, date: 2027-07-22}
+    link: https://conf.researchr.org/home/issta-2027
+    status: confirmed
+    needs_review: true
+  - year: 2026
+    id: issta-2026
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2026-01-29
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/issta.yml
+    link: https://conf.researchr.org/home/issta-2026
+    place: Oakland, California, United States
+    dates: October 3-9, 2026
+    status: past
+  - year: 2025
+    id: issta-2025
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2024-10-31
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/issta.yml
+      - {kind: notification, date: 2024-12-19, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180904}
+      - {kind: camera_ready, date: 2025-04-24, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180904}
+    link: https://conf.researchr.org/home/issta-2025
+    place: Trondheim, Norway
+    dates: June 25-28, 2025
+    start_date: 2025-06-25
+    end_date: 2025-06-28
+    status: past
+  - year: 2024
+    id: issta-2024
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2023-12-15
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/issta.yml
+      - {kind: notification, date: 2024-03-02, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=175414}
+    link: https://conf.researchr.org/home/issta-2024
+    place: Vienna, Austria
+    dates: September 16-20, 2024
+    start_date: 2024-09-16
+    end_date: 2024-09-20
+    status: past
+  - year: 2023
+    id: issta-2023
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2022-11-10
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/issta.yml
+    link: https://conf.researchr.org/home/issta-2023
+    place: Seattle, United States
+    dates: July 17-21, 2023
+    status: past
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 1412
+  checked_on: 2026-08-23
+full_name: International Symposium on Software Testing and Analysis

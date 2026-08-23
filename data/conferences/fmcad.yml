@@ -1,0 +1,60 @@
+id: fmcad
+name: FMCAD
+full_name: International Conference on Formal Methods in Computer-Aided Design
+areas: [FM]
+dblp: fmcad
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 2196
+  checked_on: 2026-08-24
+sources:
+  - {tier: 3, adapter: wikicfp}
+  - {tier: 1, adapter: ccfddl, ref: conference/CT/fmcad.yml}
+editions:
+  - year: 2027
+    id: fmcad-2027
+    timezone: AoE
+    place: TBD
+    dates: Sep 13-17, 2027 (estimated)
+    start_date: 2027-09-13
+    end_date: 2027-09-17
+    status: estimated
+    milestones:
+      - {kind: abstract, date: 2027-05-03, confidence: estimated, derived_from: fmcad-2026/abstract}
+      - {kind: submission, date: 2027-05-10, confidence: estimated, derived_from: fmcad-2026/submission}
+      - {kind: notification, confidence: estimated, date: 2027-06-27, derived_from: fmcad-2026/notification}
+      - {kind: camera_ready, confidence: estimated, date: 2027-07-16, derived_from: fmcad-2026/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: fmcad-2026
+    link: https://fmcad.org/FMCAD26/
+    timezone: AoE
+    place: Graz, Austria
+    dates: Sep 14-18, 2026
+    start_date: 2026-09-14
+    end_date: 2026-09-18
+    status: past
+    milestones:
+      - {kind: abstract, date: 2026-05-04, confidence: confirmed}
+      - {kind: submission, date: 2026-05-11, confidence: confirmed}
+      - {kind: notification, date: 2026-06-28, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=192804}
+      - {kind: camera_ready, date: 2026-07-17, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=192804}
+  - year: 2025
+    id: fmcad-2025
+    timezone: AoE
+    status: announced
+    milestones:
+      - kind: abstract
+        date: 2025-04-20
+        time: '23:59:00'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/fmcad.yml
+      - kind: submission
+        date: 2025-04-27
+        time: '23:59:00'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/fmcad.yml
+    link: https://fmcad.forsyte.at/FMCAD25/
+    place: Menlo Park, USA
+    dates: Oct. 6-10, 2025

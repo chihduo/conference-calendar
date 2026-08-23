@@ -1,0 +1,108 @@
+id: ijcai
+name: IJCAI
+areas: [AI]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/AI/ijcai.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: ijcai-2027
+    timezone: UTC-12
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-08-14 ~ 2027-08-20 (estimated)
+    start_date: 2027-08-14
+    end_date: 2027-08-20
+    milestones:
+      - {kind: abstract, date: 2027-01-11, confidence: estimated, derived_from: ijcai-2026/abstract}
+      - {kind: submission, date: 2027-01-18, confidence: estimated, derived_from: ijcai-2026/submission}
+      - {kind: notification, date: 2027-04-28, confidence: estimated, derived_from: ijcai-2026/notification}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: ijcai-2026
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2026-01-12
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
+      - kind: submission
+        date: 2026-01-19
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
+      - {kind: notification, date: 2026-04-29, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=190167}
+    link: https://2026.ijcai.org/
+    place: Bremen, Germany
+    dates: August 15-21, 2026
+    start_date: 2026-08-15
+    end_date: 2026-08-21
+    status: past
+  - year: 2025
+    id: ijcai-2025
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2025-01-16
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
+      - kind: submission
+        date: 2025-01-23
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
+    link: https://2025.ijcai.org/
+    place: Montreal, Canada
+    dates: August 16-22, 2025
+    start_date: 2025-08-16
+    end_date: 2025-08-22
+    status: past
+  - year: 2024
+    id: ijcai-2024
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2024-01-10
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
+      - kind: submission
+        date: 2024-01-17
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
+    link: https://ijcai24.org/
+    place: Jeju Island, South Korea.
+    dates: August 3-9, 2024
+    status: past
+  - year: 2023
+    id: ijcai-2023
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2023-01-11
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
+      - kind: submission
+        date: 2023-01-18
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
+      - {kind: notification, date: 2023-04-19, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170675}
+    link: https://ijcai-23.org
+    place: Cape Town, South Africa
+    dates: August 19-25, 2023
+    start_date: 2023-08-19
+    end_date: 2023-08-25
+    status: past
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 1313
+  checked_on: 2026-08-23
+full_name: International Joint Conference on Artificial Intelligence

@@ -1,0 +1,51 @@
+id: ifm
+name: IFM
+areas: [FM]
+sources:
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: ifm-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-11-17 ~ 2027-11-19 (estimated)
+    start_date: 2027-11-17
+    end_date: 2027-11-19
+    milestones:
+      - {kind: abstract, date: 2027-05-28, confidence: estimated, derived_from: ifm-2025/abstract}
+      - {kind: submission, date: 2027-06-04, confidence: estimated, derived_from: ifm-2025/submission}
+      - {kind: notification, date: 2027-08-06, confidence: estimated, derived_from: ifm-2025/notification}
+      - {kind: camera_ready, date: 2027-09-24, confidence: estimated, derived_from: ifm-2025/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2025
+    id: ifm-2025
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2025-05-30, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=187637}
+      - {kind: submission, date: 2025-06-06, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=187637}
+      - {kind: notification, date: 2025-08-08, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=187637}
+      - {kind: camera_ready, date: 2025-09-26, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=187637}
+    place: Paris, France
+    start_date: 2025-11-19
+    end_date: 2025-11-21
+    status: past
+  - year: 2023
+    id: ifm-2023
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2023-05-25, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172476}
+      - {kind: submission, date: 2023-06-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172476}
+      - {kind: notification, date: 2023-08-10, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172476}
+      - {kind: camera_ready, date: 2023-09-10, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172476}
+    place: Leiden, The Netherlands
+    start_date: 2023-11-13
+    end_date: 2023-11-15
+    status: past
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 842
+  checked_on: 2026-08-23
+full_name: Integrated Formal Methods

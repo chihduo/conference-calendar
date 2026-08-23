@@ -1,0 +1,44 @@
+id: icaps
+name: ICAPS
+areas: [AI]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/AI/icaps.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: icaps-2027
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2026-12-07, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201408}
+      - {kind: submission, date: 2026-12-13, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201408}
+      - {kind: notification, date: 2027-02-12, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201408}
+      - {kind: camera_ready, date: 2027-03-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201408}
+    place: Columbia, South Carolina, USA
+    start_date: 2027-06-27
+    end_date: 2027-07-02
+    status: announced
+    needs_review: true
+  - year: 2026
+    id: icaps-2026
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2025-12-02
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icaps.yml
+      - kind: submission
+        date: 2025-12-08
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icaps.yml
+    link: https://icaps26.icaps-conference.org/
+    place: Dublin, Ireland
+    dates: June 27 - July 2, 2026
+    status: past
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 919
+  checked_on: 2026-08-23
+full_name: International Conference on Automated Planning and Scheduling

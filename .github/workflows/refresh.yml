@@ -1,0 +1,50 @@
+name: Refresh deadlines
+
+on:
+  schedule:
+    - cron: '17 3 * * *'      # daily, 03:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: npm }
+      - run: npm ci
+
+      - name: Fetch every configured source
+        run: npm run refresh | tee refresh.log
+
+      # The guards already vetted each edition before it was written; this is the
+      # second line of defence. If it trips, nothing is committed and the run fails
+      # loudly rather than shipping a bad date.
+      - name: Validate what was written
+        run: npm run validate
+
+      - name: Commit changes
+        run: |
+          git config user.name  'deadline-bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/
+          if git diff --staged --quiet; then
+            echo 'No changes.'
+          else
+            git commit -m "chore(data): refresh deadlines $(date -u +%Y-%m-%d)
+
+          $(node -e "const q=require('./data/_review_queue.json');console.log(q.length?q.length+' item(s) need review':'No review items')")"
+            git push
+          fi
+
+      - name: Publish the run log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: refresh-log
+          path: |
+            refresh.log
+            data/_review_queue.json

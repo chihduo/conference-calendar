@@ -1,0 +1,21 @@
+{
+  "name": "conference-calendar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "2027 FM/PL/AI conference deadline calendar",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "build": "node scripts/build.mjs",
+    "ranks": "node scripts/adapters/icore.mjs",
+    "add": "node scripts/add.mjs",
+    "refresh": "node scripts/refresh.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "js-yaml": "^4.1.0",
+    "luxon": "^3.5.0",
+    "node-html-parser": "^9.0.1"
+  }
+}

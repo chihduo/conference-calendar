@@ -1,0 +1,64 @@
+id: kr
+name: KR
+full_name: International Conference on Principles of Knowledge Representation and Reasoning
+areas: [AI, LOGIC]
+dblp: kr
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 1239
+  checked_on: 2026-08-24
+sources:
+  - {tier: 3, adapter: wikicfp}
+  - {tier: 1, adapter: ccfddl, ref: conference/AI/kr.yml}
+editions:
+  - year: 2027
+    id: kr-2027
+    timezone: AoE
+    place: TBD
+    dates: Jul 19-22, 2027 (estimated)
+    start_date: 2027-07-19
+    end_date: 2027-07-22
+    status: estimated
+    milestones:
+      - {kind: abstract, date: 2027-02-07, confidence: estimated, derived_from: kr-2026/abstract}
+      - {kind: submission, date: 2027-02-12, confidence: estimated, derived_from: kr-2026/submission}
+      - {kind: notification, date: 2027-04-12, confidence: estimated, derived_from: kr-2026/notification}
+      - {kind: camera_ready, date: 2027-05-02, confidence: estimated, derived_from: kr-2026/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: kr-2026
+    link: https://kr.org/KR2026/
+    timezone: AoE
+    place: Lisbon, Portugal
+    dates: Jul 20-23, 2026
+    start_date: 2026-07-20
+    end_date: 2026-07-23
+    status: past
+    milestones:
+      - {kind: abstract, date: 2026-02-08, confidence: announced}
+      - {kind: submission, date: 2026-02-13, confidence: announced}
+      - {kind: notification, date: 2026-04-13, confidence: announced}
+      - {kind: camera_ready, date: 2026-05-03, confidence: announced}
+    note: Part of FLoC 2026.
+  - year: 2025
+    id: kr-2025
+    timezone: UTC-12
+    status: announced
+    milestones:
+      - kind: abstract
+        date: 2025-05-07
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/kr.yml
+      - kind: submission
+        date: 2025-05-12
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/kr.yml
+      - {kind: notification, date: 2025-07-10, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=186165}
+    link: https://kr.org/KR2025/
+    place: Melbourne, Australia
+    dates: November 11-17, 2025
+    start_date: 2025-11-11
+    end_date: 2025-11-17

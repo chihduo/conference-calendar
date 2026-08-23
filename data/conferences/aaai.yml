@@ -1,0 +1,71 @@
+id: aaai
+name: AAAI
+full_name: AAAI Conference on Artificial Intelligence
+areas: [AI]
+dblp: aaai
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 1629
+  checked_on: 2026-08-24
+sources:
+  - {tier: 3, adapter: wikicfp}
+  - {tier: 1, adapter: ccfddl, ref: conference/AI/aaai.yml}
+editions:
+  - year: 2027
+    id: aaai-2027
+    link: https://aaai.org/conference/aaai/aaai-27/
+    timezone: UTC-12
+    place: Montreal, Canada
+    dates: Feb 16-23, 2027
+    start_date: 2027-02-16
+    end_date: 2027-02-23
+    status: confirmed
+    milestones:
+      - {kind: abstract, date: 2026-07-21, confidence: confirmed}
+      - {kind: submission, date: 2026-07-28, confidence: confirmed}
+      - {kind: notification, date: 2026-11-30, confidence: confirmed, note: final accept/reject decisions}
+      - {kind: camera_ready, confidence: announced, date: 2026-12-14, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=200036}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: aaai-2026
+    timezone: UTC-12
+    status: announced
+    milestones:
+      - kind: abstract
+        date: 2025-07-25
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/aaai.yml
+      - kind: submission
+        date: 2025-08-01
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/aaai.yml
+      - {kind: notification, date: 2025-09-08, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=187755}
+      - {kind: camera_ready, date: 2025-11-13, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=187755}
+    link: https://aaai.org/conference/aaai/aaai-26/
+    place: Singapore EXPO
+    dates: January 20 - 27, 2026
+    start_date: 2026-01-20
+    end_date: 2026-01-27
+  - year: 2025
+    id: aaai-2025
+    timezone: UTC-12
+    status: announced
+    milestones:
+      - kind: abstract
+        date: 2024-08-07
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/aaai.yml
+      - kind: submission
+        date: 2024-08-15
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/aaai.yml
+    link: https://aaai.org/conference/aaai/aaai-25/
+    place: PHILADELPHIA, PENNSYLVANIA, USA
+    dates: February 25 - March 4, 2025
+    start_date: 2025-02-25
+    end_date: 2025-03-04

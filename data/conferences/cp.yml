@@ -1,0 +1,87 @@
+id: cp
+name: CP
+areas: [AI]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/cp.yml}
+  - {tier: 2, adapter: researchr, ref: cp-2026, track: CP 2026}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: cp-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-07-19 ~ 2027-07-22 (estimated)
+    start_date: 2027-07-19
+    end_date: 2027-07-22
+    milestones:
+      - {kind: abstract, date: 2027-03-01, confidence: estimated, derived_from: cp-2026/abstract}
+      - {kind: submission, date: 2027-03-29, confidence: estimated, derived_from: cp-2026/submission}
+      - {kind: notification, date: 2027-04-30, confidence: estimated, derived_from: cp-2026/notification}
+      - {kind: camera_ready, date: 2027-05-06, confidence: estimated, derived_from: cp-2026/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: cp-2026
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2026-03-02
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/cp.yml
+      - {kind: submission, date: 2026-03-30, time: '23:59:59', confidence: confirmed, source_url: https://conf.researchr.org/dates/cp-2026}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/cp-2026, kind: notification, date: 2026-05-01}
+      - {kind: camera_ready, date: 2026-05-07, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=192306}
+    link: https://conf.researchr.org/home/cp-2026
+    place: Lisbon
+    dates: July 20-23, 2026
+    start_date: 2026-07-20
+    end_date: 2026-07-23
+    status: past
+  - year: 2025
+    id: cp-2025
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2025-03-20
+        time: '22:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/cp.yml
+      - kind: submission
+        date: 2025-03-27
+        time: '22:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/cp.yml
+    link: https://cp2025.a4cp.org/
+    place: Glasgow, Scotland
+    dates: August 10-15, 2025
+    status: past
+  - year: 2024
+    id: cp-2024
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2024-04-18, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176738}
+      - {kind: submission, date: 2024-04-23, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176738}
+      - {kind: notification, date: 2024-06-20, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176738}
+    place: Girona
+    start_date: 2024-09-02
+    end_date: 2024-09-06
+    status: past
+  - year: 2023
+    id: cp-2023
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2023-04-27, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172631}
+      - {kind: submission, date: 2023-05-02, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172631}
+      - {kind: notification, date: 2023-07-03, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172631}
+    place: Toronto, Canada
+    start_date: 2023-08-27
+    end_date: 2023-08-31
+    status: past
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 1175
+  checked_on: 2026-08-23
+full_name: International Conference on Principles and Practice of Constraint Programming

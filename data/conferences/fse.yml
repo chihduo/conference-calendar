@@ -1,0 +1,79 @@
+id: fse
+name: FSE
+full_name: ACM International Conference on the Foundations of Software Engineering
+areas: [SE]
+dblp: sigsoft
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 52
+  checked_on: 2026-08-24
+  note: The acronym FSE is ambiguous in ICORE - id 1475 is Fast Software Encryption (rank B). This entry is pinned to id 52, ACM FoSE (was ESEC/FSE, renamed 2024).
+sources:
+  - {tier: 3, adapter: wikicfp}
+  - {tier: 2, adapter: researchr, ref: fse-2027}
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/fse.yml}
+editions:
+  - year: 2027
+    id: fse-2027
+    link: https://conf.researchr.org/home/fse-2027
+    timezone: AoE
+    place: Shenzhen, China
+    dates: Jul 12-16, 2027
+    start_date: 2027-07-12
+    end_date: 2027-07-16
+    status: confirmed
+    milestones:
+      - {kind: submission, date: 2026-10-02, confidence: confirmed}
+      - {kind: rebuttal_start, date: 2026-12-14, confidence: confirmed}
+      - {kind: rebuttal_end, date: 2026-12-18, confidence: confirmed}
+      - {kind: notification, date: 2027-01-22, confidence: confirmed, note: accept / reject / major revision}
+      - {kind: revision, date: 2027-03-05, confidence: confirmed, note: major revision resubmission}
+      - {kind: final_notification, date: 2027-03-31, confidence: confirmed}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+    provenance:
+      - {adapter: researchr, url: https://conf.researchr.org/track/fse-2027/fse-2027-papers, fetched_at: 2026-08-23T00:00:00Z}
+    note: Double-anonymous review with a major-revision round; there is no separate abstract deadline.
+  - year: 2026
+    id: fse-2026
+    timezone: AoE
+    status: announced
+    milestones:
+      - kind: abstract
+        date: 2025-09-04
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/fse.yml
+      - kind: submission
+        date: 2025-09-11
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/fse.yml
+      - {kind: notification, date: 2025-12-22, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=187793}
+    link: https://conf.researchr.org/home/fse-2026
+    place: Montréal, Canada
+    dates: July 6-10, 2026
+    start_date: 2026-07-06
+    end_date: 2026-07-10
+  - year: 2025
+    id: fse-2025
+    timezone: AoE
+    status: announced
+    milestones:
+      - kind: abstract
+        date: 2024-09-05
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/fse.yml
+      - kind: submission
+        date: 2024-09-12
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/fse.yml
+      - {kind: notification, date: 2025-01-14, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180796}
+    link: https://conf.researchr.org/home/fse-2025
+    place: Trondheim, Norway
+    dates: June 23-27, 2025
+    start_date: 2025-06-23
+    end_date: 2025-06-27

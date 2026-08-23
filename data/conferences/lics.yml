@@ -1,0 +1,77 @@
+id: lics
+name: LICS
+areas: [LOGIC]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/CT/lics.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: lics-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-07-19 ~ 2027-07-22 (estimated)
+    start_date: 2027-07-19
+    end_date: 2027-07-22
+    milestones:
+      - {kind: abstract, date: 2027-01-14, confidence: estimated, derived_from: lics-2026/abstract}
+      - {kind: submission, date: 2027-01-21, confidence: estimated, derived_from: lics-2026/submission}
+      - {kind: notification, date: 2027-04-15, confidence: estimated, derived_from: lics-2026/notification}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: lics-2026
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2026-01-15
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/lics.yml
+      - kind: submission
+        date: 2026-01-22
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/lics.yml
+      - {kind: notification, date: 2026-04-16, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=190587}
+    link: https://lics.siglog.org/lics26/
+    place: Lisbon, Portugal
+    dates: July 20-23, 2026
+    start_date: 2026-07-20
+    end_date: 2026-07-23
+    status: past
+  - year: 2024
+    id: lics-2024
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2024-01-21, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176355}
+      - {kind: submission, date: 2024-01-26, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176355}
+      - {kind: notification, date: 2024-04-15, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176355}
+    place: Tallinn, Estonia
+    start_date: 2024-07-08
+    end_date: 2024-07-12
+    status: past
+  - year: 2023
+    id: lics-2023
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2023-01-18, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=169879}
+      - kind: submission
+        date: 2023-01-23
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/lics.yml
+      - {kind: notification, date: 2023-04-05, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=169879}
+    link: https://lics.siglog.org/lics23/
+    place: Boston, Massachusetts, USA
+    dates: June 26-29, 2023
+    start_date: 2023-06-26
+    end_date: 2023-06-29
+    status: past
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 748
+  checked_on: 2026-08-23
+full_name: IEEE Symposium on Logic in Computer Science

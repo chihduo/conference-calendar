@@ -1,0 +1,74 @@
+id: aplas
+name: APLAS
+areas: [PL]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/aplas.yml}
+  - {tier: 2, adapter: researchr, ref: aplas-2026, track: APLAS Research Papers}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: aplas-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: TBD
+    milestones:
+      - {kind: submission, date: 2027-06-21, confidence: estimated, derived_from: aplas-2026/submission}
+      - {kind: rebuttal_start, date: 2027-07-21, confidence: estimated, derived_from: aplas-2026/rebuttal_start}
+      - {kind: rebuttal_end, date: 2027-07-23, confidence: estimated, derived_from: aplas-2026/rebuttal_end}
+      - {kind: notification, date: 2027-08-03, confidence: estimated, derived_from: aplas-2026/notification}
+      - {kind: camera_ready, date: 2027-09-03, confidence: estimated, derived_from: aplas-2026/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: aplas-2026
+    timezone: AoE
+    milestones:
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-2026, kind: submission, date: 2026-06-22}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-2026, kind: rebuttal_start, date: 2026-07-22}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-2026, kind: rebuttal_end, date: 2026-07-24}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-2026, kind: notification, date: 2026-08-04}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-2026, kind: camera_ready, date: 2026-09-04}
+    link: https://conf.researchr.org/home/aplas-2026
+    status: past
+  - year: 2025
+    id: aplas-2025
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2025-05-31
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/aplas.yml
+    link: https://conf.researchr.org/home/aplas-2025
+    place: Bengaluru, India
+    dates: October 27-30, 2025
+    status: past
+  - year: 2024
+    id: aplas-2024
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2024-05-24, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=179344}
+      - {kind: notification, date: 2024-08-02, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=179344}
+      - {kind: camera_ready, date: 2024-08-31, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=179344}
+    place: Kyoto, Japan
+    start_date: 2024-10-22
+    end_date: 2024-10-24
+    status: past
+  - year: 2023
+    id: aplas-2023
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2023-06-15, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172967}
+      - {kind: notification, date: 2023-08-14, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172967}
+      - {kind: camera_ready, date: 2023-09-06, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172967}
+    place: Taipei, Taiwan
+    start_date: 2023-11-26
+    end_date: 2023-11-29
+    status: past
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 171
+  checked_on: 2026-08-23
+full_name: ASIAN Symposium on Programming Languages and Systems

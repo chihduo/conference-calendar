@@ -1,0 +1,81 @@
+id: oopsla
+name: OOPSLA
+areas: [FM]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/oopsla.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: oopsla-2027
+    timezone: UTC-12
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: TBD
+    milestones:
+      - {kind: submission, date: 2026-10-09, confidence: estimated, derived_from: oopsla-2026/submission}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: oopsla-2026
+    timezone: UTC-12
+    milestones:
+      - kind: submission
+        date: 2025-10-10
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/oopsla.yml
+    link: https://conf.researchr.org/track/splash-2026/oopsla-2026
+    place: Oakland, California, United States
+    dates: October 3-9, 2026
+    status: past
+  - year: 2025
+    id: oopsla-2025
+    timezone: UTC-12
+    milestones:
+      - kind: submission
+        date: 2024-10-15
+        time: '07:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/oopsla.yml
+    link: https://2025.splashcon.org/track/OOPSLA
+    place: Singapore
+    dates: October 12-18, 2025
+    start_date: 2025-10-20
+    end_date: 2025-10-25
+    status: past
+  - year: 2024
+    id: oopsla-2024
+    timezone: UTC-4
+    milestones:
+      - kind: submission
+        date: 2023-10-21
+        time: '07:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/oopsla.yml
+    link: https://2024.splashcon.org/track/splash-2024-oopsla
+    place: Pasadena, California, United States
+    dates: October 20-25, 2024
+    start_date: 2024-01-01
+    end_date: 2024-01-01
+    status: past
+  - year: 2023
+    id: oopsla-2023
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2022-10-28
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/oopsla.yml
+    link: https://2023.splashcon.org/track/splash-2023-oopsla
+    place: Lisbon, Portugal
+    dates: October 22-27, 2023
+    status: past
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 18
+  checked_on: 2026-08-23
+full_name: ACM Conference on Object Oriented Programming Systems Languages and Applications

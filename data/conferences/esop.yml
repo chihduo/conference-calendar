@@ -1,0 +1,46 @@
+id: esop
+name: ESOP
+areas: [FM]
+sources:
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: esop-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-04-03 ~ 2027-04-08 (estimated)
+    start_date: 2027-04-03
+    end_date: 2027-04-08
+    milestones:
+      - {kind: submission, date: 2026-10-08, confidence: estimated, derived_from: esop-2024/submission}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2024
+    id: esop-2024
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2023-10-12, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=175920}
+    place: Luxembourg City, Luxembourg
+    start_date: 2024-04-06
+    end_date: 2024-04-11
+    status: past
+  - year: 2023
+    id: esop-2023
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2022-10-13, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=167721}
+      - {kind: notification, date: 2022-12-22, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=167721}
+      - {kind: camera_ready, date: 2023-01-26, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=167721}
+    place: Paris, France
+    start_date: 2023-04-22
+    end_date: 2023-04-27
+    status: past
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 514
+  checked_on: 2026-08-23
+full_name: European Symposium on Programming

@@ -1,0 +1,101 @@
+id: icml
+name: ICML
+areas: [AI]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/AI/icml.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: icml-2027
+    timezone: UTC+0
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-07-05 ~ 2027-07-11 (estimated)
+    start_date: 2027-07-05
+    end_date: 2027-07-11
+    milestones:
+      - {kind: abstract, date: 2027-01-23, confidence: estimated, derived_from: icml-2026/abstract}
+      - {kind: submission, date: 2027-01-28, confidence: estimated, derived_from: icml-2026/submission}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: icml-2026
+    timezone: UTC+0
+    milestones:
+      - kind: abstract
+        date: 2026-01-24
+        time: '11:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml
+      - kind: submission
+        date: 2026-01-29
+        time: '11:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml
+    link: https://icml.cc/Conferences/2026
+    place: Seoul, South Korea
+    dates: July 6-12, 2026
+    start_date: 2026-07-06
+    end_date: 2026-07-12
+    status: past
+  - year: 2025
+    id: icml-2025
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2025-01-23
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml
+      - kind: submission
+        date: 2025-01-30
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml
+    link: https://icml.cc/Conferences/2025
+    place: Vancouver Convention Center, Vancouver, Canada
+    dates: July 11-19, 2025
+    status: past
+  - year: 2024
+    id: icml-2024
+    timezone: UTC-12
+    milestones:
+      - kind: submission
+        date: 2024-02-01
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml
+      - {kind: notification, date: 2024-05-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176954}
+      - {kind: camera_ready, date: 2024-05-29, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=176954}
+    link: https://icml.cc/Conferences/2024
+    place: Vienna, Austria
+    dates: July 21-27, 2024
+    start_date: 2024-07-21
+    end_date: 2024-07-27
+    status: past
+  - year: 2023
+    id: icml-2023
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2023-01-09
+        time: '07:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml
+      - kind: submission
+        date: 2023-01-26
+        time: '07:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icml.yml
+    link: https://icml.cc/Conferences/2023
+    place: Hawaii Convention Center,Hawaii, USA
+    dates: July 23-29, 2023
+    status: past
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 1121
+  checked_on: 2026-08-23
+full_name: International Conference on Machine Learning

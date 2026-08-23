@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/conference-calendar/schema/conference.schema.json",
+  "title": "Conference",
+  "description": "One academic conference series and its editions. Deadline kinds are an OPEN vocabulary: any snake_case string is legal, so new milestone types can be added without touching code.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "areas", "editions"],
+  "properties": {
+    "id":        { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "name":      { "type": "string", "minLength": 1, "description": "Acronym as the community writes it, e.g. FMCAD" },
+    "full_name": { "type": "string" },
+    "areas": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "enum": ["FM", "PL", "AI", "SE", "LOGIC"] }
+    },
+    "dblp":   { "type": "string", "description": "Suffix in dblp.org/db/conf/<dblp>" },
+    "hidden": { "type": "boolean", "default": false, "description": "Keep the file but omit from the site" },
+    "note":   { "type": "string" },
+    "rank": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "value"],
+      "properties": {
+        "source":     { "type": "string", "description": "Ranking edition, e.g. ICORE2026. Ranks change between editions, so this is required." },
+        "value":      { "enum": ["A*", "A", "B", "C", "Australasian B", "Australasian C", "N", "unranked"] },
+        "icore_id":   { "type": "integer", "description": "Portal id. Authoritative key: acronyms collide (FSE is both Fast Software Encryption and ACM FoSE)." },
+        "checked_on": { "type": "string", "format": "date" },
+        "ambiguous":  { "type": "boolean", "description": "Acronym matched more than one ranked venue; a human must pick" },
+        "below_threshold": { "type": "boolean", "description": "Kept deliberately despite ranking below the user's cutoff" },
+        "note": { "type": "string" }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "description": "Which fetch tiers apply to this venue. Ordered by trust, highest last.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tier", "adapter"],
+        "properties": {
+          "tier":    { "type": "integer", "minimum": 0, "maximum": 4 },
+          "adapter": { "type": "string" },
+          "ref":     { "type": "string", "description": "Adapter-specific handle: path, researchr id, wikicfp event id, or URL" },
+          "track":   { "type": "string", "description": "Pin the researchr track when the scorer cannot pick one" },
+          "disabled":{ "type": "boolean" }
+        }
+      }
+    },
+    "editions": {
+      "type": "array", "minItems": 1,
+      "items": { "$ref": "#/definitions/edition" }
+    }
+  },
+  "definitions": {
+    "edition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["year", "id", "status", "milestones"],
+      "properties": {
+        "year":   { "type": "integer", "minimum": 1990, "maximum": 2100 },
+        "id":     { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*-[0-9]{4}$" },
+        "link":   { "type": "string", "format": "uri" },
+        "timezone": {
+          "type": "string",
+          "description": "Default zone for milestones in this edition. AoE (= UTC-12) is the academic norm.",
+          "pattern": "^(AoE|UTC([+-](0?[0-9]|1[0-2]))?|[A-Za-z]+/[A-Za-z_+-]+)$"
+        },
+        "place":  { "type": "string" },
+        "dates":  { "type": "string", "description": "Human-readable conference dates for display" },
+        "start_date": { "type": "string", "format": "date", "description": "Machine-readable; drives ICS and the deadline-after-conference guard" },
+        "end_date":   { "type": "string", "format": "date" },
+        "status": { "enum": ["estimated", "announced", "confirmed", "past"] },
+        "note": { "type": "string" },
+        "needs_review": { "type": "boolean" },
+        "milestones": { "type": "array", "items": { "$ref": "#/definitions/milestone" } },
+        "provenance": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["adapter", "fetched_at"],
+            "properties": {
+              "adapter":    { "type": "string" },
+              "url":        { "type": "string" },
+              "fetched_at": { "type": "string", "format": "date-time" },
+              "note":       { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "milestone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "confidence"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "description": "OPEN vocabulary - not an enum, so new deadline types need no code change. Common values: abstract, submission, rebuttal_start, rebuttal_end, notification, revision, final_notification, camera_ready, artifact_registration, artifact_submission, early_registration, registration, conference_start"
+        },
+        "date": { "type": "string", "format": "date" },
+        "time": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$", "default": "23:59:59" },
+        "tz":   { "type": "string", "description": "Overrides the edition timezone for this one milestone" },
+        "confidence": {
+          "enum": ["confirmed", "announced", "estimated", "unknown"],
+          "description": "confirmed = stated in the official CFP; announced = on an official page but marked tentative, or from a community source; estimated = derived from a prior edition; unknown = the field exists but no date is known yet"
+        },
+        "derived_from": { "type": "string", "description": "<edition-id>/<kind> this estimate was shifted from" },
+        "locked":       { "type": "boolean", "description": "Pin against automated overwrite" },
+        "needs_review": { "type": "boolean" },
+        "source_url":   { "type": "string" },
+        "note":         { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if":   { "properties": { "confidence": { "enum": ["confirmed", "announced", "estimated"] } }, "required": ["confidence"] },
+          "then": { "required": ["date"] }
+        },
+        {
+          "if":   { "properties": { "confidence": { "const": "estimated" } }, "required": ["confidence"] },
+          "then": { "required": ["derived_from"] }
+        },
+        {
+          "if":   { "properties": { "confidence": { "const": "unknown" } }, "required": ["confidence"] },
+          "then": { "not": { "required": ["date"] } }
+        }
+      ]
+    }
+  }
+}

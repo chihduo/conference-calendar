@@ -1,0 +1,68 @@
+id: sat
+name: SAT
+areas: [FM, SE]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/CT/sat.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: sat-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: TBD
+    milestones:
+      - {kind: abstract, date: 2027-03-01, confidence: estimated, derived_from: sat-2026/abstract}
+      - {kind: submission, date: 2027-03-09, confidence: estimated, derived_from: sat-2026/submission}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: sat-2026
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2026-03-02
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/sat.yml
+      - kind: submission
+        date: 2026-03-10
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/sat.yml
+    link: https://satisfiability.org/SAT26/
+    place: Lisbon, Portugal
+    dates: July 20 - July 23, 2026
+    status: past
+  - year: 2024
+    id: sat-2024
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2024-03-08, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=177898}
+      - {kind: submission, date: 2024-03-15, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=177898}
+      - {kind: notification, date: 2024-05-22, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=177898}
+      - {kind: camera_ready, date: 2024-07-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=177898}
+    place: Pune, India
+    start_date: 2024-08-21
+    end_date: 2024-08-24
+    status: past
+  - year: 2023
+    id: sat-2023
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2023-03-10, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=171789}
+      - {kind: submission, date: 2023-03-17, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=171789}
+      - {kind: notification, date: 2023-05-15, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=171789}
+      - {kind: camera_ready, date: 2023-06-04, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=171789}
+    place: Alghero, Italy
+    start_date: 2023-07-04
+    end_date: 2023-07-08
+    status: past
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 1250
+  checked_on: 2026-08-23
+full_name: International Conference on Theory and Applications of Satisfiability Testing

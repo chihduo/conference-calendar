@@ -1,0 +1,45 @@
+id: popl
+name: POPL
+full_name: ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages
+areas: [PL, FM]
+dblp: popl
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 82
+  checked_on: 2026-08-24
+sources:
+  - {tier: 3, adapter: wikicfp}
+  - {tier: 2, adapter: researchr, ref: POPL-2027}
+editions:
+  - year: 2027
+    id: popl-2027
+    link: https://popl27.sigplan.org/
+    timezone: AoE
+    place: Mexico City, Mexico
+    dates: Jan 10-16, 2027
+    start_date: 2027-01-10
+    end_date: 2027-01-16
+    status: confirmed
+    milestones:
+      - {kind: submission, date: 2026-07-09, confidence: confirmed}
+      - {kind: rebuttal_start, date: 2026-09-07, confidence: confirmed}
+      - {kind: rebuttal_end, date: 2026-09-10, confidence: confirmed}
+      - {kind: notification, date: 2026-10-05, confidence: confirmed}
+      - {kind: revision, date: 2026-10-26, confidence: confirmed}
+      - {kind: final_notification, date: 2026-11-09, confidence: confirmed}
+      - {kind: camera_ready, date: 2026-11-20, confidence: confirmed}
+      - {kind: registration, confidence: unknown}
+    provenance:
+      - {adapter: researchr, url: https://popl27.sigplan.org/dates, fetched_at: 2026-08-23T00:00:00Z}
+  - year: 2026
+    id: popl-2026
+    timezone: AoE
+    status: announced
+    milestones:
+      - {kind: submission, date: 2025-07-10, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=192912}
+      - {kind: notification, date: 2025-11-06, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=192912}
+      - {kind: camera_ready, date: 2025-12-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=192912}
+    place: Rennes, France
+    start_date: 2026-01-11
+    end_date: 2026-01-17

@@ -1,0 +1,55 @@
+id: stacs
+name: STACS
+areas: [FM]
+sources:
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: stacs-2027
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2026-10-11, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201264}
+      - {kind: notification, date: 2026-12-22, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201264}
+    place: Göttingen, Germany
+    start_date: 2027-03-08
+    end_date: 2027-03-12
+    status: announced
+    needs_review: true
+  - year: 2026
+    id: stacs-2026
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2025-09-25, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=189330}
+      - {kind: notification, date: 2025-12-12, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=189330}
+    place: Grenoble, France
+    start_date: 2026-03-09
+    end_date: 2026-03-13
+    status: past
+  - year: 2025
+    id: stacs-2025
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2024-09-26, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182376}
+      - {kind: notification, date: 2024-12-16, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182376}
+      - {kind: camera_ready, date: 2025-01-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182376}
+    place: Jena, Germany
+    start_date: 2025-03-04
+    end_date: 2025-03-07
+    status: past
+  - year: 2024
+    id: stacs-2024
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2023-09-28, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=175808}
+      - {kind: notification, date: 2023-12-13, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=175808}
+      - {kind: camera_ready, date: 2024-01-18, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=175808}
+    place: Clermont-Ferrand, France
+    start_date: 2024-03-12
+    end_date: 2024-03-14
+    status: past
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 1426
+  checked_on: 2026-08-23
+full_name: International Symposium on Theoretical Aspects of Computer Science

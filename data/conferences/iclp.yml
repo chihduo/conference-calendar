@@ -1,0 +1,63 @@
+id: iclp
+name: ICLP
+areas: [LOGIC]
+sources:
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: iclp-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-09-10 ~ 2027-09-17 (estimated)
+    start_date: 2027-09-10
+    end_date: 2027-09-17
+    milestones:
+      - {kind: abstract, date: 2027-04-11, confidence: estimated, derived_from: iclp-2025/abstract}
+      - {kind: submission, date: 2027-04-16, confidence: estimated, derived_from: iclp-2025/submission}
+      - {kind: notification, date: 2027-05-23, confidence: estimated, derived_from: iclp-2025/notification}
+      - {kind: camera_ready, date: 2027-07-25, confidence: estimated, derived_from: iclp-2025/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2025
+    id: iclp-2025
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2025-04-13, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=186057}
+      - {kind: submission, date: 2025-04-18, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=186057}
+      - {kind: notification, date: 2025-05-25, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=186057}
+      - {kind: camera_ready, date: 2025-07-27, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=186057}
+    place: Rende, Italy
+    start_date: 2025-09-12
+    end_date: 2025-09-19
+    status: past
+  - year: 2024
+    id: iclp-2024
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2024-05-06, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180022}
+      - {kind: submission, date: 2024-05-13, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180022}
+      - {kind: notification, date: 2024-06-19, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180022}
+      - {kind: camera_ready, date: 2024-08-05, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180022}
+    place: Dallas, TX, USA
+    start_date: 2024-10-11
+    end_date: 2024-10-17
+    status: past
+  - year: 2023
+    id: iclp-2023
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2023-01-30, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170235}
+      - {kind: submission, date: 2023-02-06, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170235}
+      - {kind: notification, date: 2023-02-28, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170235}
+      - {kind: camera_ready, date: 2023-05-26, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170235}
+    place: London, United Kingdom
+    start_date: 2023-07-09
+    end_date: 2023-07-15
+    status: past
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 1119
+  checked_on: 2026-08-23
+full_name: International Conference on Logic Programming

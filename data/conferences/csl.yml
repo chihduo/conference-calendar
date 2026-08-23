@@ -1,0 +1,40 @@
+id: csl
+name: CSL
+full_name: Annual Conference of the European Association for Computer Science Logic
+areas: [LOGIC, FM]
+dblp: csl
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 1995
+  checked_on: 2026-08-24
+sources:
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: csl-2027
+    link: https://csl2027.github.io/
+    timezone: AoE
+    place: Brighton, United Kingdom
+    dates: Jan 25-29, 2027
+    start_date: 2027-01-25
+    end_date: 2027-01-29
+    status: confirmed
+    milestones:
+      - {kind: submission, date: 2026-07-08, confidence: confirmed}
+      - {kind: notification, date: 2026-10-15, confidence: confirmed}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+    note: Proceedings in LIPIcs; contributed papers up to 15 pages excluding references.
+  - year: 2025
+    id: csl-2025
+    timezone: AoE
+    status: announced
+    milestones:
+      - {kind: abstract, date: 2024-07-18, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180153}
+      - {kind: submission, date: 2024-07-23, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180153}
+      - {kind: notification, date: 2024-10-27, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180153}
+      - {kind: camera_ready, date: 2024-11-24, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=180153}
+    place: Amsterdam
+    start_date: 2025-02-10
+    end_date: 2025-02-14

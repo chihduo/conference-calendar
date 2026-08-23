@@ -1,0 +1,38 @@
+id: ijcar
+name: IJCAR
+full_name: International Joint Conference on Automated Reasoning
+areas: [FM, AI, LOGIC]
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 1314
+  checked_on: 2026-08-23
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/CT/ijcar.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: ijcar-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: TBD
+    milestones:
+      - {kind: abstract, date: 2027-02-05, confidence: estimated, derived_from: ijcar-2026/abstract}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: ijcar-2026
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2026-02-06
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/ijcar.yml
+    link: https://www.floc26.org/ijcar
+    place: Lisbon, Portugal
+    dates: July 26-29, 2026
+    status: past

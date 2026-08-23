@@ -1,0 +1,58 @@
+id: pldi
+name: PLDI
+areas: [PL]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/pldi.yml}
+  - {tier: 2, adapter: researchr, ref: pldi-2027, track: PLDI Research Papers}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: pldi-2027
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2026-11-12, time: '23:59:59', confidence: confirmed, source_url: https://conf.researchr.org/dates/pldi-2027}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/pldi-2027, kind: rebuttal_start, date: 2027-02-16}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/pldi-2027, kind: rebuttal_end, date: 2027-02-18}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/pldi-2027, kind: notification, date: 2027-03-04}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/pldi-2027, kind: revision, date: 2027-03-23}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/pldi-2027, kind: final_notification, date: 2027-04-01}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/pldi-2027, kind: camera_ready, date: 2027-04-15}
+    link: https://conf.researchr.org/home/pldi-2027
+    place: Atlanta, Georgia, USA
+    dates: June 5-11, 2027
+    status: confirmed
+    needs_review: true
+  - year: 2026
+    id: pldi-2026
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2025-11-13
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/pldi.yml
+    link: https://pldi26.sigplan.org/
+    place: Boulder, Colorado, United States
+    dates: June 15-19, 2026
+    status: past
+  - year: 2025
+    id: pldi-2025
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2024-11-14
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/pldi.yml
+    link: https://pldi25.sigplan.org/
+    place: Seoul, South Korea
+    dates: June 16-20, 2025
+    start_date: 2025-06-16
+    end_date: 2025-06-20
+    status: past
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 84
+  checked_on: 2026-08-23
+full_name: ACM-SIGPLAN Conference on Programming Language Design and Implementation

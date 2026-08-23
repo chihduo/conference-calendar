@@ -1,0 +1,74 @@
+name: Add conference
+
+on:
+  issues:
+    types: [opened, labeled]
+  workflow_dispatch:
+    inputs:
+      acronym:
+        description: 'Conference acronym, e.g. CONCUR'
+        required: true
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  add:
+    # Only the repo owner can drive this. The acronym reaches a shell, and on a
+    # public repo anyone can open an issue.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.user.login == github.repository_owner &&
+       contains(github.event.issue.labels.*.name, 'add-conference'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: npm }
+      - run: npm ci
+
+      - name: Extract acronym
+        id: acro
+        env:
+          RAW: ${{ github.event.inputs.acronym || github.event.issue.title }}
+        run: |
+          # Whitelist, never sanitise-by-removal: anything unexpected fails the run.
+          CLEAN=$(printf '%s' "$RAW" | tr -d '\n' | grep -oE '^[A-Za-z][A-Za-z0-9+-]{1,15}$' || true)
+          if [ -z "$CLEAN" ]; then
+            echo "::error::'$RAW' is not a plausible conference acronym"
+            exit 1
+          fi
+          echo "acronym=$CLEAN" >> "$GITHUB_OUTPUT"
+
+      - name: Run the discovery cascade
+        run: npm run add -- '${{ steps.acro.outputs.acronym }}' | tee add.log
+
+      - run: npm run validate
+
+      - name: Commit
+        run: |
+          git config user.name  'deadline-bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/
+          git diff --staged --quiet || {
+            git commit -m "feat(data): add ${{ steps.acro.outputs.acronym }} via discovery cascade"
+            git push
+          }
+
+      - name: Report back on the issue
+        if: always() && github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const log = fs.existsSync('add.log') ? fs.readFileSync('add.log', 'utf8') : '(no output)';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'Discovery cascade result:\n\n```\n' + log.trim().slice(0, 60000) + '\n```',
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number, state: 'closed',
+            });

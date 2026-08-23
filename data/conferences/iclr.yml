@@ -1,0 +1,112 @@
+id: iclr
+name: ICLR
+areas: [FM]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/AI/iclr.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: iclr-2027
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2026-09-18
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+      - kind: submission
+        date: 2026-09-25
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+    link: https://iclr.cc/Conferences/2027
+    place: San Francisco, CA, USA
+    dates: April 26-30, 2027
+    status: announced
+    needs_review: true
+  - year: 2026
+    id: iclr-2026
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2025-09-19
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+      - kind: submission
+        date: 2025-09-24
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+    link: https://iclr.cc/Conferences/2026
+    place: TBA
+    dates: May 01-05, 2026
+    start_date: 2026-04-24
+    end_date: 2026-04-28
+    status: past
+  - year: 2025
+    id: iclr-2025
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2024-09-27
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+      - kind: submission
+        date: 2024-10-01
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+    link: https://iclr.cc/Conferences/2025
+    place: Singapore
+    dates: April 24-28, 2025
+    status: past
+  - year: 2024
+    id: iclr-2024
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2023-09-21
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+      - kind: submission
+        date: 2023-09-28
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+      - {kind: notification, date: 2024-01-15, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=175423}
+    link: https://iclr.cc/Conferences/2024
+    place: Vienna, Austria
+    dates: May 07-11, 2024
+    start_date: 2024-05-07
+    end_date: 2024-05-11
+    status: past
+  - year: 2023
+    id: iclr-2023
+    timezone: UTC-12
+    milestones:
+      - kind: abstract
+        date: 2022-09-21
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+      - kind: submission
+        date: 2022-09-28
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/iclr.yml
+      - {kind: notification, date: 2023-01-20, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=165954}
+    link: https://iclr.cc/Conferences/2023
+    place: Kigali, Rwanda
+    dates: May 01-05, 2023
+    start_date: 2023-05-01
+    end_date: 2023-05-05
+    status: past
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 2273
+  checked_on: 2026-08-23
+full_name: International Conference on Learning Representations

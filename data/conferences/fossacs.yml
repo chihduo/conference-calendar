@@ -1,0 +1,37 @@
+id: fossacs
+name: FOSSACS
+areas: [FM]
+sources:
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: fossacs-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-04-03 ~ 2027-04-08 (estimated)
+    start_date: 2027-04-03
+    end_date: 2027-04-08
+    milestones:
+      - {kind: submission, date: 2026-10-22, confidence: estimated, derived_from: fossacs-2024/submission}
+      - {kind: notification, date: 2026-12-17, confidence: estimated, derived_from: fossacs-2024/notification}
+      - {kind: camera_ready, date: 2027-01-19, confidence: estimated, derived_from: fossacs-2024/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2024
+    id: fossacs-2024
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2023-10-26, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=175903}
+      - {kind: notification, date: 2023-12-21, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=175903}
+      - {kind: camera_ready, date: 2024-01-23, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=175903}
+    place: Luxembourg City
+    start_date: 2024-04-06
+    end_date: 2024-04-11
+    status: past
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 547
+  checked_on: 2026-08-23
+full_name: Foundations of Software Science and Computational Structures

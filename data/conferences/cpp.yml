@@ -1,0 +1,39 @@
+id: cpp
+name: CPP
+areas: [FM]
+sources:
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: cpp-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-01-11 ~ 2027-01-12 (estimated)
+    start_date: 2027-01-11
+    end_date: 2027-01-12
+    milestones:
+      - {kind: abstract, date: 2026-09-09, confidence: estimated, derived_from: cpp-2023/abstract}
+      - {kind: submission, date: 2026-09-16, confidence: estimated, derived_from: cpp-2023/submission}
+      - {kind: notification, date: 2026-11-16, confidence: estimated, derived_from: cpp-2023/notification}
+      - {kind: camera_ready, date: 2026-12-07, confidence: estimated, derived_from: cpp-2023/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2023
+    id: cpp-2023
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2022-09-14, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=164272}
+      - {kind: submission, date: 2022-09-21, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=164272}
+      - {kind: notification, date: 2022-11-21, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=164272}
+      - {kind: camera_ready, date: 2022-12-12, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=164272}
+    place: Boston, Massachusetts, USA
+    start_date: 2023-01-16
+    end_date: 2023-01-17
+    status: past
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 2341
+  checked_on: 2026-08-23
+full_name: Certified Programs and Proofs

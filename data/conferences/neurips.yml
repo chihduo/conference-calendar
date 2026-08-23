@@ -1,0 +1,67 @@
+id: neurips
+name: NEURIPS
+areas: [FM]
+sources:
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: neurips-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-12-05 ~ 2027-12-11 (estimated)
+    start_date: 2027-12-05
+    end_date: 2027-12-11
+    milestones:
+      - {kind: submission, date: 2027-05-10, confidence: estimated, derived_from: neurips-2026/submission}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: neurips-2026
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2026-05-11, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=191967}
+    place: Sydney, Australia
+    start_date: 2026-12-06
+    end_date: 2026-12-12
+    status: past
+  - year: 2025
+    id: neurips-2025
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2025-05-11, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182647}
+      - {kind: submission, date: 2025-05-14, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182647}
+    place: San Diego
+    start_date: 2025-12-02
+    end_date: 2025-12-07
+    status: past
+  - year: 2024
+    id: neurips-2024
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2024-05-15, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=179437}
+      - {kind: submission, date: 2024-05-22, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=179437}
+      - {kind: notification, date: 2024-09-25, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=179437}
+    place: Vancouver, Canada
+    start_date: 2024-12-09
+    end_date: 2024-12-15
+    status: past
+  - year: 2023
+    id: neurips-2023
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2023-05-11, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172789}
+      - {kind: submission, date: 2023-05-17, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172789}
+      - {kind: notification, date: 2023-09-21, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172789}
+    place: New Orleans, LA
+    start_date: 2023-12-10
+    end_date: 2023-12-16
+    status: past
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 98
+  checked_on: 2026-08-23
+full_name: Advances in Neural Information Processing Systems (was NIPS)

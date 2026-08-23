@@ -1,0 +1,43 @@
+id: ciaa
+name: CIAA
+full_name: International Conference on Implementation and Application of Automata
+areas: [FM, LOGIC]
+dblp: ciaa
+rank:
+  source: ICORE2026
+  value: C
+  icore_id: 1062
+  checked_on: 2026-08-24
+  below_threshold: true
+note: >-
+  Ranked C in ICORE2026, below the B cutoff used for this calendar.
+  Kept deliberately because it was named explicitly; set hidden:true to drop it.
+sources:
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: ciaa-2027
+    timezone: AoE
+    place: TBD
+    dates: Sep 20-23, 2027 (estimated)
+    start_date: 2027-09-20
+    end_date: 2027-09-23
+    status: estimated
+    milestones:
+      - {kind: submission,   date: 2027-05-01, confidence: estimated, derived_from: ciaa-2025/submission}
+      - {kind: notification, date: 2027-06-18, confidence: estimated, derived_from: ciaa-2025/notification}
+      - {kind: camera_ready, date: 2027-06-28, confidence: estimated, derived_from: ciaa-2025/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2025
+    id: ciaa-2025
+    timezone: AoE
+    place: Palermo, Italy
+    dates: Sep 22-25, 2025
+    start_date: 2025-09-22
+    end_date: 2025-09-25
+    status: past
+    milestones:
+      - {kind: submission,   date: 2025-05-03, confidence: announced}
+      - {kind: notification, date: 2025-06-20, confidence: announced}
+      - {kind: camera_ready, date: 2025-06-30, confidence: announced}
+    note: Estimation base - no 2026 edition data was available at seed time.

@@ -1,0 +1,51 @@
+id: vmcai
+name: VMCAI
+full_name: International Conference on Verification, Model Checking, and Abstract Interpretation
+areas: [FM, PL]
+dblp: vmcai
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 1847
+  checked_on: 2026-08-24
+sources:
+  - {tier: 3, adapter: wikicfp}
+  - {tier: 2, adapter: researchr, ref: VMCAI-2027}
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/vmcai.yml}
+editions:
+  - year: 2027
+    id: vmcai-2027
+    link: https://conf.researchr.org/home/VMCAI-2027
+    timezone: AoE
+    place: Mexico City, Mexico
+    dates: Jan 11-12, 2027
+    start_date: 2027-01-11
+    end_date: 2027-01-12
+    status: confirmed
+    milestones:
+      - {kind: submission, date: 2026-09-16, confidence: confirmed}
+      - {kind: artifact_registration, date: 2026-09-18, confidence: confirmed}
+      - {kind: artifact_submission, date: 2026-09-23, confidence: confirmed}
+      - {kind: notification, date: 2026-11-06, confidence: confirmed, note: paper and artifact}
+      - {kind: camera_ready, date: 2026-11-20, confidence: confirmed}
+      - {kind: registration, confidence: unknown}
+    provenance:
+      - {adapter: researchr, url: https://conf.researchr.org/dates/VMCAI-2027, fetched_at: 2026-08-23T00:00:00Z}
+    note: Co-located with POPL 2027. At least one author must present in person.
+  - year: 2026
+    id: vmcai-2026
+    timezone: AoE
+    status: announced
+    milestones:
+      - kind: submission
+        date: 2025-09-15
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/vmcai.yml
+      - {kind: notification, date: 2025-11-06, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=189002}
+      - {kind: camera_ready, date: 2025-11-20, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=189002}
+    link: https://conf.researchr.org/home/VMCAI-2026
+    place: Rennes, France
+    dates: January 12-13, 2026
+    start_date: 2026-01-12
+    end_date: 2026-01-13

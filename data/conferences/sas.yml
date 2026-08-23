@@ -1,0 +1,66 @@
+id: sas
+name: SAS
+areas: [FM]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/sas.yml}
+  - {tier: 2, adapter: researchr, ref: sas-2026, track: SAS 2026}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: sas-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: TBD
+    milestones:
+      - {kind: submission, date: 2027-05-06, confidence: estimated, derived_from: sas-2026/submission}
+      - {kind: artifact_submission, date: 2027-05-07, confidence: estimated, derived_from: sas-2026/artifact_submission}
+      - {kind: rebuttal_start, date: 2027-06-15, confidence: estimated, derived_from: sas-2026/rebuttal_start}
+      - {kind: rebuttal_end, date: 2027-06-18, confidence: estimated, derived_from: sas-2026/rebuttal_end}
+      - {kind: notification, date: 2027-07-03, confidence: estimated, derived_from: sas-2026/notification}
+      - {kind: camera_ready, date: 2027-07-19, confidence: estimated, derived_from: sas-2026/camera_ready}
+      - {kind: registration, date: 2027-04-30, confidence: estimated, derived_from: sas-2026/registration}
+  - year: 2026
+    id: sas-2026
+    timezone: AoE
+    milestones:
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: submission, date: 2026-05-07}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: artifact_submission, date: 2026-05-08}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: rebuttal_start, date: 2026-06-16}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: rebuttal_end, date: 2026-06-19}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: notification, date: 2026-07-04}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: camera_ready, date: 2026-07-20}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: registration, date: 2026-05-01}
+    link: https://conf.researchr.org/home/sas-2026
+    status: past
+  - year: 2025
+    id: sas-2025
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2025-05-04
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/sas.yml
+    link: https://2025.splashcon.org/home/sas-2025
+    place: Singapore
+    dates: October 12-18, 2025
+    status: past
+  - year: 2023
+    id: sas-2023
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2023-04-24, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172531}
+      - {kind: notification, date: 2023-06-29, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172531}
+      - {kind: camera_ready, date: 2023-08-03, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=172531}
+    place: Cascais (Lisbon), Portugal
+    start_date: 2023-10-22
+    end_date: 2023-10-27
+    status: past
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 1763
+  checked_on: 2026-08-23
+full_name: Static Analysis Symposium

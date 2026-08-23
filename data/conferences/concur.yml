@@ -1,0 +1,95 @@
+id: concur
+name: CONCUR
+areas: [FM]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/CT/concur.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: concur-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-08-31 ~ 2027-09-03 (estimated)
+    start_date: 2027-08-31
+    end_date: 2027-09-03
+    milestones:
+      - {kind: abstract, date: 2027-04-19, confidence: estimated, derived_from: concur-2026/abstract}
+      - {kind: submission, date: 2027-04-26, confidence: estimated, derived_from: concur-2026/submission}
+      - {kind: notification, date: 2027-06-14, confidence: estimated, derived_from: concur-2026/notification}
+      - {kind: camera_ready, date: 2027-06-28, confidence: estimated, derived_from: concur-2026/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: concur-2026
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2026-04-20
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/concur.yml
+      - kind: submission
+        date: 2026-04-27
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/concur.yml
+      - {kind: notification, date: 2026-06-15, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=189766}
+      - {kind: camera_ready, date: 2026-06-29, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=189766}
+    link: https://confest-2026.github.io/concur/
+    place: Liverpool, United Kingdom
+    dates: Sep 1-4, 2026
+    start_date: 2026-09-01
+    end_date: 2026-09-04
+    status: past
+  - year: 2025
+    id: concur-2025
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2025-04-03
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/concur.yml
+      - kind: submission
+        date: 2025-04-09
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/concur.yml
+      - {kind: notification, date: 2025-05-27, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=184786}
+      - {kind: camera_ready, date: 2025-06-10, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=184786}
+    link: https://conferences.au.dk/confest2025/concur
+    place: Aarhus, Denmark
+    dates: Aug 26-29, 2025
+    start_date: 2025-08-26
+    end_date: 2025-08-29
+    status: past
+  - year: 2024
+    id: concur-2024
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2024-04-26, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=179117}
+      - {kind: notification, date: 2024-06-21, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=179117}
+      - {kind: camera_ready, date: 2024-07-12, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=179117}
+    place: Calgary, Canada
+    start_date: 2024-09-09
+    end_date: 2024-09-13
+    status: past
+  - year: 2023
+    id: concur-2023
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2023-04-24, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170487}
+      - {kind: submission, date: 2023-05-02, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170487}
+      - {kind: notification, date: 2023-06-28, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170487}
+      - {kind: camera_ready, date: 2023-07-12, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=170487}
+    place: Antwerp
+    start_date: 2023-09-18
+    end_date: 2023-09-23
+    status: past
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 973
+  checked_on: 2026-08-23
+full_name: International Conference on Concurrency Theory

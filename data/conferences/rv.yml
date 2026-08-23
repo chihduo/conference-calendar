@@ -1,0 +1,83 @@
+id: rv
+name: RV
+areas: [FM]
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/rv.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: rv-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: 2027-10-05 ~ 2027-10-08 (estimated)
+    start_date: 2027-10-05
+    end_date: 2027-10-08
+    milestones:
+      - {kind: submission, date: 2027-05-30, confidence: estimated, derived_from: rv-2026/submission}
+      - {kind: notification, date: 2027-07-31, confidence: estimated, derived_from: rv-2026/notification}
+      - {kind: camera_ready, date: 2027-08-11, confidence: estimated, derived_from: rv-2026/camera_ready}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: rv-2026
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2026-05-31
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/rv.yml
+      - {kind: notification, date: 2026-08-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=194380}
+      - {kind: camera_ready, date: 2026-08-12, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=194380}
+    link: https://rv2026.smithengineering.queensu.ca/
+    place: Kingston, Canada
+    dates: October 6-9, 2026
+    start_date: 2026-10-06
+    end_date: 2026-10-09
+    status: past
+  - year: 2025
+    id: rv-2025
+    timezone: AoE
+    milestones:
+      - kind: submission
+        date: 2025-05-30
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/rv.yml
+      - {kind: notification, date: 2025-07-11, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=185605}
+      - {kind: camera_ready, date: 2025-07-27, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=185605}
+    link: https://rv25.isec.tugraz.at/
+    place: Graz, Austria
+    dates: September 15-19, 2025
+    start_date: 2025-09-15
+    end_date: 2025-09-19
+    status: past
+  - year: 2024
+    id: rv-2024
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2024-05-14, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=178619}
+      - {kind: notification, date: 2024-06-25, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=178619}
+      - {kind: camera_ready, date: 2024-07-23, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=178619}
+    place: Istanbul, Turkey
+    start_date: 2024-10-15
+    end_date: 2024-10-18
+    status: past
+  - year: 2023
+    id: rv-2023
+    timezone: AoE
+    milestones:
+      - {kind: submission, date: 2023-06-04, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=171598}
+      - {kind: notification, date: 2023-07-07, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=171598}
+      - {kind: camera_ready, date: 2023-07-30, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=171598}
+    place: Thessaloniki
+    start_date: 2023-10-03
+    end_date: 2023-10-06
+    status: past
+rank:
+  source: ICORE2026
+  value: B
+  icore_id: 1932
+  checked_on: 2026-08-23
+full_name: International Conference on Runtime Verification (was workshop pre 2010)

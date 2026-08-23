@@ -1,0 +1,17 @@
+name: Add a conference
+description: Give an acronym; the discovery cascade fills in the rest.
+title: 'ACRONYM'
+labels: ['add-conference']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Put **only the acronym** in the title, e.g. `CONCUR`.
+        A workflow will look it up in ICORE, ccf-deadlines, conf.researchr.org
+        and WikiCFP, commit the result, and reply here with what it found.
+        Anything it could not resolve is reported rather than guessed.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes (optional)
+      placeholder: Official CFP URL, which track counts as the main one, etc.
