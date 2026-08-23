@@ -1,6 +1,6 @@
 id: lpar
 name: LPAR
-areas: [AI, LOGIC]
+areas: [FM, LOGIC, AI]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:

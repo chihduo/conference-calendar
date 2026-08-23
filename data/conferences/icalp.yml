@@ -1,6 +1,6 @@
 id: icalp
 name: ICALP
-areas: [FM]
+areas: [LOGIC, FM]
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/CT/icalp.yml}
   - {tier: 3, adapter: wikicfp}

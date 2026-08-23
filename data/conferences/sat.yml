@@ -1,6 +1,6 @@
 id: sat
 name: SAT
-areas: [FM, SE]
+areas: [FM, LOGIC]
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/CT/sat.yml}
   - {tier: 3, adapter: wikicfp}

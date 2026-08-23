@@ -1,6 +1,6 @@
 id: concur
 name: CONCUR
-areas: [FM]
+areas: [FM, LOGIC]
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/CT/concur.yml}
   - {tier: 3, adapter: wikicfp}

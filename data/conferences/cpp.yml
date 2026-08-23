@@ -1,6 +1,6 @@
 id: cpp
 name: CPP
-areas: [FM]
+areas: [FM, PL, LOGIC]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:

@@ -1,6 +1,6 @@
 id: fossacs
 name: FOSSACS
-areas: [FM]
+areas: [LOGIC, FM]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:

@@ -1,6 +1,6 @@
 id: cade
 name: CADE
-areas: [FM]
+areas: [FM, LOGIC, AI]
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/CT/cade.yml}
   - {tier: 3, adapter: wikicfp}

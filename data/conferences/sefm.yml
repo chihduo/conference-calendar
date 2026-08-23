@@ -1,6 +1,6 @@
 id: sefm
 name: SEFM
-areas: [FM, SE]
+areas: [SE, FM]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:

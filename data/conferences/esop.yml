@@ -1,6 +1,6 @@
 id: esop
 name: ESOP
-areas: [FM]
+areas: [PL, FM]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:

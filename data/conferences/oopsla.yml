@@ -1,6 +1,6 @@
 id: oopsla
 name: OOPSLA
-areas: [FM]
+areas: [PL]
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/SE/oopsla.yml}
   - {tier: 3, adapter: wikicfp}

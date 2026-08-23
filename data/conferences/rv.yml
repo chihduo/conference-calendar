@@ -1,6 +1,6 @@
 id: rv
 name: RV
-areas: [FM]
+areas: [FM, SE]
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/SE/rv.yml}
   - {tier: 3, adapter: wikicfp}

@@ -1,6 +1,6 @@
 id: sas
 name: SAS
-areas: [FM]
+areas: [PL, FM]
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/SE/sas.yml}
   - {tier: 2, adapter: researchr, ref: sas-2026, track: SAS 2026}

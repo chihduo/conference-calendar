@@ -1,7 +1,7 @@
 id: ijcar
 name: IJCAR
 full_name: International Joint Conference on Automated Reasoning
-areas: [FM, AI, LOGIC]
+areas: [FM, LOGIC, AI]
 rank:
   source: ICORE2026
   value: A

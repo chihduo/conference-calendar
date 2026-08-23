@@ -1,6 +1,6 @@
 id: iclp
 name: ICLP
-areas: [LOGIC]
+areas: [AI, LOGIC]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:

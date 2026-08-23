@@ -1,6 +1,6 @@
 id: iclr
 name: ICLR
-areas: [FM]
+areas: [AI]
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/AI/iclr.yml}
   - {tier: 3, adapter: wikicfp}

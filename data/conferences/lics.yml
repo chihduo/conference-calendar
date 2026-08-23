@@ -1,6 +1,6 @@
 id: lics
 name: LICS
-areas: [LOGIC]
+areas: [LOGIC, FM]
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/CT/lics.yml}
   - {tier: 3, adapter: wikicfp}

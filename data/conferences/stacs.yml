@@ -1,6 +1,6 @@
 id: stacs
 name: STACS
-areas: [FM]
+areas: [LOGIC]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:

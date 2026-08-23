@@ -1,6 +1,6 @@
 id: neurips
-name: NEURIPS
-areas: [FM]
+name: NeurIPS
+areas: [AI]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:

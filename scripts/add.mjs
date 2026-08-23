@@ -70,9 +70,13 @@ const AREA_HINT = [
   [/software engineering|testing|maintenance|requirements/i, 'SE'],
   [/logic|computation theory|semantics|deduction|automated reasoning|automata|concurrency/i, 'LOGIC'],
 ];
+/* A regex over conference titles is a guess, not knowledge. When nothing
+   matches, say so instead of silently defaulting - a wrong area tag quietly
+   corrupts the filters and the per-area ICS feeds. */
 const guessAreas = (title) => {
   const hits = AREA_HINT.filter(([re]) => re.test(title || '')).map(([, a]) => a);
-  return hits.length ? [...new Set(hits)] : ['FM'];
+  return hits.length ? { areas: [...new Set(hits)], guessed: false }
+                     : { areas: ['FM'], guessed: true };
 };
 
 async function discover(acronym) {
@@ -88,7 +92,10 @@ async function discover(acronym) {
       const pick = hits.length > 1 ? hits.sort((a, b) => (b.value === 'A*') - (a.value === 'A*'))[0] : hits[0];
       doc.rank = icore.rankBlock(pick, { ambiguous: hits.length > 1 });
       doc.full_name = pick.title;
-      doc.areas = guessAreas(pick.title);
+      doc.name = pick.acronym || doc.name;      // keep the community's casing, e.g. NeurIPS
+      const g = guessAreas(pick.title);
+      doc.areas = g.areas;
+      if (g.guessed) report.notes.push(`Could not infer the research area from "${pick.title}"; defaulted to FM - set areas by hand.`);
       report.layers.icore = `${pick.value} (id ${pick.icore_id})${hits.length > 1 ? ` - AMBIGUOUS, ${hits.length} matches` : ''}`;
       if (hits.length > 1) report.notes.push(`ICORE has ${hits.length} venues called ${acronym}: ${hits.map((h) => `${h.value} id=${h.icore_id} ${h.title}`).join(' | ')}. Pin the right icore_id by hand.`);
     }
