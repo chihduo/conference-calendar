@@ -16,30 +16,41 @@ editions:
     id: fmcad-2027
     timezone: AoE
     place: TBD
-    dates: Sep 13-17, 2027 (estimated)
-    start_date: 2027-09-13
+    dates: Sep 15-17, 2027 (estimated)
+    start_date: 2027-09-15
     end_date: 2027-09-17
     status: estimated
     milestones:
       - {kind: abstract, date: 2027-05-03, confidence: estimated, derived_from: fmcad-2026/abstract}
       - {kind: submission, date: 2027-05-10, confidence: estimated, derived_from: fmcad-2026/submission}
-      - {kind: notification, confidence: estimated, date: 2027-06-27, derived_from: fmcad-2026/notification}
-      - {kind: camera_ready, confidence: estimated, date: 2027-07-16, derived_from: fmcad-2026/camera_ready}
+      - {kind: notification, confidence: estimated, date: 2027-07-18, derived_from: fmcad-2026/notification}
+      - {kind: camera_ready, confidence: estimated, date: 2027-07-31, derived_from: fmcad-2026/camera_ready}
       - {kind: registration, confidence: unknown}
   - year: 2026
     id: fmcad-2026
     link: https://fmcad.org/FMCAD26/
     timezone: AoE
     place: Graz, Austria
-    dates: Sep 14-18, 2026
-    start_date: 2026-09-14
+    dates: Sep 16-18, 2026
+    start_date: 2026-09-16
     end_date: 2026-09-18
     status: past
     milestones:
-      - {kind: abstract, date: 2026-05-04, confidence: confirmed}
-      - {kind: submission, date: 2026-05-11, confidence: confirmed}
-      - {kind: notification, date: 2026-06-28, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=192804}
-      - {kind: camera_ready, date: 2026-07-17, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=192804}
+      - kind: abstract
+        date: 2026-05-04
+        confidence: confirmed
+        locked: true
+        source_url: https://fmcad.org/FMCAD26/important_dates/
+        note: extended from Apr 26
+      - kind: submission
+        date: 2026-05-11
+        confidence: confirmed
+        locked: true
+        source_url: https://fmcad.org/FMCAD26/important_dates/
+        note: extended from May 3
+      - {kind: notification, date: 2026-07-19, confidence: confirmed, locked: true, source_url: https://fmcad.org/FMCAD26/important_dates/}
+      - {kind: camera_ready, date: 2026-08-01, confidence: confirmed, locked: true, source_url: https://fmcad.org/FMCAD26/important_dates/}
+    note: Deadlines are 11:59pm AoE. The abstract and paper deadlines were extended by one week; ccf-deadlines and WikiCFP still carry the original dates.
   - year: 2025
     id: fmcad-2025
     timezone: AoE

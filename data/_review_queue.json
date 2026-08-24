@@ -36,24 +36,6 @@
     "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
-    "conference": "fmcad",
-    "edition": "fmcad-2026",
-    "kind": "abstract",
-    "reason": "conflict",
-    "severity": "action",
-    "detail": "hand-entered 2026-05-04 vs 2026-05-03 from ccfddl (1d) - confirm which is right",
-    "seen_at": "2026-08-24T02:54:39.973Z"
-  },
-  {
-    "conference": "fmcad",
-    "edition": "fmcad-2026",
-    "kind": "submission",
-    "reason": "conflict",
-    "severity": "action",
-    "detail": "hand-entered 2026-05-11 vs 2026-04-26 from ccfddl (15d) - confirm which is right",
-    "seen_at": "2026-08-24T02:54:39.973Z"
-  },
-  {
     "conference": "icaps",
     "edition": "icaps-2025",
     "kind": null,

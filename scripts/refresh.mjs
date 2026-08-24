@@ -5,6 +5,7 @@
    and `git revert` is the undo. --dry-run reports without touching disk. */
 import fs from 'node:fs';
 import path from 'node:path';
+import { DateTime } from 'luxon';
 import {
   CONF_DIR, loadYaml, saveConference, writeReviewQueue, readReviewQueue, severityOf,
   CONFIDENCE_RANK, TIER_CONFIDENCE_CEILING, editionIssues, daysBetween, shift364, byDateThenKind, auditEstimates,
@@ -118,6 +119,21 @@ function reestimate(doc, changes) {
     const anchor = ed.milestones.find((m) => m.derived_from)?.derived_from?.split('/')[0];
     const src = anchor ? doc.editions.find((e) => e.id === anchor) : null;
 
+    /* The conference dates are estimated from the same base as the milestones,
+       so they have to move with it too - otherwise correcting a base leaves the
+       estimated edition claiming a span nobody derived. */
+    if (src && ed.status === 'estimated' && src.start_date) {
+      const n = ed.year - src.year;
+      const want = { start_date: shift364(src.start_date, n),
+                     end_date: shift364(src.end_date || src.start_date, n) };
+      if (want.start_date && (ed.start_date !== want.start_date || ed.end_date !== want.end_date)) {
+        changes.push(`${ed.id}: re-estimated conference dates ${ed.start_date || '?'}~${ed.end_date || '?'} -> ${want.start_date}~${want.end_date}`);
+        Object.assign(ed, want);
+        const fmt = (d) => DateTime.fromISO(d, { zone: 'utc' }).toFormat('LLL d');
+        ed.dates = `${fmt(want.start_date)}-${DateTime.fromISO(want.end_date, { zone: 'utc' }).toFormat('d')}, ${ed.year} (estimated)`;
+      }
+    }
+
     for (const m of ed.milestones) {
       if (m.locked) continue;
 
@@ -131,7 +147,7 @@ function reestimate(doc, changes) {
           changes.push(`${ed.id}/${m.kind}: re-estimated ${m.date} -> ${want} (base ${srcId}/${srcKind} moved)`);
           m.date = want;
         }
-      } else if (m.confidence === 'unknown' && src) {
+      } else if (m.confidence === 'unknown' && src) {  // eslint-disable-line
         const base = src.milestones.find((x) => x.kind === m.kind && x.date);
         if (!base) continue;
         const want = shift364(base.date, ed.year - src.year);
