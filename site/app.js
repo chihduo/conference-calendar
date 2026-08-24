@@ -35,6 +35,21 @@ function submissionsByVenue() {
   return map;
 }
 
+/* The ONE milestone each tracked paper is next waiting on.
+   Marking every milestone the current status waits for reversed three rows at
+   once for a submitted TACAS paper (rebuttal opens, rebuttal ends,
+   notification), which is a set, not an answer to "where am I". pending() is
+   already relevant-and-future sorted soonest-first, so its head is the answer -
+   and using it guarantees the timeline marks exactly what tops 我的投稿. */
+function nextMilestoneFor(now) {
+  const out = new Map();                 // submission id -> milestone kind
+  for (const s of loadSubs()) {
+    const p = pending(s, now);
+    if (p.length) out.set(s.id, p[0].m.kind);
+  }
+  return out;
+}
+
 function passesFilter(c) {
   if (state.areas.size && !c.areas.some((a) => state.areas.has(a))) return false;
   if (state.ranks.size && !state.ranks.has(c.rank?.value)) return false;
@@ -111,6 +126,7 @@ function badges(c) {
 function renderDeadlines(root, now) {
   const subs = submissionsByVenue();
   if (!subs.size) state.onlyMine = false;   // the toggle is hidden with nothing tracked
+  const nextFor = nextMilestoneFor(now);
   const all = events()
     .filter((x) => passesFilter(x.c))
     .filter((x) => !state.onlyMine || subs.has(x.e.id));
@@ -172,13 +188,14 @@ function renderDeadlines(root, now) {
     if (m.note) { const nt = el('span', 'mkind', `· ${m.note}`); what.appendChild(nt); }
 
     for (const sub of mine) {
-      /* A milestone is "live" for this paper when its current status is waiting
-         on it - the same rule that drives the 我的投稿 view. */
-      const live = (RELEVANT[sub.status] || []).includes(baseKind(m.kind)) && !isPast;
+      const live = !isPast && nextFor.get(sub.id) === m.kind;
       const chip = el('span', 'mine-chip' + (live ? ' live' : ''));
       chip.textContent = `${live ? '▸ ' : ''}${sub.paper}`;
-      chip.title = `你的投稿・${statusLabel(sub.status)}` +
-        (live ? '\n這是你目前在等的日期。' : '');
+      chip.title = live
+        ? `${sub.paper}\n狀態：${statusLabel(sub.status)}\n` +
+          `→ 這是這篇論文的下一個關鍵日期（每篇只會反白一個）。`
+        : `${sub.paper}\n狀態：${statusLabel(sub.status)}\n` +
+          (isPast ? '這個日期已經過了。' : '這個日期還輪不到你，或不影響目前的狀態。');
       what.appendChild(chip);
     }
     row.appendChild(what);
