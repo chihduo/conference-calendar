@@ -28,7 +28,13 @@ export const KIND_META = {
   notification:          { order: 50, label: 'Notification', chain: true },
   revision:              { order: 60, label: 'Revision due', chain: true },
   final_notification:    { order: 70, label: 'Final notification', chain: true },
-  camera_ready:          { order: 80, label: 'Camera-ready', chain: true },
+  /* Deliberately off-chain. ICSE finalises directly-accepted papers a month
+     BEFORE it decides the major-revision ones, and rolling-cycle venues put a
+     camera-ready ahead of the next round's submission. "Camera-ready follows
+     final notification" is simply not an invariant. The real one - it follows
+     some acceptance decision - is checked separately below. */
+  camera_ready:          { order: 80, label: 'Camera-ready' },
+  camera_ready_after_revision: { order: 85, label: 'Camera-ready · 修訂後' },
   early_registration:    { order: 90, label: 'Early registration' },
   registration:          { order: 91, label: 'Registration' },
   conference_start:      { order: 99, label: 'Conference' },
@@ -264,6 +270,18 @@ export function editionIssues(conf, ed) {
       if (!src) out.push(`${m.kind}: derived_from points at unknown edition "${srcEd}"`);
       else if (!src.milestones.some((x) => x.kind === srcKind))
         out.push(`${m.kind}: derived_from points at missing milestone "${m.derived_from}"`);
+    }
+  }
+
+  /* The true camera-ready invariant: it cannot precede the first acceptance
+     decision of its edition, whichever branch it belongs to. */
+  const firstNotification = dated
+    .filter((m) => /^notification(_cycle\d+)?$/.test(m.kind))
+    .sort((a, b) => a._d - b._d)[0];
+  if (firstNotification) {
+    for (const m of dated.filter((x) => /^camera_ready/.test(x.kind))) {
+      if (m._d < firstNotification._d)
+        out.push(`${m.kind} (${m.date}) precedes the first notification (${firstNotification.date})`);
     }
   }
 

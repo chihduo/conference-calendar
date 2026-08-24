@@ -133,23 +133,5 @@
     "severity": "action",
     "detail": "derived from sefm-2023/submission, a 4-year shift - too far back to trust",
     "seen_at": "2026-08-24T02:54:39.973Z"
-  },
-  {
-    "conference": "icse",
-    "edition": "icse-2027",
-    "kind": "camera_ready",
-    "reason": "multiple-candidates",
-    "severity": "action",
-    "detail": "researchr offers 2 dates for \"camera_ready\" (2026-11-24 \"Camera-ready (of directly accepted papers)\"; 2027-01-25 \"Camera-ready (of accepted major revision papers)\") - not written",
-    "seen_at": "2026-08-24T02:57:40.473Z"
-  },
-  {
-    "conference": "icse",
-    "edition": "icse-2027",
-    "kind": null,
-    "reason": "guard",
-    "severity": "action",
-    "detail": "camera_ready (2026-11-24) precedes final_notification (2026-12-18)",
-    "seen_at": "2026-08-24T02:57:40.473Z"
   }
 ]

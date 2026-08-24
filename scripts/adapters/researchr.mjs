@@ -37,6 +37,10 @@ const RULES = [
   /* These must precede the generic revision rule: ICSE labels a row
      "Camera-ready (of accepted major revision papers)", which is a camera-ready
      that merely mentions revision, not a revision deadline. */
+  /* Two camera-readies on two branches: one for papers accepted outright, one
+     for papers that went through a major revision. Distinct deadlines, so
+     distinct kinds - collapsing them would silently drop one. */
+  [/camera.?ready.*revision|revision.*camera.?ready/i, 'camera_ready_after_revision'],
   [/camera.?ready|final version|final paper/i, 'camera_ready'],
   [/final (accept|notif|decision)/i,       'final_notification'],
   [/major revision|revision/i,             'revision'],

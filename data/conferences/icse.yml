@@ -16,6 +16,8 @@ editions:
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027, kind: notification, date: 2026-10-20}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027, kind: revision, date: 2026-11-17}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027, kind: camera_ready, date: 2026-11-24}
+      - {kind: final_notification, date: 2026-12-18, confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027}
+      - {kind: camera_ready_after_revision, date: 2027-01-25, confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027}
     link: https://conf.researchr.org/home/icse-2027
     place: Dublin, Ireland
     dates: April 25-May 01, 2027
