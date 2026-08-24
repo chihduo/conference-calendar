@@ -177,7 +177,19 @@ iframe 裡，沒有 `allow-modals` 時 `confirm()` 會被瀏覽器靜默忽略�
 並標上原因（`ZZQ  # no dates found by any source`）。留著的會在之後每晚重試，這是刻意的
 ——太新而還沒被任何來源收錄的會議，過一陣子就會開始抓得到。
 
-抓不到就明說抓不到，不會寫出半殘的檔案。
+抓不到就明說抓不到，不會寫出半殘的檔案——但**只說「抓不到」等於把人卡在原地**，所以每種
+無法自動解析的情況都會附上編號的「下一步」，指名要改哪個檔的哪個欄位：
+
+| 回報的情況 | 下一步 |
+|---|---|
+| ICORE 有同名的多筆（`FSE` 同時是 Fast Software Encryption 和 ACM FoSE） | 編 `rank.icore_id` 與 `rank.value`，移除 `rank.ambiguous` |
+| researchr 判不出主 track | 在該筆 `sources` 加 `track: "<主 track 名>"`，再跑 `npm run refresh <id>` |
+| WikiCFP 上同縮寫是別的會議（`CADE` 是 AI and the Digital Economy） | 改 `sources` 的 `ref` 指向正確縮寫，或改用 tier-4 官網 adapter |
+| 猜不出研究領域 | 設 `areas:`（FM / PL / AI / SE / LOGIC / SEC，可多選） |
+| 上游資料自相矛盾、某個值被丟掉 | 拿官方 CFP 對照，手填正確值並加 `locked: true` |
+| 所有來源都沒有日期 | 手寫一屆（格式見 `schema/conference.schema.json`），或寫 `scripts/adapters/custom/<id>.mjs` |
+
+從 issue 觸發時，這份清單會**放在回覆的最上面**，完整輸出收在 `<details>` 裡。
 
 ## 自動化
 

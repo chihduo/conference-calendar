@@ -63,10 +63,18 @@ jobs:
           script: |
             const fs = require('fs');
             const log = fs.existsSync('add.log') ? fs.readFileSync('add.log', 'utf8') : '(no output)';
+            // Lead with what the human has to do; the full trace goes underneath.
+            const steps = log.split('\n')
+              .filter((l) => /^\s+\d+\.\s/.test(l))
+              .map((l) => l.trim());
+            const head = steps.length
+              ? '**需要你處理 ' + steps.length + ' 件事：**\n' + steps.map((s) => '- ' + s).join('\n') + '\n\n'
+              : '**全部自動解析完成，不需要手動處理。**\n\n';
             await github.rest.issues.createComment({
               owner: context.repo.owner, repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'Discovery cascade result:\n\n```\n' + log.trim().slice(0, 60000) + '\n```',
+              body: head + '<details><summary>完整輸出</summary>\n\n```\n' +
+                    log.trim().slice(0, 60000) + '\n```\n</details>',
             });
             await github.rest.issues.update({
               owner: context.repo.owner, repo: context.repo.repo,

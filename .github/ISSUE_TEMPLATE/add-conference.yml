@@ -9,7 +9,10 @@ body:
         Put **only the acronym** in the title, e.g. `CONCUR`.
         A workflow will look it up in ICORE, ccf-deadlines, conf.researchr.org
         and WikiCFP, commit the result, and reply here with what it found.
-        Anything it could not resolve is reported rather than guessed.
+
+        Nothing is guessed. Anything it could not resolve comes back as a
+        numbered **下一步 / next steps** list naming the file and field to edit —
+        so a partial result is still something you can finish, not a dead end.
   - type: textarea
     id: notes
     attributes:

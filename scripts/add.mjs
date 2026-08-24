@@ -81,7 +81,10 @@ const guessAreas = (title) => {
 };
 
 async function discover(acronym) {
-  const report = { acronym, layers: {}, notes: [] };
+  const report = { acronym, layers: {}, notes: [], next: [] };
+  /* "Reported rather than guessed" is only useful if the report says what to do
+     about it. Every condition that needs a human names the file and the field. */
+  const act = (how) => { if (!report.next.includes(how)) report.next.push(how); };
   const doc = { id: acronym.toLowerCase(), name: acronym.toUpperCase(), areas: ['FM'], sources: [], editions: [] };
 
   /* Tier 0 - rank */
@@ -96,9 +99,15 @@ async function discover(acronym) {
       doc.name = pick.acronym || doc.name;      // keep the community's casing, e.g. NeurIPS
       const g = guessAreas(pick.title);
       doc.areas = g.areas;
-      if (g.guessed) report.notes.push(`Could not infer the research area from "${pick.title}"; defaulted to FM - set areas by hand.`);
+      if (g.guessed) {
+        report.notes.push(`Could not infer the research area from "${pick.title}"; defaulted to FM.`);
+        act(`設定領域：編 data/conferences/${doc.id}.yml 的 areas:，從 FM / PL / AI / SE / LOGIC / SEC 選（可多選）`);
+      }
       report.layers.icore = `${pick.value} (id ${pick.icore_id})${hits.length > 1 ? ` - AMBIGUOUS, ${hits.length} matches` : ''}`;
-      if (hits.length > 1) report.notes.push(`ICORE has ${hits.length} venues called ${acronym}: ${hits.map((h) => `${h.value} id=${h.icore_id} ${h.title}`).join(' | ')}. Pin the right icore_id by hand.`);
+      if (hits.length > 1) {
+        report.notes.push(`ICORE has ${hits.length} venues called ${acronym}: ${hits.map((h) => `${h.value} id=${h.icore_id} ${h.title}`).join(' | ')}`);
+        act(`挑對排名：編 data/conferences/${doc.id}.yml 的 rank.icore_id 與 rank.value，並移除 rank.ambiguous`);
+      }
     }
   } catch (e) { report.layers.icore = 'failed: ' + e.message; }
 
@@ -131,7 +140,10 @@ async function discover(acronym) {
       doc.sources.push({ tier: 2, adapter: 'researchr', ref: r.id, ...(r.ambiguous ? {} : { track: r.track }) });
       put(Number(/(\d{4})/.exec(r.id)[1]), { link: `https://conf.researchr.org/home/${r.id}` }, r.milestones);
       report.layers.researchr = `${r.id}, track "${r.track}"${r.ambiguous ? ' (AMBIGUOUS)' : ''}`;
-      if (r.ambiguous) report.notes.push(`researchr track could not be identified among: ${r.tracks.join(' / ')}. Pin one via sources[].track.`);
+      if (r.ambiguous) {
+        report.notes.push(`researchr track could not be identified among: ${r.tracks.join(' / ')}`);
+        act(`指定 track：在 data/conferences/${doc.id}.yml 的 researchr 那筆 sources 加 track: "<主 track 名>"，然後 npm run refresh ${doc.id}`);
+      }
     }
   } catch (e) { report.layers.researchr = 'failed: ' + e.message; }
 
@@ -145,6 +157,8 @@ async function discover(acronym) {
       + (rej.length ? `; ${rej.length} rejected as a different venue` : '');
     for (const r of rej)
       report.notes.push(`WikiCFP "${acronym} ${r.year}" is a different conference ("${r.title}", similarity ${r.similarity}) - discarded.`);
+    if (rej.length && !eds.length)
+      act(`WikiCFP 上的 ${acronym} 是別的會議。若這個會議在 WikiCFP 用另一個縮寫，把 sources 那筆改成 {tier: 3, adapter: wikicfp, ref: <正確縮寫>}；若根本不在上面，改寫 tier-4 官網 adapter`);
   } catch (e) { report.layers.wikicfp = 'failed: ' + e.message; }
 
   /* assemble */
@@ -169,10 +183,14 @@ async function discover(acronym) {
     report.dropped.push({ id: e.id, issues: r.issues });
     return false;
   });
-  for (const r of report.repaired)
+  for (const r of report.repaired) {
     report.notes.push(`Repaired ${r.id}: dropped ${r.removed.map((x) => x.what).join(', ')} (upstream data looks wrong)`);
-  for (const d of report.dropped)
+    act(`核對被丟掉的值：拿官方 CFP 對照 ${r.id}，正確的話手填並加 locked: true，自動抓取就不會再覆蓋`);
+  }
+  for (const d of report.dropped) {
     report.notes.push(`Dropped ${d.id}: ${d.issues.join('; ')}`);
+    act(`${d.id} 整屆被丟掉（上游資料自相矛盾）。需要它的話照 schema/conference.schema.json 手寫一屆`);
+  }
 
   /* Estimate the target year when nobody has published it yet. */
   if (!doc.editions.some((e) => e.year === TARGET_YEAR)) {
@@ -183,6 +201,7 @@ async function discover(acronym) {
       report.notes.push(`${TARGET_YEAR} not published yet - estimated from ${base.id} by +364d x ${TARGET_YEAR - base.year}.`);
     } else {
       report.notes.push(`No dated edition found anywhere; ${TARGET_YEAR} left as placeholders.`);
+      act(`沒有任何來源有日期。到官網找 CFP 手填一屆（格式見 schema/conference.schema.json 或任一現有檔案），或寫 scripts/adapters/custom/${doc.id}.mjs`);
       doc.editions.unshift({
         year: TARGET_YEAR, id: `${doc.id}-${TARGET_YEAR}`, timezone: 'AoE', place: 'TBD', dates: 'TBD',
         status: 'announced', needs_review: true,
@@ -242,6 +261,9 @@ for (const acro of queued) {
     // A half-formed file is worse than none: report why and write nothing.
     console.log(`   REJECTED   ${report.issues.length} guard issue(s):`);
     report.issues.forEach((i) => console.log(`      x ${i}`));
+    console.log('   ── 下一步 ──');
+    console.log(`   1. 上游資料互相矛盾，沒有寫出檔案。到官網確認正確日期後手寫 data/conferences/${doc.id}.yml`);
+    report.next.forEach((a, i) => console.log(`   ${i + 2}. ${a}`));
     dropPrior(doc.id);
     review.push({ conference: doc.id, edition: null, kind: null, reason: 'add-rejected',
                   severity: severityOf('add-rejected'), detail: report.issues.join('; '), seen_at: new Date().toISOString() });
@@ -249,9 +271,17 @@ for (const acro of queued) {
     failed++; continue;
   }
   if (!dated) {
-    console.log('   REJECTED   no dates found by any layer - add it by hand or give it a tier-4 adapter');
+    console.log('   REJECTED   no dates found by any layer - nothing was written');
+    if (report.next.length) {
+      console.log('   ── 下一步 ──');
+      report.next.forEach((a, i) => console.log(`   ${i + 1}. ${a}`));
+    }
     unresolved.set(acro, 'no dates found by any source');
     failed++; continue;
+  }
+  if (report.next.length) {
+    console.log('   ── 下一步 ──');
+    report.next.forEach((a, i) => console.log(`   ${i + 1}. ${a}`));
   }
   if (!DRY) saveConference({ ...doc, _file: `${doc.id}.yml` });
   dropPrior(doc.id);   // a successful add supersedes anything said about it before
