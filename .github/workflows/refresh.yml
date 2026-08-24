@@ -17,6 +17,11 @@ jobs:
         with: { node-version: '20', cache: npm }
       - run: npm ci
 
+      # Expand the wishlist first, so anything added tonight is also fetched
+      # tonight rather than waiting another day.
+      - name: Expand data/wishlist.txt
+        run: npm run add | tee add.log
+
       - name: Fetch every configured source
         run: npm run refresh | tee refresh.log
 
@@ -46,5 +51,6 @@ jobs:
         with:
           name: refresh-log
           path: |
+            add.log
             refresh.log
             data/_review_queue.json

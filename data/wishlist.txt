@@ -1,4 +1,5 @@
-# One acronym per line. `npm run add` (or the daily cron) expands each into
-# data/conferences/<id>.yml via the discovery cascade, then clears the line.
+# One acronym per line. The nightly job expands each into data/conferences/<id>.yml
+# via the discovery cascade and removes the line; anything it could not resolve
+# stays here annotated with why.
 #
 # Add a line here to add a conference. Everything below is a comment.

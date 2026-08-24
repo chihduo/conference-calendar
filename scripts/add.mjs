@@ -209,12 +209,18 @@ async function discover(acronym) {
 
 const names = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const wishlist = path.join(CONF_DIR, '..', 'wishlist.txt');
+const fromWishlist = !names.length;
 const queued = names.length ? names
   : fs.existsSync(wishlist)
     ? fs.readFileSync(wishlist, 'utf8').split('\n').map((l) => l.replace(/#.*/, '').trim()).filter(Boolean)
     : [];
 
 if (!queued.length) { console.log('Nothing to add. Pass acronyms, or list them in data/wishlist.txt.'); process.exit(0); }
+
+/* Lines that resolved are consumed; lines that did not stay, annotated with why,
+   so the file always reads as "still outstanding" rather than as a growing log.
+   A venue too new for any source can start resolving on a later night. */
+const unresolved = new Map();
 
 const review = readReviewQueue();
 const dropPrior = (id) => { for (let i = review.length - 1; i >= 0; i--) if (review[i].conference === id) review.splice(i, 1); };
@@ -239,10 +245,12 @@ for (const acro of queued) {
     dropPrior(doc.id);
     review.push({ conference: doc.id, edition: null, kind: null, reason: 'add-rejected',
                   severity: severityOf('add-rejected'), detail: report.issues.join('; '), seen_at: new Date().toISOString() });
+    unresolved.set(acro, `guard: ${report.issues[0]}`);
     failed++; continue;
   }
   if (!dated) {
     console.log('   REJECTED   no dates found by any layer - add it by hand or give it a tier-4 adapter');
+    unresolved.set(acro, 'no dates found by any source');
     failed++; continue;
   }
   if (!DRY) saveConference({ ...doc, _file: `${doc.id}.yml` });
@@ -253,4 +261,14 @@ for (const acro of queued) {
   added++;
 }
 if (!DRY) writeReviewQueue(review);
+
+if (fromWishlist && !DRY && fs.existsSync(wishlist)) {
+  const header = fs.readFileSync(wishlist, 'utf8')
+    .split('\n').filter((l) => /^\s*(#|$)/.test(l)).join('\n').replace(/\n+$/, '');
+  const body = [...unresolved].map(([a, why]) => `${a}  # ${why}`);
+  fs.writeFileSync(wishlist, [header, '', ...body].join('\n').replace(/\n{3,}/g, '\n\n') + '\n');
+  const done = queued.length - unresolved.size;
+  if (done) console.log(`\nwishlist: removed ${done} resolved line(s), ${unresolved.size} still outstanding.`);
+}
+
 console.log(`\n${added} added, ${skipped} skipped, ${failed} rejected.${DRY ? ' (dry run - nothing written)' : ''}`);

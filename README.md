@@ -164,12 +164,56 @@ iframe 裡，沒有 `allow-modals` 時 `confirm()` 會被瀏覽器靜默忽略�
 
 三種方式，共用同一支 `scripts/add.mjs`：
 
-1. 在 `data/wishlist.txt` 加一行縮寫（可直接在 GitHub 網頁上編輯），隔天 cron 展開
-2. Actions → Add conference → Run workflow，填縮寫
-3. 開一個標題就是縮寫、貼 `add-conference` 標籤的 issue；workflow 會跑完、commit、
-   並在 issue 回報抓到什麼 — 這是唯一能從手機完成的路徑
+| 方式 | 怎麼做 | 何時生效 |
+|---|---|---|
+| **wishlist** | 在 `data/wishlist.txt` 加一行縮寫（可直接在 GitHub 網頁上編輯，不必 clone） | 當晚的 cron |
+| **手動觸發** | Actions → Add conference → Run workflow，填縮寫 | 立即 |
+| **開 issue** | 標題就是縮寫、貼 `add-conference` 標籤 | 立即，並在 issue 回報結果 |
+
+第三條是**唯一能從手機完成**的路徑。它只接受 repo owner 開的 issue，而且縮寫會先過
+白名單正則才進 shell——公開 repo 上任何人都能開 issue。
+
+`wishlist.txt` 是**待辦清單而不是紀錄**：解析成功的行會被移除，沒解析出來的留在原地
+並標上原因（`ZZQ  # no dates found by any source`）。留著的會在之後每晚重試，這是刻意的
+——太新而還沒被任何來源收錄的會議，過一陣子就會開始抓得到。
 
 抓不到就明說抓不到，不會寫出半殘的檔案。
+
+## 自動化
+
+三支 workflow，跑在 `chihduo/conference-calendar`：
+
+| workflow | 觸發 | 做什麼 |
+|---|---|---|
+| `refresh.yml` | 每日 **03:17 UTC** + 手動 | 展開 wishlist → 抓所有來源 → 驗證 → 由 `deadline-bot` commit |
+| `deploy.yml` | push 到 main、refresh 完成、手動 | validate → build → `npm test` → 發佈到 Pages |
+| `add-conference.yml` | 貼 `add-conference` 標籤的 issue、手動 | 跑發現 cascade → commit → 在 issue 回報並關閉 |
+
+**deploy 是靠 `workflow_run` 接在 refresh 後面，不是靠 push 觸發。** GitHub 規定用
+`GITHUB_TOKEN` 推的 commit 不會觸發任何 workflow（防無限迴圈），所以 bot 的資料 commit
+雖然符合 `paths: ['data/**']` 卻不會重建網站——資料每晚前進、站台卻停在上次人工推送的
+版本。refresh 失敗時不部署，帶著沒過關的資料上線比不更新更糟。
+
+驗證擋在部署前面：`npm run validate`（schema + 護欄）和 `npm test`（兩套瀏覽器層測試）
+任一失敗就不發佈。
+
+### 從零重建時需要的 repo 設定
+
+這幾項不在程式碼裡，fork 或重建時要手動做一次：
+
+1. **Settings → Pages → Source = GitHub Actions**（不是 branch）。沒設的話 build 會成功、
+   deploy 會以 404 失敗，錯誤訊息會直接指到這裡
+2. **Settings → Actions → General → Workflow permissions = Read and write**。新 repo 預設
+   唯讀，`deadline-bot` 會推不動 commit
+3. **建立 `add-conference` 標籤**，否則第三條新增路徑不會被觸發
+
+用 CLI 一次做完：
+
+```bash
+gh api -X POST repos/OWNER/REPO/pages -f build_type=workflow
+gh api -X PUT repos/OWNER/REPO/actions/permissions/workflow -f default_workflow_permissions=write
+gh label create add-conference --description "Run the discovery cascade for the acronym in the title" --color 0E8A16
+```
 
 ## 排名
 
