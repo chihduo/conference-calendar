@@ -6,7 +6,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"CADE 2026\" is \"International Conference on AI and the Digital Economy\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "cade",
@@ -15,7 +15,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"CADE 2025\" is \"International Conference on AI and the Digital Economy (CADE) 2025\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "cade",
@@ -24,7 +24,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"CADE 2024\" is \"International Conference on AI and the Digital Economy (CADE)\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "cade",
@@ -33,7 +33,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"CADE 2022\" is \"Competitive Advantage in the Digital Economy (CADE) 2022\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "fmcad",
@@ -42,7 +42,7 @@
     "reason": "conflict",
     "severity": "action",
     "detail": "hand-entered 2026-05-04 vs 2026-05-03 from ccfddl (1d) - confirm which is right",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "fmcad",
@@ -51,7 +51,7 @@
     "reason": "conflict",
     "severity": "action",
     "detail": "hand-entered 2026-05-11 vs 2026-04-26 from ccfddl (15d) - confirm which is right",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "icaps",
@@ -60,7 +60,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "icaps",
@@ -69,7 +69,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "icfp",
@@ -78,7 +78,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"ICFP 2022\" is \"https://icfp22.sigplan.org/\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "iclr",
@@ -87,16 +87,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"ICLR 2025\" is \"Call for Workshops\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-23T18:47:53.779Z"
-  },
-  {
-    "conference": "icse",
-    "edition": "icse-2027",
-    "kind": "revision",
-    "reason": "multiple-candidates",
-    "severity": "action",
-    "detail": "researchr offers 3 dates for \"revision\" (2026-11-17 \"Revision due\"; 2026-12-18 \"Final decision (of major revision papers)\"; 2027-01-25 \"Camera-ready (of accepted major revision papers)\") - not written",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "ijcar",
@@ -105,7 +96,43 @@
     "reason": "guard",
     "severity": "action",
     "detail": "submission (2025-02-15) precedes abstract (2026-02-06)",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
+  },
+  {
+    "conference": "lpar",
+    "edition": "lpar-2027",
+    "kind": "abstract",
+    "reason": "stale-base",
+    "severity": "action",
+    "detail": "derived from lpar-2024/abstract, a 3-year shift - too far back to trust",
+    "seen_at": "2026-08-24T02:54:39.973Z"
+  },
+  {
+    "conference": "lpar",
+    "edition": "lpar-2027",
+    "kind": "submission",
+    "reason": "stale-base",
+    "severity": "action",
+    "detail": "derived from lpar-2024/submission, a 3-year shift - too far back to trust",
+    "seen_at": "2026-08-24T02:54:39.973Z"
+  },
+  {
+    "conference": "lpar",
+    "edition": "lpar-2027",
+    "kind": "notification",
+    "reason": "stale-base",
+    "severity": "action",
+    "detail": "derived from lpar-2024/notification, a 3-year shift - too far back to trust",
+    "seen_at": "2026-08-24T02:54:39.973Z"
+  },
+  {
+    "conference": "lpar",
+    "edition": "lpar-2027",
+    "kind": "camera_ready",
+    "reason": "stale-base",
+    "severity": "action",
+    "detail": "derived from lpar-2024/camera_ready, a 3-year shift - too far back to trust",
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
     "conference": "sas",
@@ -114,24 +141,33 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"SAS 2026\" is \"Animate Experience - The 37th Annual Conference of the Society for Animation Studies\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-23T18:47:53.779Z"
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
-    "conference": "csf",
-    "edition": null,
-    "kind": null,
-    "reason": "newly-added",
-    "severity": "info",
-    "detail": "Could not infer the research area from \"IEEE Computer Security Foundations Symposium (was CSFW)\"; defaulted to FM - set areas by hand.",
-    "seen_at": "2026-08-24T02:42:22.353Z"
+    "conference": "sefm",
+    "edition": "sefm-2027",
+    "kind": "submission",
+    "reason": "stale-base",
+    "severity": "action",
+    "detail": "derived from sefm-2023/submission, a 4-year shift - too far back to trust",
+    "seen_at": "2026-08-24T02:54:39.973Z"
   },
   {
-    "conference": "csf",
-    "edition": null,
+    "conference": "icse",
+    "edition": "icse-2027",
+    "kind": "camera_ready",
+    "reason": "multiple-candidates",
+    "severity": "action",
+    "detail": "researchr offers 2 dates for \"camera_ready\" (2026-11-24 \"Camera-ready (of directly accepted papers)\"; 2027-01-25 \"Camera-ready (of accepted major revision papers)\") - not written",
+    "seen_at": "2026-08-24T02:57:40.473Z"
+  },
+  {
+    "conference": "icse",
+    "edition": "icse-2027",
     "kind": null,
-    "reason": "newly-added",
-    "severity": "info",
-    "detail": "2027 not published yet - estimated from csf-2025 by +364d x 2.",
-    "seen_at": "2026-08-24T02:42:22.353Z"
+    "reason": "guard",
+    "severity": "action",
+    "detail": "camera_ready (2026-11-24) precedes final_notification (2026-12-18)",
+    "seen_at": "2026-08-24T02:57:40.473Z"
   }
 ]

@@ -108,8 +108,12 @@ function renderDeadlines(root, now) {
     what.appendChild(name);
     what.appendChild(el('span', 'mkind', m.label));
     if (m.confidence === 'estimated') {
-      const est = el('span', 'est-mark', '推估');
-      est.title = `由 ${m.derived_from} 推算（+364 天，保留星期幾）`;
+      /* An estimate far out is fine; one about to arrive unconfirmed is a risk,
+         so it says so rather than looking like any other date. */
+      const soonish = days <= 90;
+      const est = el('span', 'est-mark' + (soonish ? ' est-warn' : ''), soonish ? '推估・未確認' : '推估');
+      est.title = `由 ${m.derived_from} 推算（+364 天，保留星期幾）` +
+        (soonish ? '\n這個日期快到了但還沒經官方確認，投稿前請查 CFP。' : '');
       what.appendChild(est);
     }
     if (m.note) { const nt = el('span', 'mkind', `· ${m.note}`); what.appendChild(nt); }

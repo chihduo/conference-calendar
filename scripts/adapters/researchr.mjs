@@ -34,15 +34,27 @@ const RULES = [
   [/artifact/i,                            'artifact_submission'],
   [/abstract/i,                            'abstract'],
   [/author response|rebuttal|response period/i, 'rebuttal'],
-  [/major revision|revision/i,             'revision'],
-  [/final (accept|notif|decision)/i,       'final_notification'],
+  /* These must precede the generic revision rule: ICSE labels a row
+     "Camera-ready (of accepted major revision papers)", which is a camera-ready
+     that merely mentions revision, not a revision deadline. */
   [/camera.?ready|final version|final paper/i, 'camera_ready'],
+  [/final (accept|notif|decision)/i,       'final_notification'],
+  [/major revision|revision/i,             'revision'],
   [/early.*regist/i,                       'early_registration'],
   [/regist/i,                              'registration'],
   [/notification|acceptance|decision/i,    'notification'],
   [/paper submission|submission deadline|full paper|paper deadline|submission/i, 'submission'],
 ];
 export const labelToKind = (label) => RULES.find(([re]) => re.test(label))?.[1] ?? null;
+
+/* Multi-round venues label the round in the same cell: "Submission (Round 2)".
+   Split it off so the kind matches normally and carries a _cycleN suffix. */
+const ROUND_RE = /[\s(\[]*\b(?:round|cycle|deadline)\s*#?\s*(\d+)(?:\s*\/\s*\d+)?[)\]]*/i;
+export function splitRound(label) {
+  const m = ROUND_RE.exec(label);
+  if (!m) return { label, cycle: 0 };
+  return { label: label.replace(ROUND_RE, ' ').replace(/\s{2,}/g, ' ').trim(), cycle: Number(m[1]) };
+}
 
 /* Track disambiguation is the whole ballgame here: ICSE 2027 lists 40 tracks,
    POPL's page carries its co-located conferences and workshops, and picking the
@@ -101,16 +113,34 @@ export async function fetchDates(id, { name, year, track } = {}) {
   const src = `https://conf.researchr.org/dates/${id}`;
   const out = [];
   for (const r of rows.filter((r) => r.track === chosen)) {
-    const kind = labelToKind(r.what);
+    const { label, cycle } = splitRound(r.what);
+    const kind = labelToKind(label);
     const when = parseWhen(r.when);
     if (!kind || !when) continue;
-    const base = { confidence: 'confirmed', source_url: src, adapter: 'researchr', note: r.what };
+    const suffix = cycle ? `_cycle${cycle}` : '';
+    const base = { confidence: 'confirmed', source_url: src, adapter: 'researchr', note: r.what, cycle };
     if (kind === 'rebuttal') {
-      out.push({ ...base, kind: 'rebuttal_start', date: when.from });
-      if (when.to) out.push({ ...base, kind: 'rebuttal_end', date: when.to });
+      out.push({ ...base, kind: `rebuttal_start${suffix}`, date: when.from });
+      if (when.to) out.push({ ...base, kind: `rebuttal_end${suffix}`, date: when.to });
     } else {
-      out.push({ ...base, kind, date: when.to || when.from });
+      out.push({ ...base, kind: `${kind}${suffix}`, date: when.to || when.from });
     }
   }
+
+  /* A round that notifies twice is notifying once about the paper and once
+     about the revision; the later one is the final decision, not a duplicate. */
+  const byCycle = new Map();
+  for (const m of out) {
+    const c = m.cycle || 0;
+    if (!/^notification(_cycle\d+)?$/.test(m.kind)) continue;
+    (byCycle.get(c) || byCycle.set(c, []).get(c)).push(m);
+  }
+  for (const [c, list] of byCycle) {
+    if (list.length < 2) continue;
+    list.sort((a, b) => a.date.localeCompare(b.date));
+    for (const m of list.slice(1)) m.kind = `final_notification${c ? `_cycle${c}` : ''}`;
+  }
+  for (const m of out) delete m.cycle;
+
   return { milestones: out, track: chosen, tracks, ambiguous };
 }

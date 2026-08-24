@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {
   CONF_DIR, loadYaml, saveConference, writeReviewQueue, readReviewQueue, severityOf,
-  CONFIDENCE_RANK, TIER_CONFIDENCE_CEILING, editionIssues, daysBetween, shift364, byDateThenKind,
+  CONFIDENCE_RANK, TIER_CONFIDENCE_CEILING, editionIssues, daysBetween, shift364, byDateThenKind, auditEstimates,
 } from './lib.mjs';
 import * as ccfddl from './adapters/ccfddl.mjs';
 import * as researchr from './adapters/researchr.mjs';
@@ -215,6 +215,18 @@ async function refreshOne(file) {
       else ed.milestones.push(next);
       changes.push(`${ed.id}/${kind}: ${why}`);
     }
+    /* Once a venue turns out to run rounds, the flat estimate it used to carry
+       is superseded - keeping both would show two "submission" dates. */
+    const cycleBases = new Set(ed.milestones
+      .filter((m) => /_cycle\d+$/.test(m.kind) && m.date)
+      .map((m) => m.kind.replace(/_cycle\d+$/, '')));
+    const orphans = ed.milestones.filter(
+      (m) => !/_cycle\d+$/.test(m.kind) && cycleBases.has(m.kind) &&
+             (m.confidence === 'estimated' || m.confidence === 'unknown'));
+    if (orphans.length) {
+      ed.milestones = ed.milestones.filter((m) => !orphans.includes(m));
+      changes.push(`${ed.id}: dropped ${orphans.length} estimate(s) superseded by per-round dates (${orphans.map((m) => m.kind).join(', ')})`);
+    }
     ed.milestones.sort(byDateThenKind);
     for (const m of ed.milestones) if (m.derived_from === undefined) delete m.derived_from;
 
@@ -231,6 +243,8 @@ async function refreshOne(file) {
   }
 
   reestimate(doc, changes);
+  // escalate estimates that are running out of time without ever being confirmed
+  for (const a of auditEstimates(doc)) flag(doc.id, a.edition, a.kind, a.reason, a.detail);
   const empty = doc.editions.filter((e) => !e.milestones?.length && !e.start_date);
   if (empty.length) {
     doc.editions = doc.editions.filter((e) => !empty.includes(e));
@@ -258,11 +272,12 @@ for (const f of files) {
     r.changes.forEach((c) => console.log('   · ' + c));
   }
 }
-/* Refresh owns its own findings and rebuilds them wholesale, but must not
-   discard the notes add.mjs left behind for venues it did not touch. */
+/* Refresh rebuilds findings for the conferences it actually examined and leaves
+   every other conference's findings alone. Filtering by reason instead would
+   make `npm run refresh cav` silently erase what we know about the other 43. */
 if (!DRY) {
-  const touchedIds = new Set(files.map((f) => f.replace(/\.ya?ml$/, '')));
-  const kept = readReviewQueue().filter((r) => r.reason === 'newly-added' && !touchedIds.has(r.conference));
+  const examined = new Set(files.map((f) => f.replace(/\.ya?ml$/, '')));
+  const kept = readReviewQueue().filter((r) => !examined.has(r.conference));
   writeReviewQueue([...kept, ...review]);
 }
 console.log(`\n${touched} file(s) with changes, ${review.filter((r) => r.severity === 'action').length} item(s) needing a decision.`);

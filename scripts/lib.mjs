@@ -21,6 +21,7 @@ export const KIND_META = {
   tool_artifact_submission: { order: 25, label: 'Tool-paper artifact' },
   artifact_registration: { order: 30, label: 'Artifact reg.' },
   artifact_submission:   { order: 31, label: 'Artifact' },
+  voluntary_artifact_submission: { order: 33, label: 'Artifact (voluntary)' },
   rebuttal_start:        { order: 40, label: 'Rebuttal opens', chain: true },
   rebuttal_end:          { order: 41, label: 'Rebuttal ends', chain: true },
   early_rejection_notification: { order: 45, label: 'Early rejection' },
@@ -185,7 +186,8 @@ export function saveConference(conf) {
    run, while add-produced notes persist until a human clears them. Severity
    keeps the actionable ones from drowning in the informational ones. */
 export const ACTIONABLE = new Set(['conflict', 'guard', 'multiple-candidates', 'wrong-venue',
-                                   'ambiguous-track', 'add-rejected', 'no-adapter', 'fetch-failed']);
+                                   'ambiguous-track', 'add-rejected', 'no-adapter', 'fetch-failed',
+                                   'estimate-unconfirmed', 'estimate-expired', 'stale-base']);
 export const severityOf = (reason) => (ACTIONABLE.has(reason) ? 'action' : 'info');
 
 /** Locate the first structural divergence between two objects. */
@@ -285,3 +287,42 @@ export function editionIssues(conf, ed) {
 
 export const daysBetween = (a, b) =>
   Math.abs(DateTime.fromISO(a, { zone: 'utc' }).diff(DateTime.fromISO(b, { zone: 'utc' }), 'days').days);
+
+/* ---- estimate audit ----
+   Re-fetching daily replaces an estimate the moment a real date appears, but
+   nothing in that loop notices an estimate that is running out of time without
+   ever being confirmed. TACAS 2027 sat at an estimated 2026-10-08 derived from
+   a 2024 base while the real deadline was 2026-10-15 - close enough to look
+   fine, wrong enough to miss a submission by a week. These checks escalate
+   before the date arrives rather than after. */
+export const ESTIMATE_WARN_DAYS = 90;
+export const STALE_BASE_YEARS = 2;
+
+export function auditEstimates(conf, { today = DateTime.utc() } = {}) {
+  const out = [];
+  for (const ed of conf.editions || []) {
+    if (ed.status === 'past') continue;
+    for (const m of ed.milestones || []) {
+      if (m.confidence !== 'estimated' || !m.date) continue;
+      const days = Math.round(DateTime.fromISO(m.date, { zone: 'utc' }).diff(today, 'days').days);
+
+      if (days < 0) {
+        out.push({ edition: ed.id, kind: m.kind, reason: 'estimate-expired',
+          detail: `estimated ${m.date} has passed and was never confirmed - the CFP either moved or was never found` });
+      } else if (days <= ESTIMATE_WARN_DAYS) {
+        out.push({ edition: ed.id, kind: m.kind, reason: 'estimate-unconfirmed',
+          detail: `estimated ${m.date} is ${days} day(s) away and still unconfirmed - check the official CFP` });
+      }
+
+      if (m.derived_from) {
+        const srcYear = Number(/-(\d{4})\//.exec(m.derived_from)?.[1]);
+        const shift = srcYear ? ed.year - srcYear : 0;
+        if (shift > STALE_BASE_YEARS) {
+          out.push({ edition: ed.id, kind: m.kind, reason: 'stale-base',
+            detail: `derived from ${m.derived_from}, a ${shift}-year shift - too far back to trust` });
+        }
+      }
+    }
+  }
+  return out;
+}

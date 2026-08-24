@@ -6,17 +6,21 @@ sources:
 editions:
   - year: 2027
     id: fossacs-2027
+    link: https://etaps.org/2027/
+    place: Copenhagen, Denmark
+    dates: Apr 12-15, 2027
+    start_date: 2027-04-12
+    end_date: 2027-04-15
+    status: confirmed
     timezone: AoE
-    place: TBD
-    status: estimated
-    needs_review: true
-    dates: 2027-04-03 ~ 2027-04-08 (estimated)
-    start_date: 2027-04-03
-    end_date: 2027-04-08
+    note: Part of ETAPS 2027; same joint call as TACAS and ESOP round 2.
     milestones:
-      - {kind: submission, date: 2026-10-22, confidence: estimated, derived_from: fossacs-2024/submission}
-      - {kind: notification, date: 2026-12-17, confidence: estimated, derived_from: fossacs-2024/notification}
-      - {kind: camera_ready, date: 2027-01-19, confidence: estimated, derived_from: fossacs-2024/camera_ready}
+      - {kind: submission, date: 2026-10-15, confidence: confirmed}
+      - {kind: rebuttal_start, date: 2026-12-07, confidence: confirmed}
+      - {kind: rebuttal_end, date: 2026-12-09, confidence: confirmed}
+      - {kind: notification, date: 2026-12-22, confidence: confirmed}
+      - {kind: voluntary_artifact_submission, date: 2027-01-11, confidence: confirmed}
+      - {kind: camera_ready, date: 2027-01-25, confidence: confirmed}
       - {kind: registration, confidence: unknown}
   - year: 2024
     id: fossacs-2024

@@ -41,11 +41,11 @@ editions:
       - {kind: abstract, date: 2026-05-19, confidence: confirmed}
       - {kind: submission, date: 2026-05-21, confidence: confirmed}
       - {kind: tool_artifact_submission, date: 2026-05-28, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
-      - {kind: artifact_submission, date: 2026-08-06, confidence: confirmed, note: voluntary post-acceptance artifact for regular papers}
+      - {kind: early_rejection_notification, date: 2026-06-11, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
       - {kind: rebuttal_start, date: 2026-07-02, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
       - {kind: rebuttal_end, date: 2026-07-09, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
-      - {kind: early_rejection_notification, date: 2026-06-11, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
       - {kind: notification, date: 2026-07-23, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
+      - {kind: artifact_submission, date: 2026-08-06, confidence: confirmed, note: voluntary post-acceptance artifact for regular papers}
       - {kind: camera_ready, date: 2026-09-10, confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-atva-2026}
     note: Co-located with APLAS 2026.
   - year: 2025

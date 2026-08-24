@@ -171,3 +171,7 @@ footer { margin-top: 38px; padding-top: 15px; border-top: 1px solid var(--line);
 .subform .f-grow { flex: 1 1 260px; }
 .subform button { cursor: pointer; }
 .card .ed-head select { font-size: 12px; }
+
+/* an estimate that is about to arrive unconfirmed */
+.est-mark.est-warn { color: var(--rust); font-weight: 620;
+  border: 1px solid currentColor; border-radius: 2px; padding: 0 4px; }

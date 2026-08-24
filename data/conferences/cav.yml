@@ -7,18 +7,20 @@ sources:
 editions:
   - year: 2027
     id: cav-2027
+    link: https://conferences.i-cav.org/2027/
+    place: Amsterdam, The Netherlands
+    dates: Jul 19-23, 2027
+    start_date: 2027-07-19
+    end_date: 2027-07-23
+    status: confirmed
     timezone: AoE
-    place: TBD
-    status: estimated
-    needs_review: true
-    dates: 2027-07-25 ~ 2027-07-28 (estimated)
-    start_date: 2027-07-25
-    end_date: 2027-07-28
     milestones:
-      - {kind: submission, date: 2027-01-27, confidence: estimated, derived_from: cav-2026/submission}
-      - {kind: notification, date: 2027-04-16, confidence: estimated, derived_from: cav-2026/notification}
+      - {kind: submission, date: 2027-01-20, confidence: confirmed}
+      - {kind: rebuttal_start, date: 2027-04-05, confidence: confirmed}
+      - {kind: rebuttal_end, date: 2027-04-08, confidence: confirmed}
+      - {kind: notification, date: 2027-04-23, confidence: confirmed}
+      - {kind: early_registration, date: 2027-05-18, confidence: confirmed}
       - {kind: camera_ready, confidence: unknown}
-      - {kind: registration, confidence: unknown}
   - year: 2026
     id: cav-2026
     timezone: AoE

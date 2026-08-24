@@ -6,17 +6,25 @@ sources:
 editions:
   - year: 2027
     id: esop-2027
+    link: https://etaps.org/2027/
+    place: Copenhagen, Denmark
+    dates: Apr 12-15, 2027
+    start_date: 2027-04-12
+    end_date: 2027-04-15
+    status: confirmed
     timezone: AoE
-    place: TBD
-    status: estimated
-    needs_review: true
-    dates: 2027-04-03 ~ 2027-04-08 (estimated)
-    start_date: 2027-04-03
-    end_date: 2027-04-08
+    note: Part of ETAPS 2027. ESOP runs two submission rounds; round 1 closed in May 2026.
     milestones:
-      - {kind: submission, date: 2026-10-08, confidence: estimated, derived_from: esop-2024/submission}
-      - {kind: notification, confidence: unknown}
-      - {kind: camera_ready, confidence: unknown}
+      - {kind: submission_cycle1, date: 2026-05-28, confidence: confirmed, note: round 1}
+      - {kind: rebuttal_start_cycle1, date: 2026-07-20, confidence: confirmed, note: round 1}
+      - {kind: rebuttal_end_cycle1, date: 2026-07-22, confidence: confirmed, note: round 1}
+      - {kind: notification_cycle1, date: 2026-08-06, confidence: confirmed, note: round 1}
+      - {kind: submission_cycle2, date: 2026-10-15, confidence: confirmed, note: round 2}
+      - {kind: rebuttal_start_cycle2, date: 2026-12-07, confidence: confirmed, note: round 2}
+      - {kind: rebuttal_end_cycle2, date: 2026-12-09, confidence: confirmed, note: round 2}
+      - {kind: notification_cycle2, date: 2026-12-22, confidence: confirmed, note: round 2}
+      - {kind: voluntary_artifact_submission, date: 2027-01-11, confidence: confirmed}
+      - {kind: camera_ready, date: 2027-01-25, confidence: confirmed}
       - {kind: registration, confidence: unknown}
   - year: 2024
     id: esop-2024

@@ -6,18 +6,19 @@ sources:
 editions:
   - year: 2027
     id: cpp-2027
+    link: https://popl27.sigplan.org/home/CPP-2027
     timezone: AoE
-    place: TBD
-    status: estimated
-    needs_review: true
-    dates: 2027-01-11 ~ 2027-01-12 (estimated)
+    place: Mexico City, Mexico
+    dates: Jan 11-12, 2027
     start_date: 2027-01-11
     end_date: 2027-01-12
+    status: confirmed
+    note: Co-located with POPL 2027. Deadlines expire at the end of the day, anywhere on earth.
     milestones:
-      - {kind: abstract, date: 2026-09-09, confidence: estimated, derived_from: cpp-2023/abstract}
-      - {kind: submission, date: 2026-09-16, confidence: estimated, derived_from: cpp-2023/submission}
-      - {kind: notification, date: 2026-11-16, confidence: estimated, derived_from: cpp-2023/notification}
-      - {kind: camera_ready, date: 2026-12-07, confidence: estimated, derived_from: cpp-2023/camera_ready}
+      - {kind: abstract, date: 2026-09-03, confidence: confirmed}
+      - {kind: submission, date: 2026-09-10, confidence: confirmed}
+      - {kind: notification, date: 2026-11-10, confidence: confirmed}
+      - {kind: camera_ready, date: 2026-11-25, confidence: confirmed}
       - {kind: registration, confidence: unknown}
   - year: 2023
     id: cpp-2023

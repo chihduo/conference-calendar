@@ -2,6 +2,7 @@ id: oopsla
 name: OOPSLA
 areas: [PL]
 sources:
+  - {tier: 2, adapter: researchr, ref: splash-2027, track: OOPSLA}
   - {tier: 1, adapter: ccfddl, ref: conference/SE/oopsla.yml}
   - {tier: 3, adapter: wikicfp}
 editions:
@@ -9,14 +10,26 @@ editions:
     id: oopsla-2027
     timezone: UTC-12
     place: TBD
-    status: estimated
+    status: confirmed
     needs_review: true
     dates: TBD
     milestones:
-      - {kind: submission, date: 2026-10-09, confidence: estimated, derived_from: oopsla-2026/submission}
-      - {kind: notification, confidence: unknown}
-      - {kind: camera_ready, confidence: unknown}
+      - {kind: submission_cycle1, date: 2026-10-14, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: rebuttal_start_cycle1, date: 2026-12-01, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: rebuttal_end_cycle1, date: 2026-12-05, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: notification_cycle1, date: 2026-12-18, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: revision_cycle1, date: 2027-01-22, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: final_notification_cycle1, date: 2027-02-12, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: camera_ready_cycle1, date: 2027-03-05, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: submission_cycle2, date: 2027-04-07, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: rebuttal_start_cycle2, date: 2027-06-15, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: rebuttal_end_cycle2, date: 2027-06-19, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: notification_cycle2, date: 2027-07-02, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: revision_cycle2, date: 2027-07-30, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: final_notification_cycle2, date: 2027-08-13, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
+      - {kind: camera_ready_cycle2, date: 2027-08-27, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
       - {kind: registration, confidence: unknown}
+    link: https://conf.researchr.org/home/splash-2027
   - year: 2026
     id: oopsla-2026
     timezone: UTC-12

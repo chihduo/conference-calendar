@@ -25,13 +25,13 @@ editions:
     id: sas-2026
     timezone: AoE
     milestones:
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: registration, date: 2026-05-01}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: submission, date: 2026-05-07}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: artifact_submission, date: 2026-05-08}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: rebuttal_start, date: 2026-06-16}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: rebuttal_end, date: 2026-06-19}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: notification, date: 2026-07-04}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: camera_ready, date: 2026-07-20}
-      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: registration, date: 2026-05-01}
     link: https://conf.researchr.org/home/sas-2026
     status: past
   - year: 2025
