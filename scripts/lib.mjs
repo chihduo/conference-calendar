@@ -344,3 +344,40 @@ export function auditEstimates(conf, { today = DateTime.utc() } = {}) {
   }
   return out;
 }
+
+/* ---- forward projection ----
+   The estimate machinery only ever ran when a venue was first added, so a
+   calendar seeded for 2027 would quietly stop looking ahead once 2027's calls
+   closed. Shared by add.mjs (first seeding) and refresh.mjs (rolling forward)
+   so the two produce identical shapes. */
+
+/** The year worth planning for: this year until its calls close mid-year, then the next. */
+export const planningYear = (now = DateTime.utc()) => (now.month >= 7 ? now.year + 1 : now.year);
+
+/** Project an edition `targetYear` from `base` by shifting +364d per year. */
+export function estimateEdition(confId, base, targetYear,
+                                { placeholders = ['notification', 'camera_ready', 'registration'] } = {}) {
+  const n = targetYear - base.year;
+  if (n <= 0) return null;
+  const start = base.start_date ? shift364(base.start_date, n) : null;
+  const end = base.end_date || base.start_date ? shift364(base.end_date || base.start_date, n) : null;
+  const fmt = (d) => DateTime.fromISO(d, { zone: 'utc' }).toFormat('LLL d');
+
+  const ed = {
+    year: targetYear, id: `${confId}-${targetYear}`, timezone: base.timezone || 'AoE',
+    place: 'TBD', status: 'estimated', needs_review: true,
+    dates: start ? `${fmt(start)}-${DateTime.fromISO(end, { zone: 'utc' }).toFormat('d')}, ${targetYear} (estimated)` : 'TBD',
+    ...(start ? { start_date: start, end_date: end } : {}),
+    milestones: base.milestones
+      .filter((m) => m.date)
+      .map((m) => ({ kind: m.kind, date: shift364(m.date, n), confidence: 'estimated',
+                     derived_from: `${base.id}/${m.kind}` })),
+  };
+  for (const k of placeholders)
+    if (!ed.milestones.some((m) => baseKind(m.kind) === k)) ed.milestones.push({ kind: k, confidence: 'unknown' });
+  ed.milestones.sort(byDateThenKind);
+  return ed;
+}
+
+/** Kinds that represent "the call is still open" for planning purposes. */
+export const CALL_KINDS = new Set(['abstract', 'submission']);

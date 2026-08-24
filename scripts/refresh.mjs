@@ -9,6 +9,7 @@ import { DateTime } from 'luxon';
 import {
   CONF_DIR, loadYaml, saveConference, writeReviewQueue, readReviewQueue, severityOf,
   CONFIDENCE_RANK, TIER_CONFIDENCE_CEILING, editionIssues, daysBetween, shift364, byDateThenKind, auditEstimates,
+  baseKind, estimateEdition, CALL_KINDS,
 } from './lib.mjs';
 import * as ccfddl from './adapters/ccfddl.mjs';
 import * as researchr from './adapters/researchr.mjs';
@@ -161,6 +162,37 @@ function reestimate(doc, changes) {
   }
 }
 
+/* Keep one open call ahead of today. Without this the calendar stops looking
+   forward the moment the seeded year's deadlines pass: sources publish a new
+   edition eventually, but a venue announces six to nine months out, and the
+   whole point of an estimate is to fill exactly that gap.
+   Runs only when no future call exists, so it cannot pile up speculative years. */
+function rollForward(doc, changes) {
+  const hasOpenCall = doc.editions.some((e) =>
+    e.status !== 'past' &&
+    e.milestones.some((m) => m.date && CALL_KINDS.has(baseKind(m.kind)) &&
+                             DateTime.fromISO(m.date, { zone: 'utc' }) > DateTime.fromJSDate(NOW)));
+  if (hasOpenCall) return;
+
+  const base = doc.editions
+    .filter((e) => e.milestones.some((m) => m.date))
+    .sort((a, b) => b.year - a.year)[0];
+  if (!base) return;
+
+  const year = Math.max(base.year, THIS_YEAR) + 1;
+  if (doc.editions.some((e) => e.year === year)) return;
+
+  const est = estimateEdition(doc.id, base, year);
+  if (!est) return;
+  const issues = editionIssues({ ...doc, editions: [...doc.editions, est] }, est);
+  if (issues.length) {
+    flag(doc.id, est.id, null, 'guard', `roll-forward rejected: ${issues.join('; ')}`);
+    return;
+  }
+  doc.editions.push(est);
+  changes.push(`${est.id}: projected from ${base.id} (no open call remained)`);
+}
+
 async function refreshOne(file) {
   const full = path.join(CONF_DIR, file);
   const doc = loadYaml(fs.readFileSync(full, 'utf8'));
@@ -258,6 +290,7 @@ async function refreshOne(file) {
     }
   }
 
+  rollForward(doc, changes);
   reestimate(doc, changes);
   // escalate estimates that are running out of time without ever being confirmed
   for (const a of auditEstimates(doc)) flag(doc.id, a.edition, a.kind, a.reason, a.detail);

@@ -6,13 +6,14 @@
    needs_review set so it gets one human pass before it is treated as settled. */
 import fs from 'node:fs';
 import path from 'node:path';
-import { CONF_DIR, saveConference, shift364, byDateThenKind, editionIssues, writeReviewQueue, readReviewQueue, severityOf } from './lib.mjs';
+import { CONF_DIR, saveConference, byDateThenKind, editionIssues, writeReviewQueue, readReviewQueue,
+         severityOf, estimateEdition, planningYear } from './lib.mjs';
 import * as icore from './adapters/icore.mjs';
 import * as ccfddl from './adapters/ccfddl.mjs';
 import * as researchr from './adapters/researchr.mjs';
 import * as wikicfp from './adapters/wikicfp.mjs';
 
-const TARGET_YEAR = Number(process.env.TARGET_YEAR) || 2027;
+const TARGET_YEAR = Number(process.env.TARGET_YEAR) || planningYear();
 const DRY = process.argv.includes('--dry-run');
 
 /* Guessing a researchr id is cheap (a HEAD-ish GET) and the 404 is unambiguous,
@@ -176,23 +177,10 @@ async function discover(acronym) {
   /* Estimate the target year when nobody has published it yet. */
   if (!doc.editions.some((e) => e.year === TARGET_YEAR)) {
     const base = doc.editions.find((e) => e.milestones.some((m) => m.date));
-    if (base) {
-      const n = TARGET_YEAR - base.year;
-      const est = {
-        year: TARGET_YEAR, id: `${doc.id}-${TARGET_YEAR}`, timezone: base.timezone || 'AoE',
-        place: 'TBD', status: 'estimated', needs_review: true,
-        dates: base.start_date ? `${shift364(base.start_date, n)} ~ ${shift364(base.end_date || base.start_date, n)} (estimated)` : 'TBD',
-        ...(base.start_date ? { start_date: shift364(base.start_date, n), end_date: shift364(base.end_date || base.start_date, n) } : {}),
-        milestones: base.milestones.filter((m) => m.date).map((m) => ({
-          kind: m.kind, date: shift364(m.date, n), confidence: 'estimated',
-          derived_from: `${base.id}/${m.kind}`,
-        })),
-      };
-      for (const k of ['notification', 'camera_ready', 'registration'])
-        if (!est.milestones.some((m) => m.kind === k)) est.milestones.push({ kind: k, confidence: 'unknown' });
-      est.milestones.sort(byDateThenKind);
+    const est = base && estimateEdition(doc.id, base, TARGET_YEAR);
+    if (est) {
       doc.editions.unshift(est);
-      report.notes.push(`${TARGET_YEAR} not published yet - estimated from ${base.id} by +364d x ${n}.`);
+      report.notes.push(`${TARGET_YEAR} not published yet - estimated from ${base.id} by +364d x ${TARGET_YEAR - base.year}.`);
     } else {
       report.notes.push(`No dated edition found anywhere; ${TARGET_YEAR} left as placeholders.`);
       doc.editions.unshift({
