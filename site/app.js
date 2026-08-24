@@ -53,7 +53,23 @@ function countdown(t, now) {
   return { txt: `${days} 天`, cls: 'cd' };
 }
 const MONTHS = ['1 月', '2 月', '3 月', '4 月', '5 月', '6 月', '7 月', '8 月', '9 月', '10 月', '11 月', '12 月'];
-const monthKey = (t) => `${t.getUTCFullYear()} 年 ${MONTHS[t.getUTCMonth()]}`;
+/* Group by the date the CFP states, not by the UTC instant: an AoE deadline on
+   the 30th converts to the 1st of the next month in UTC, which would file it
+   under a heading that contradicts the date printed on the row. */
+const monthKeyOf = (m) => `${m.date.slice(0, 4)} 年 ${MONTHS[Number(m.date.slice(5, 7)) - 1]}`;
+
+/* The viewer's own clock, for the "when is that for me" tooltip. */
+const VIEWER_TZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch { return 'local'; } })();
+const localOf = (iso) => {
+  try { return new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }); }
+  catch { return new Date(iso).toString(); }
+};
+/* Local calendar date, for recording when YOU did something. toISOString would
+   give the UTC date, which is yesterday for anyone east of Greenwich at night. */
+const todayLocal = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
 
 function badges(c) {
   const f = document.createDocumentFragment();
@@ -89,7 +105,7 @@ function renderDeadlines(root, now) {
 
   let lastMonth = null;
   for (const { c, e, m, t } of shown) {
-    const mk = monthKey(t);
+    const mk = monthKeyOf(m);
     if (mk !== lastMonth) { root.appendChild(el('div', 'month', mk)); lastMonth = mk; }
 
     const isPast = t < now;
@@ -98,7 +114,10 @@ function renderDeadlines(root, now) {
     const sev = isPast ? ' past' : days <= 2 ? ' urgent' : days <= 14 ? ' soon' : '';
     const row = el('div', 'row' + sev);
 
-    const dt = el('div', 'dt'); dt.innerHTML = fmtDate(m); row.appendChild(dt);
+    const dt = el('div', 'dt');
+    dt.innerHTML = fmtDate(m);
+    dt.title = `${m.date} ${m.time} ${m.tz}\n你的時間（${VIEWER_TZ}）：${localOf(m.iso)}`;
+    row.appendChild(dt);
     row.appendChild(Object.assign(el('div', cd.cls || 'cd'), { textContent: cd.txt }));
 
     const what = el('div', 'what');
@@ -348,7 +367,7 @@ function renderSubmissions(root, now) {
     const list = loadSubs();
     list.push({
       id: 'p' + Date.now().toString(36), paper: title.value.trim(), venue: venue.value,
-      status: st.value, history: [{ status: st.value, on: new Date().toISOString().slice(0, 10) }], notes: '',
+      status: st.value, history: [{ status: st.value, on: todayLocal() }], notes: '',
     });
     saveSubs(list); render();
   };
@@ -379,7 +398,7 @@ function renderSubmissions(root, now) {
     sel.onchange = () => {
       const list = loadSubs(); const t = list.find((x) => x.id === s.id);
       t.status = sel.value;
-      (t.history ||= []).push({ status: sel.value, on: new Date().toISOString().slice(0, 10) });
+      (t.history ||= []).push({ status: sel.value, on: todayLocal() });
       saveSubs(list); render();
     };
     line.appendChild(sel);
