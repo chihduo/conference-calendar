@@ -8,7 +8,7 @@ const rankCls = (v) => 'rank r-' + (v === 'A*' ? 'astar' : (v || 'unranked').toL
 const state = {
   view: 'deadlines',
   areas: new Set(), ranks: new Set(), q: '',
-  showPast: false, showEstimated: true,
+  showPast: false, showEstimated: true, onlyMine: false,
 };
 
 /* ---------- flatten ---------- */
@@ -22,6 +22,17 @@ function events() {
       for (const m of e.milestones) if (m.iso) out.push({ c, e, m, t: new Date(m.iso) });
     }
   return out.sort((a, b) => a.t - b.t);
+}
+
+/* Bridge between the two layers. The timeline renders public conference facts;
+   this is the only place personal state reaches into it. */
+function submissionsByVenue() {
+  const map = new Map();
+  for (const s of loadSubs()) {
+    if (!map.has(s.venue)) map.set(s.venue, []);
+    map.get(s.venue).push(s);
+  }
+  return map;
 }
 
 function passesFilter(c) {
@@ -98,7 +109,11 @@ function badges(c) {
 
 /* ---------- views ---------- */
 function renderDeadlines(root, now) {
-  const all = events().filter((x) => passesFilter(x.c));
+  const subs = submissionsByVenue();
+  if (!subs.size) state.onlyMine = false;   // the toggle is hidden with nothing tracked
+  const all = events()
+    .filter((x) => passesFilter(x.c))
+    .filter((x) => !state.onlyMine || subs.has(x.e.id));
   const shown = all.filter((x) => {
     if (!state.showPast && x.t < now) return false;
     if (!state.showEstimated && x.m.confidence === 'estimated') return false;
@@ -128,7 +143,10 @@ function renderDeadlines(root, now) {
     const cd = countdown(t, now);
     const days = cd.days;
     const sev = isPast ? ' past' : days <= 1 ? ' urgent' : days <= 14 ? ' soon' : '';
-    const row = el('div', 'row' + sev);
+    /* Two independent channels: the left stripe carries urgency, the background
+       carries ownership. Overloading one would make them unreadable together. */
+    const mine = subs.get(e.id) || [];
+    const row = el('div', 'row' + sev + (mine.length ? ' mine' : ''));
 
     const dt = el('div', 'dt');
     dt.innerHTML = fmtDate(m);
@@ -152,6 +170,17 @@ function renderDeadlines(root, now) {
       what.appendChild(est);
     }
     if (m.note) { const nt = el('span', 'mkind', `· ${m.note}`); what.appendChild(nt); }
+
+    for (const sub of mine) {
+      /* A milestone is "live" for this paper when its current status is waiting
+         on it - the same rule that drives the 我的投稿 view. */
+      const live = (RELEVANT[sub.status] || []).includes(baseKind(m.kind)) && !isPast;
+      const chip = el('span', 'mine-chip' + (live ? ' live' : ''));
+      chip.textContent = `${live ? '▸ ' : ''}${sub.paper}`;
+      chip.title = `你的投稿・${statusLabel(sub.status)}` +
+        (live ? '\n這是你目前在等的日期。' : '');
+      what.appendChild(chip);
+    }
     row.appendChild(what);
 
     const meta = el('div', 'meta');
@@ -527,7 +556,10 @@ function renderFilters(root) {
   q.oninput = (ev) => { state.q = ev.target.value; render({ keepFocus: 'search' }); };
   bar.appendChild(q);
 
-  for (const [key, label] of [['showPast', '顯示已過期'], ['showEstimated', '顯示推估']]) {
+  const toggles = [['showPast', '顯示已過期'], ['showEstimated', '顯示推估']];
+  if (loadSubs().length) toggles.unshift(['onlyMine', '只看我的投稿']);
+  else state.onlyMine = false;
+  for (const [key, label] of toggles) {
     const lab = el('label', 'toggle');
     const cb = el('input'); cb.type = 'checkbox'; cb.checked = state[key];
     cb.onchange = () => { state[key] = cb.checked; render(); };

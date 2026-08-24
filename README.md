@@ -24,6 +24,10 @@ npm run ranks FSE      # 查 ICORE 排名
 notification 才會浮上來；標成 `accepted` 之後才輪到 camera-ready 與註冊。
 這些日期本來就在會議資料裡，狀態只決定哪些對你有意義。
 
+這層資訊也會標回「截稿時間軸」：你追蹤的會議整列帶底色，其中你目前正在等的那一個
+日期會反白。急迫度走左側色條、歸屬走背景色，兩個獨立通道疊加而不互相蓋掉。沒有投稿
+紀錄時時間軸完全不變，不會多出任何雜訊。
+
 ## 里程碑是開放詞彙
 
 `kind` 不是 enum。常用值有 `abstract` / `submission` / `rebuttal_start` /

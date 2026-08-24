@@ -91,7 +91,7 @@ input[type=search] { border: 1px solid var(--line); background: var(--surface); 
 .row.past { opacity: var(--past-op); }
 /* Urgency is carried by the stripe as well as the hue, so it survives desaturation. */
 .row.soon { border-left-color: var(--amber); }
-.row.urgent { border-left-color: var(--rust); background: var(--surface); }
+.row.urgent { border-left-color: var(--rust); }
 .dt { font-family: var(--mono); font-size: 12px; color: var(--slate); white-space: nowrap;
       font-variant-numeric: tabular-nums; }
 .dt b { color: var(--ink); font-weight: 620; }
@@ -175,3 +175,11 @@ footer { margin-top: 38px; padding-top: 15px; border-top: 1px solid var(--line);
 /* an estimate that is about to arrive unconfirmed */
 .est-mark.est-warn { color: var(--rust); font-weight: 620;
   border: 1px solid currentColor; border-radius: 2px; padding: 0 4px; }
+
+/* rows carrying one of your own submissions */
+.row.mine { background: var(--petrol-soft); }
+.row.mine:hover { background: var(--petrol-soft); filter: brightness(0.98); }
+.mine-chip { font: 500 11.5px var(--ui); color: var(--petrol); border: 1px solid currentColor;
+  border-radius: 2px; padding: 0 5px; max-width: 30ch; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; }
+.mine-chip.live { background: var(--petrol); color: var(--paper); border-color: var(--petrol); font-weight: 620; }
