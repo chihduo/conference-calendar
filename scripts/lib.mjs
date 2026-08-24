@@ -32,11 +32,38 @@ export const KIND_META = {
   registration:          { order: 91, label: 'Registration' },
   conference_start:      { order: 99, label: 'Conference' },
 };
-export const inChain = (k) => KIND_META[k]?.chain === true;
+/* Rolling-deadline venues (CSF runs three cycles a year) express each round as
+   `<kind>_cycleN`. The suffix is parsed rather than enumerated, so a venue with
+   five cycles needs no code change - which is the point of an open vocabulary.
+   Ordering interleaves by cycle so one round's stages stay together. */
+const CYCLE_RE = /^(.+)_cycle(\d+)$/;
+export const baseKind = (k) => CYCLE_RE.exec(k)?.[1] ?? k;
+export const cycleOf  = (k) => Number(CYCLE_RE.exec(k)?.[2] ?? 0);
+export const inChain = (k) => KIND_META[baseKind(k)]?.chain === true;
 
-export const kindLabel = (k) =>
-  KIND_META[k]?.label ?? k.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
-export const kindOrder = (k) => KIND_META[k]?.order ?? 500;
+const prettify = (k) => k.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+export const kindLabel = (k) => {
+  const m = CYCLE_RE.exec(k);
+  if (m) return `${KIND_META[m[1]]?.label ?? prettify(m[1])} · 第 ${m[2]} 輪`;
+  return KIND_META[k]?.label ?? prettify(k);
+};
+export const kindOrder = (k) => {
+  const m = CYCLE_RE.exec(k);
+  const base = KIND_META[m ? m[1] : k]?.order ?? 500;
+  return m ? Number(m[2]) * 100 + base : base;
+};
+
+/* Display order follows the dates, not the declared pipeline position: with
+   rolling cycles a venue's camera-ready has a lower pipeline order than cycle 3
+   yet happens much later. Undated milestones trail, ordered structurally. */
+const byDateThenKind = (a, b) => {
+  if (a.date && b.date) return a.date.localeCompare(b.date) || kindOrder(a.kind) - kindOrder(b.kind);
+  if (a.date) return -1;
+  if (b.date) return 1;
+  return kindOrder(a.kind) - kindOrder(b.kind);
+};
+
+export { byDateThenKind };
 
 export const CONFIDENCE_RANK = { unknown: 0, estimated: 1, announced: 2, confirmed: 3 };
 
@@ -238,11 +265,20 @@ export function editionIssues(conf, ed) {
     }
   }
 
-  const ordered = dated.filter((m) => inChain(m.kind))
-    .sort((a, b) => kindOrder(a.kind) - kindOrder(b.kind));
-  for (let i = 1; i < ordered.length; i++) {
-    if (ordered[i]._d < ordered[i - 1]._d)
-      out.push(`${ordered[i].kind} (${ordered[i].date}) precedes ${ordered[i - 1].kind} (${ordered[i - 1].date})`);
+  /* Check the chain within each submission cycle separately. Cycle 2's
+     submission legitimately precedes cycle 1's notification, so comparing
+     across cycles would flag a correct calendar as broken. */
+  const groups = new Map();
+  for (const m of dated.filter((x) => inChain(x.kind))) {
+    const c = cycleOf(m.kind);
+    (groups.get(c) || groups.set(c, []).get(c)).push(m);
+  }
+  for (const [, list] of groups) {
+    const ordered = list.sort((a, b) => kindOrder(a.kind) - kindOrder(b.kind));
+    for (let i = 1; i < ordered.length; i++) {
+      if (ordered[i]._d < ordered[i - 1]._d)
+        out.push(`${ordered[i].kind} (${ordered[i].date}) precedes ${ordered[i - 1].kind} (${ordered[i - 1].date})`);
+    }
   }
   return out;
 }

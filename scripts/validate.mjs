@@ -35,8 +35,6 @@ for (const file of files) {
   if (seenConf.has(doc.id)) err(file, `duplicate conference id "${doc.id}" (also ${seenConf.get(doc.id)})`);
   seenConf.set(doc.id, file);
 
-  if (doc.rank && ['C', 'Australasian C', 'N', 'unranked'].includes(doc.rank.value) && !doc.rank.below_threshold)
-    warn(file, `rank ${doc.rank.value} is below the B threshold but below_threshold is not set`);
   if (doc.rank?.ambiguous) warn(file, `rank marked ambiguous - a human needs to pick the right ICORE entry`);
 
   for (const ed of doc.editions) {

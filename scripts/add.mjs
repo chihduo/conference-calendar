@@ -6,7 +6,7 @@
    needs_review set so it gets one human pass before it is treated as settled. */
 import fs from 'node:fs';
 import path from 'node:path';
-import { CONF_DIR, saveConference, shift364, kindOrder, editionIssues, writeReviewQueue, readReviewQueue, severityOf } from './lib.mjs';
+import { CONF_DIR, saveConference, shift364, byDateThenKind, editionIssues, writeReviewQueue, readReviewQueue, severityOf } from './lib.mjs';
 import * as icore from './adapters/icore.mjs';
 import * as ccfddl from './adapters/ccfddl.mjs';
 import * as researchr from './adapters/researchr.mjs';
@@ -148,7 +148,7 @@ async function discover(acronym) {
 
   /* assemble */
   for (const e of editions.values()) {
-    e.milestones.sort((a, b) => kindOrder(a.kind) - kindOrder(b.kind));
+    e.milestones.sort(byDateThenKind);
     e.status = e.year < TARGET_YEAR ? 'past'
       : e.milestones.some((m) => m.confidence === 'confirmed') ? 'confirmed' : 'announced';
     for (const m of e.milestones) { delete m.adapter; delete m.tier; delete m.note; }
@@ -190,7 +190,7 @@ async function discover(acronym) {
       };
       for (const k of ['notification', 'camera_ready', 'registration'])
         if (!est.milestones.some((m) => m.kind === k)) est.milestones.push({ kind: k, confidence: 'unknown' });
-      est.milestones.sort((a, b) => kindOrder(a.kind) - kindOrder(b.kind));
+      est.milestones.sort(byDateThenKind);
       doc.editions.unshift(est);
       report.notes.push(`${TARGET_YEAR} not published yet - estimated from ${base.id} by +364d x ${n}.`);
     } else {

@@ -1,7 +1,7 @@
 const DATA = "__DATA__";
 const $ = (s, r = document) => r.querySelector(s);
 const el = (t, cls, txt) => { const n = document.createElement(t); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; };
-const AREAS = ['FM', 'PL', 'AI', 'SE', 'LOGIC'];
+const AREAS = ['FM', 'PL', 'AI', 'SE', 'LOGIC', 'SEC'];
 const RANKS = ['A*', 'A', 'B', 'C'];
 const rankCls = (v) => 'rank r-' + (v === 'A*' ? 'astar' : (v || 'unranked').toLowerCase().replace(/\W+/g, ''));
 
@@ -58,7 +58,7 @@ const monthKey = (t) => `${t.getUTCFullYear()} 年 ${MONTHS[t.getUTCMonth()]}`;
 function badges(c) {
   const f = document.createDocumentFragment();
   const r = el('span', rankCls(c.rank?.value), c.rank?.value || '—');
-  r.title = `${c.rank?.source || 'unranked'}${c.rank?.below_threshold ? ' — below the B threshold' : ''}`;
+  r.title = c.rank?.source || 'unranked';
   f.appendChild(r);
   for (const a of c.areas) f.appendChild(el('span', 'area', a));
   return f;
@@ -211,7 +211,8 @@ function renderSubscribe(root) {
   root.appendChild(p);
   const box = el('div', 'subs');
   for (const [f, label] of [['all.ics', '全部'], ['fm.ics', 'FM'], ['pl.ics', 'PL'], ['ai.ics', 'AI'],
-                            ['se.ics', 'SE'], ['logic.ics', 'Logic'], ['rank-a.ics', '只要 A*/A']]) {
+                            ['se.ics', 'SE'], ['logic.ics', 'Logic'], ['sec.ics', 'Security'],
+                            ['rank-a.ics', '只要 A*/A']]) {
     const a = el('a', null, label);
     a.href = DATA.feeds?.[f] || f; a.download = f;
     a.title = `下載 ${f}（部署後也可用 ./${f} 這個網址訂閱）`;
@@ -295,16 +296,24 @@ function editionsIndex() {
   return idx;
 }
 
-/** Milestones that matter for this submission right now, soonest first. */
+/* Rolling-deadline venues express rounds as `<kind>_cycleN`; the relevance map
+   is written in base kinds so it does not need a row per cycle. */
+const baseKind = (k) => /^(.+)_cycle\d+$/.exec(k)?.[1] ?? k;
+
+/** Milestones that matter for this submission right now, soonest first.
+    Only the nearest future one of each kind: with three cycles running, every
+    remaining round's notification would otherwise pile up as "your" next date. */
 function pending(sub, now) {
   const hit = editionsIndex().get(sub.venue);
   if (!hit) return [];
   const kinds = RELEVANT[sub.status] || [];
-  return hit.e.milestones
-    .filter((m) => kinds.includes(m.kind) && m.iso)
+  const future = hit.e.milestones
+    .filter((m) => kinds.includes(baseKind(m.kind)) && m.iso)
     .map((m) => ({ ...hit, m, t: new Date(m.iso) }))
     .filter((x) => x.t > now)
     .sort((a, b) => a.t - b.t);
+  const seen = new Set();
+  return future.filter((x) => !seen.has(baseKind(x.m.kind)) && seen.add(baseKind(x.m.kind)));
 }
 
 function renderSubmissions(root, now) {
@@ -450,7 +459,7 @@ function personalICS(subs, idx) {
   for (const s of subs) {
     const hit = idx.get(s.venue); if (!hit) continue;
     for (const m of hit.e.milestones) {
-      if (!m.iso || !(RELEVANT[s.status] || []).includes(m.kind)) continue;
+      if (!m.iso || !(RELEVANT[s.status] || []).includes(baseKind(m.kind))) continue;
       const end = new Date(m.iso), start = new Date(end.getTime() - 3600000);
       L.push('BEGIN:VEVENT', `UID:${s.id}-${m.kind}@conference-calendar`, `DTSTAMP:${stamp(now)}`,
         `DTSTART:${stamp(start)}`, `DTEND:${stamp(end)}`,
@@ -525,6 +534,7 @@ function initTheme() {
 }
 
 $('#gen').textContent = DATA.generated_at.slice(0, 10);
+$('#count').textContent = String(DATA.conferences.length);
 initTheme();
 render();
 setInterval(() => { if (state.view === 'deadlines') render(); }, 60000);

@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {
   CONF_DIR, loadYaml, saveConference, writeReviewQueue, readReviewQueue, severityOf,
-  CONFIDENCE_RANK, TIER_CONFIDENCE_CEILING, editionIssues, daysBetween, shift364, kindOrder,
+  CONFIDENCE_RANK, TIER_CONFIDENCE_CEILING, editionIssues, daysBetween, shift364, byDateThenKind,
 } from './lib.mjs';
 import * as ccfddl from './adapters/ccfddl.mjs';
 import * as researchr from './adapters/researchr.mjs';
@@ -215,7 +215,7 @@ async function refreshOne(file) {
       else ed.milestones.push(next);
       changes.push(`${ed.id}/${kind}: ${why}`);
     }
-    ed.milestones.sort((a, b) => kindOrder(a.kind) - kindOrder(b.kind));
+    ed.milestones.sort(byDateThenKind);
     for (const m of ed.milestones) if (m.derived_from === undefined) delete m.derived_from;
 
     // GUARD: vet the merged edition; roll back wholesale if it no longer holds together

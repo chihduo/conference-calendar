@@ -115,5 +115,23 @@
     "severity": "action",
     "detail": "WikiCFP \"SAS 2026\" is \"Animate Experience - The 37th Annual Conference of the Society for Animation Studies\" (similarity 0) - discarded, not the same conference",
     "seen_at": "2026-08-23T18:47:53.779Z"
+  },
+  {
+    "conference": "csf",
+    "edition": null,
+    "kind": null,
+    "reason": "newly-added",
+    "severity": "info",
+    "detail": "Could not infer the research area from \"IEEE Computer Security Foundations Symposium (was CSFW)\"; defaulted to FM - set areas by hand.",
+    "seen_at": "2026-08-24T02:42:22.353Z"
+  },
+  {
+    "conference": "csf",
+    "edition": null,
+    "kind": null,
+    "reason": "newly-added",
+    "severity": "info",
+    "detail": "2027 not published yet - estimated from csf-2025 by +364d x 2.",
+    "seen_at": "2026-08-24T02:42:22.353Z"
   }
 ]

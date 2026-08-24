@@ -8,10 +8,9 @@ rank:
   value: C
   icore_id: 1062
   checked_on: 2026-08-24
-  below_threshold: true
 note: >-
-  Ranked C in ICORE2026, below the B cutoff used for this calendar.
-  Kept deliberately because it was named explicitly; set hidden:true to drop it.
+  Ranked C in ICORE2026. The ranking is reference metadata here, not an
+  admission criterion - set hidden:true if you stop caring about this venue.
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:

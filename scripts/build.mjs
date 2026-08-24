@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { DateTime } from 'luxon';
-import { ROOT, loadConferences, readReviewQueue, instantOf, kindLabel, kindOrder, zoneOf } from './lib.mjs';
+import { ROOT, loadConferences, readReviewQueue, instantOf, kindLabel, byDateThenKind } from './lib.mjs';
 
 const DIST = path.join(ROOT, 'dist');
 const SITE = path.join(ROOT, 'site');
@@ -28,7 +28,7 @@ function buildModel() {
         needs_review: !!e.needs_review,
         milestones: e.milestones
           .slice()
-          .sort((a, b) => kindOrder(a.kind) - kindOrder(b.kind))
+          .sort(byDateThenKind)
           .map((m) => {
             const inst = instantOf(m, e);
             return {
@@ -140,6 +140,7 @@ const feeds = {
   'ai.ics':     { name: 'AI deadlines',    filter: (c) => c.areas.includes('AI') },
   'se.ics':     { name: 'SE deadlines',    filter: (c) => c.areas.includes('SE') },
   'logic.ics':  { name: 'Logic deadlines', filter: (c) => c.areas.includes('LOGIC') },
+  'sec.ics':    { name: 'Security deadlines', filter: (c) => c.areas.includes('SEC') },
   'rank-a.ics': { name: 'A*/A deadlines',  filter: (c) => ['A*', 'A'].includes(c.rank?.value) },
 };
 

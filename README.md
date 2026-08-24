@@ -90,8 +90,19 @@ early-rejection 刻意不在鏈上——artifact 在有些會議是投稿時交�
 
 ## 排名
 
+**排名是參考資料，不是收錄門檻。** 它用來排序、篩選，以及在一開始拉出候選名單；
+低於任何等級的會議都可以留著（CIAA 是 C 級，照樣在清單裡）。不想要的會議設
+`hidden: true` 或直接刪檔。
+
 `rank.source` 一律記錄版本。CORE 已改制為 **ICORE**，現行版本是 **ICORE2026**
 （取代 CORE2023），名次有變動。`rank.icore_id` 才是可靠的鍵——ICORE 裡的 "FSE"
 有兩筆：Fast Software Encryption（B）和 ACM FoSE（A*，id 52）。
 
-`rank.below_threshold: true` 表示這個會議低於 B 門檻但你刻意保留（CIAA 是 C 級）。
+## 滾動截稿
+
+有些會議一年收好幾輪（CSF 分 summer / fall / winter 三輪）。這種用
+`<kind>_cycleN` 表示，例如 `submission_cycle2`、`notification_cycle2`。
+後綴是解析出來的而不是列舉的，所以五輪的會議也不必改程式。
+
+順序檢查會**分輪進行**——第 2 輪的投稿本來就早於第 1 輪的通知，跨輪比較會把正確的
+行事曆判成壞的。「我的投稿」也只顯示每種里程碑最近的那一個，不會把三輪的通知全堆上來。

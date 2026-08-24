@@ -57,14 +57,12 @@ export function lookup(ranks, acronym) {
 
 /** Build the `rank` block for a conference YAML. */
 export function rankBlock(match, { checked_on, ambiguous = false } = {}) {
-  const THRESHOLD = ['A*', 'A', 'B'];
   return {
     source: EDITION,
     value: match.value,
     icore_id: match.icore_id,
     checked_on: checked_on || new Date().toISOString().slice(0, 10),
     ...(ambiguous ? { ambiguous: true } : {}),
-    ...(THRESHOLD.includes(match.value) ? {} : { below_threshold: true }),
   };
 }
 
