@@ -191,11 +191,8 @@ function renderDeadlines(root, now) {
       const live = !isPast && nextFor.get(sub.id) === m.kind;
       const chip = el('span', 'mine-chip' + (live ? ' live' : ''));
       chip.textContent = `${live ? '▸ ' : ''}${sub.paper}`;
-      chip.title = live
-        ? `${sub.paper}\n狀態：${statusLabel(sub.status)}\n` +
-          `→ 這是這篇論文的下一個關鍵日期（每篇只會反白一個）。`
-        : `${sub.paper}\n狀態：${statusLabel(sub.status)}\n` +
-          (isPast ? '這個日期已經過了。' : '這個日期還輪不到你，或不影響目前的狀態。');
+      // Only what the chip cannot show: the title is truncated and the status is absent.
+      chip.title = `${sub.paper}\n狀態：${statusLabel(sub.status)}`;
       what.appendChild(chip);
     }
     row.appendChild(what);
