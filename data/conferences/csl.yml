@@ -11,6 +11,20 @@ rank:
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: csl-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: Jan 24-28, 2028 (estimated)
+    start_date: 2028-01-24
+    end_date: 2028-01-28
+    milestones:
+      - {kind: submission, date: 2027-07-07, confidence: estimated, derived_from: csl-2027/submission}
+      - {kind: notification, date: 2027-10-14, confidence: estimated, derived_from: csl-2027/notification}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: csl-2027
     link: https://csl2027.github.io/

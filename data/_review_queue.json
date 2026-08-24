@@ -6,7 +6,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"CADE 2026\" is \"International Conference on AI and the Digital Economy\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "cade",
@@ -15,7 +15,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"CADE 2025\" is \"International Conference on AI and the Digital Economy (CADE) 2025\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "cade",
@@ -24,7 +24,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"CADE 2024\" is \"International Conference on AI and the Digital Economy (CADE)\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "cade",
@@ -33,7 +33,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"CADE 2022\" is \"Competitive Advantage in the Digital Economy (CADE) 2022\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "icaps",
@@ -42,7 +42,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "icaps",
@@ -51,7 +51,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "icfp",
@@ -60,7 +60,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"ICFP 2022\" is \"https://icfp22.sigplan.org/\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "iclr",
@@ -69,7 +69,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"ICLR 2025\" is \"Call for Workshops\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "ijcar",
@@ -78,7 +78,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "submission (2025-02-15) precedes abstract (2026-02-06)",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "lpar",
@@ -87,7 +87,7 @@
     "reason": "stale-base",
     "severity": "action",
     "detail": "derived from lpar-2024/abstract, a 3-year shift - too far back to trust",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "lpar",
@@ -96,7 +96,7 @@
     "reason": "stale-base",
     "severity": "action",
     "detail": "derived from lpar-2024/submission, a 3-year shift - too far back to trust",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "lpar",
@@ -105,7 +105,7 @@
     "reason": "stale-base",
     "severity": "action",
     "detail": "derived from lpar-2024/notification, a 3-year shift - too far back to trust",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "lpar",
@@ -114,7 +114,7 @@
     "reason": "stale-base",
     "severity": "action",
     "detail": "derived from lpar-2024/camera_ready, a 3-year shift - too far back to trust",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "sas",
@@ -123,7 +123,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"SAS 2026\" is \"Animate Experience - The 37th Annual Conference of the Society for Animation Studies\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   },
   {
     "conference": "sefm",
@@ -132,6 +132,6 @@
     "reason": "stale-base",
     "severity": "action",
     "detail": "derived from sefm-2023/submission, a 4-year shift - too far back to trust",
-    "seen_at": "2026-08-24T14:12:46.005Z"
+    "seen_at": "2026-08-24T17:12:33.801Z"
   }
 ]

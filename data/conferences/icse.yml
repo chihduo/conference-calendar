@@ -6,6 +6,25 @@ sources:
   - {tier: 2, adapter: researchr, ref: icse-2027, track: Research Track}
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: icse-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: Apr 25-29, 2028 (estimated)
+    start_date: 2028-04-25
+    end_date: 2028-04-29
+    milestones:
+      - {kind: abstract, date: 2027-06-22, confidence: estimated, derived_from: icse-2027/abstract}
+      - {kind: submission, date: 2027-06-29, confidence: estimated, derived_from: icse-2027/submission}
+      - {kind: rebuttal_start, date: 2027-09-24, confidence: estimated, derived_from: icse-2027/rebuttal_start}
+      - {kind: notification, date: 2027-10-19, confidence: estimated, derived_from: icse-2027/notification}
+      - {kind: revision, date: 2027-11-16, confidence: estimated, derived_from: icse-2027/revision}
+      - {kind: camera_ready, date: 2027-11-23, confidence: estimated, derived_from: icse-2027/camera_ready}
+      - {kind: final_notification, date: 2027-12-17, confidence: estimated, derived_from: icse-2027/final_notification}
+      - {kind: camera_ready_after_revision, date: 2028-01-24, confidence: estimated, derived_from: icse-2027/camera_ready_after_revision}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: icse-2027
     timezone: AoE

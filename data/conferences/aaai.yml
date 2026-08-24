@@ -12,6 +12,21 @@ sources:
   - {tier: 3, adapter: wikicfp}
   - {tier: 1, adapter: ccfddl, ref: conference/AI/aaai.yml}
 editions:
+  - year: 2028
+    id: aaai-2028
+    timezone: UTC-12
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: Feb 15-22, 2028 (estimated)
+    start_date: 2028-02-15
+    end_date: 2028-02-22
+    milestones:
+      - {kind: abstract, date: 2027-07-20, confidence: estimated, derived_from: aaai-2027/abstract}
+      - {kind: submission, date: 2027-07-27, confidence: estimated, derived_from: aaai-2027/submission}
+      - {kind: notification, date: 2027-11-29, confidence: estimated, derived_from: aaai-2027/notification}
+      - {kind: camera_ready, date: 2027-12-13, confidence: estimated, derived_from: aaai-2027/camera_ready}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: aaai-2027
     link: https://aaai.org/conference/aaai/aaai-27/
