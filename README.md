@@ -52,6 +52,12 @@ notification 才會浮上來；標成 `accepted` 之後才輪到 camera-ready �
 early-rejection 刻意不在鏈上——artifact 在有些會議是投稿時交、有些是錄取後才交，
 硬性排序會編碼一個不成立的假設。
 
+## 主題
+
+**預設深色。** 深色色票直接放在 `:root` 上，不是藏在 `@media (prefers-color-scheme)`
+後面——否則頁面會先畫成淺色再被 JS 換掉，開啟時會閃一下白。切換鈕把選擇存進
+localStorage，之後沿用；按鈕上寫的是「切過去會變成什麼」，不是目前狀態。
+
 ## 時區
 
 日期一律照 CFP 原文顯示（多為 AoE），因為你要拿它跟 CFP 對照；滑鼠移到日期上會顯示

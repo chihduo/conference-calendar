@@ -70,5 +70,40 @@ console.log('\n=== 刪光之後 ===');
   dom.window.close();
 }
 
+console.log('\n=== 主題預設 ===');
+{
+  const html = fs.readFileSync('dist/index.html', 'utf8');
+  const mk = (pre) => {
+    const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
+      { runScripts: 'dangerously', url: 'https://example.org/' });
+    if (pre) dom.window.localStorage.setItem('cc-theme', pre);
+    dom.window.confirm = () => false;
+    dom.window.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
+    dom.window.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]);
+    return dom;
+  };
+
+  let d = mk(null);
+  check('沒有偏好時預設深色', d.window.document.documentElement.dataset.theme === 'dark',
+        d.window.document.documentElement.dataset.theme);
+  const btn = d.window.document.querySelector('#theme');
+  check('切換鈕標示目標主題「淺色」', btn.textContent === '淺色', btn.textContent);
+  btn.click();
+  check('點一下切到淺色', d.window.document.documentElement.dataset.theme === 'light');
+  check('選擇有存起來', d.window.localStorage.getItem('cc-theme') === 'light');
+  d.window.close();
+
+  d = mk('light');
+  check('重新載入沿用存下的淺色', d.window.document.documentElement.dataset.theme === 'light');
+  d.window.close();
+
+  // dark must be the base palette, not a media query, or the page flashes light first
+  const css = html.match(/<style>([\s\S]*?)<\/style>/)[1];
+  const base = /:root, :root\[data-theme="dark"\] \{[\s\S]*?--paper: (#[0-9a-f]{6})/.exec(css);
+  check(':root 基礎色票就是深色（不靠 JS，不會閃白）', base && base[1] === '#13171b', base?.[1]);
+  check('不再用 prefers-color-scheme 決定主題',
+        !/@media[^{]*prefers-color-scheme[^{]*\{[^}]*--paper/.test(css));
+}
+
 console.log(`\n${pass}/${total} 通過`);
 process.exit(pass === total ? 0 : 1);

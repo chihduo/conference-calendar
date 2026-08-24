@@ -685,15 +685,18 @@ function render(opts = {}) {
 }
 
 /* theme */
+/* Dark unless the reader has chosen otherwise. The CSS already paints dark with
+   no data-theme set, so this only records the choice explicitly. */
 function initTheme() {
-  const saved = localStorage.getItem('cc-theme');
-  if (saved) document.documentElement.dataset.theme = saved;
-  $('#theme').onclick = () => {
-    const cur = document.documentElement.dataset.theme
-      || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    const next = cur === 'dark' ? 'light' : 'dark';
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem('cc-theme', next);
+  const root = document.documentElement;
+  root.dataset.theme = localStorage.getItem('cc-theme') || 'dark';
+  const btn = $('#theme');
+  const label = () => { btn.textContent = root.dataset.theme === 'dark' ? '淺色' : '深色'; };
+  label();
+  btn.onclick = () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('cc-theme', root.dataset.theme);
+    label();
   };
 }
 
