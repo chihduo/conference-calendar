@@ -40,18 +40,34 @@ function fmtDate(m) {
   const d = new Date(m.date + 'T12:00:00Z');
   return `${m.date} <b>${WD[d.getUTCDay()]}</b>`;
 }
+/* Calendar-day difference in the VIEWER's timezone, not a count of elapsed
+   24-hour periods. The duration form ticked over at whatever clock time the
+   deadline instant happened to fall on locally - VMCAI's AoE deadline made the
+   number drop at 7:59pm in Taipei - which nobody expects. Comparing local
+   midnights instead makes it change at local midnight, everywhere.
+   Math.round absorbs the 23- or 25-hour day at a DST transition. */
+const localMidnight = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+const daysUntilLocal = (t, now) => Math.round((localMidnight(t) - localMidnight(now)) / 86400000);
+
 function countdown(t, now) {
+  const days = daysUntilLocal(t, now);
   const ms = t - now;
-  if (ms < 0) {
-    const d = Math.floor(-ms / 86400000);
-    return { txt: d === 0 ? '今天稍早' : `${d} 天前`, cls: '' };
+
+  if (days < 0) return { txt: `${-days} 天前`, cls: '', days };
+  if (days === 0) {
+    /* On the final day a bare "today" is not actionable - two hours and twenty
+       hours are different situations - so this is the one place an hour count
+       earns its keep. */
+    if (ms <= 0) return { txt: '今天稍早', cls: '', days };
+    const hrs = Math.floor(ms / 3600000);
+    if (hrs < 1) return { txt: `剩 ${Math.max(1, Math.floor(ms / 60000))} 分`, cls: 'cd urgent', days };
+    return { txt: `今天 · 剩 ${hrs} 小時`, cls: 'cd urgent', days };
   }
-  const days = Math.floor(ms / 86400000);
-  const hrs = Math.floor(ms / 3600000);
-  if (hrs < 48) return { txt: `${hrs} 小時`, cls: 'cd urgent' };
-  if (days <= 14) return { txt: `${days} 天`, cls: 'cd near' };
-  return { txt: `${days} 天`, cls: 'cd' };
+  if (days === 1) return { txt: '明天', cls: 'cd urgent', days };
+  if (days <= 14) return { txt: `${days} 天`, cls: 'cd near', days };
+  return { txt: `${days} 天`, cls: 'cd', days };
 }
+
 const MONTHS = ['1 月', '2 月', '3 月', '4 月', '5 月', '6 月', '7 月', '8 月', '9 月', '10 月', '11 月', '12 月'];
 /* Group by the date the CFP states, not by the UTC instant: an AoE deadline on
    the 30th converts to the 1st of the next month in UTC, which would file it
@@ -108,10 +124,10 @@ function renderDeadlines(root, now) {
     const mk = monthKeyOf(m);
     if (mk !== lastMonth) { root.appendChild(el('div', 'month', mk)); lastMonth = mk; }
 
-    const isPast = t < now;
+    const isPast = t < now;              // "past" stays absolute: 2 hours ago is past
     const cd = countdown(t, now);
-    const days = (t - now) / 86400000;
-    const sev = isPast ? ' past' : days <= 2 ? ' urgent' : days <= 14 ? ' soon' : '';
+    const days = cd.days;
+    const sev = isPast ? ' past' : days <= 1 ? ' urgent' : days <= 14 ? ' soon' : '';
     const row = el('div', 'row' + sev);
 
     const dt = el('div', 'dt');
