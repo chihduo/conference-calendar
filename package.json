@@ -10,7 +10,8 @@
     "ranks": "node scripts/adapters/icore.mjs",
     "add": "node scripts/add.mjs",
     "refresh": "node scripts/refresh.mjs",
-    "audit": "node scripts/audit.mjs"
+    "audit": "node scripts/audit.mjs",
+    "test:ui": "node test/ui.test.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -18,5 +19,8 @@
     "js-yaml": "^4.1.0",
     "luxon": "^3.5.0",
     "node-html-parser": "^9.0.1"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3"
   }
 }

@@ -461,8 +461,25 @@ function renderSubmissions(root, now) {
       saveSubs(list); render();
     };
     line.appendChild(sel);
+    /* Confirm inline instead of through window.confirm: the published page runs
+       in a sandboxed iframe, where a modal call is ignored and returns false -
+       so the button did nothing at all, with no dialog and no error. A two-step
+       button needs no modal API and behaves the same from file://. */
     const del = el('button', 'chip', '刪除');
-    del.onclick = () => { if (confirm(`刪除「${s.paper}」的紀錄？`)) { saveSubs(loadSubs().filter((x) => x.id !== s.id)); render(); } };
+    let armed = false, armTimer = null;
+    const disarm = () => { armed = false; del.textContent = '刪除'; del.className = 'chip'; };
+    del.onclick = () => {
+      if (!armed) {
+        armed = true;
+        del.textContent = '再按一次確認';
+        del.className = 'chip danger';
+        armTimer = setTimeout(disarm, 4000);
+        return;
+      }
+      clearTimeout(armTimer);
+      saveSubs(loadSubs().filter((x) => x.id !== s.id));
+      render();
+    };
     line.appendChild(del);
     card.appendChild(line);
 
@@ -504,6 +521,9 @@ function renderSubmissions(root, now) {
   exp.download = 'my-submissions.json';
   box.appendChild(exp);
 
+  const status = el('div', 'count');
+  status.style.margin = '6px 0 0';
+
   const impLabel = el('label', null, '匯入 JSON');
   impLabel.style.cssText = 'font:500 12px var(--ui);color:var(--petrol);border:1px solid var(--line);border-radius:3px;padding:4px 10px;background:var(--surface);cursor:pointer';
   const imp = el('input'); imp.type = 'file'; imp.accept = 'application/json'; imp.style.display = 'none';
@@ -512,12 +532,15 @@ function renderSubmissions(root, now) {
     try {
       const parsed = JSON.parse(await f.text());
       if (!Array.isArray(parsed.submissions)) throw new Error('缺少 submissions 陣列');
-      const cur = loadSubs();
-      const byId = new Map(cur.map((x) => [x.id, x]));
+      const byId = new Map(loadSubs().map((x) => [x.id, x]));
       for (const s of parsed.submissions) byId.set(s.id, s);
       saveSubs([...byId.values()]);
       render();
-    } catch (e) { alert('匯入失敗：' + e.message); }
+    } catch (e) {
+      // alert() is blocked in the sandboxed iframe too; report in the page.
+      status.textContent = `匯入失敗：${e.message}`;
+      status.style.color = 'var(--rust)';
+    }
   };
   impLabel.appendChild(imp);
   box.appendChild(impLabel);
@@ -527,6 +550,7 @@ function renderSubmissions(root, now) {
   ics.download = 'my-deadlines.ics';
   box.appendChild(ics);
   root.appendChild(box);
+  root.appendChild(status);
 }
 
 /* Built in the browser rather than at build time, because the source data

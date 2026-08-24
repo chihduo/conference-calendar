@@ -183,3 +183,5 @@ footer { margin-top: 38px; padding-top: 15px; border-top: 1px solid var(--line);
   border-radius: 2px; padding: 0 5px; max-width: 30ch; overflow: hidden; text-overflow: ellipsis;
   white-space: nowrap; }
 .mine-chip.live { background: var(--petrol); color: var(--paper); border-color: var(--petrol); font-weight: 620; }
+
+.chip.danger { color: var(--rust); border-color: currentColor; font-weight: 620; }

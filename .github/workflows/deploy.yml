@@ -26,6 +26,8 @@ jobs:
       # A schema or guard failure must stop the deploy, not ship broken dates.
       - run: npm run validate
       - run: npm run build
+      # Browser-level checks run against the built page, so they must follow the build.
+      - run: npm run test:ui
       - uses: actions/upload-pages-artifact@v3
         with: { path: dist }
 

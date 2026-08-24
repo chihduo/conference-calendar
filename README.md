@@ -10,7 +10,13 @@ npm run validate       # schema + 合理性檢查
 npm run refresh        # 抓取所有來源並寫回 YAML（--dry-run 只印不寫）
 npm run add CONCUR     # 只給縮寫，自動補齊整份資料
 npm run ranks FSE      # 查 ICORE 排名
+npm run audit          # 檢查推估值:快到期了還沒確認?基準是不是太舊?
+npm run test:ui        # 用真的 DOM 對 dist/index.html 跑瀏覽器層測試
 ```
+
+`test:ui` 把 `window.confirm` 固定成回傳 `false`，模擬沒有 `allow-modals` 的
+sandboxed iframe。發佈成 artifact 的頁面就跑在那種環境裡，`confirm()` 會被瀏覽器
+靜默忽略——刪除按鈕曾因此完全沒有反應。頁面裡不再使用任何 `confirm()` / `alert()`。
 
 ## 兩層資料模型
 
