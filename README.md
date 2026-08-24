@@ -133,6 +133,9 @@ early-rejection 刻意不在鏈上——artifact 在有些會議是投稿時交�
 - **`locked: true`** 可釘住任何你確認過的值。
 - 過不了的通通進 `data/_review_queue.json`，網站上會顯示。
 - 每次 refresh 都是一次 bot commit，`git diff` 逐行可讀，`git revert` 就是還原鍵。
+- 部署透過 `workflow_run` 接在 refresh 之後，而不是靠 push 觸發：GitHub 規定用
+  `GITHUB_TOKEN` 推的 commit **不會觸發任何 workflow**（防無限迴圈），所以 bot 更新
+  資料之後網站不會自己重建。refresh 失敗時不部署。
 
 ## 瀏覽器層測試
 

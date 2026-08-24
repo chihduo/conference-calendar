@@ -5,6 +5,12 @@ on:
     branches: [main]
     paths: ['data/**', 'site/**', 'scripts/**', 'schema/**', 'package*.json', '.github/workflows/deploy.yml']
   workflow_dispatch:
+  # A push made with GITHUB_TOKEN deliberately triggers no workflow, so the
+  # nightly refresh would update the data and never rebuild the site.
+  # workflow_run is the documented way to chain across that boundary.
+  workflow_run:
+    workflows: ["Refresh deadlines"]
+    types: [completed]
 
 permissions:
   contents: read
@@ -17,6 +23,10 @@ concurrency:
 
 jobs:
   build:
+    # Never publish on top of a refresh that failed its guards.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
