@@ -11,7 +11,9 @@
     "add": "node scripts/add.mjs",
     "refresh": "node scripts/refresh.mjs",
     "audit": "node scripts/audit.mjs",
-    "test:ui": "node test/ui.test.mjs"
+    "test:ui": "node test/ui.test.mjs",
+    "test:subs": "node test/submissions.test.mjs",
+    "test": "npm run test:ui --silent && npm run test:subs --silent"
   },
   "dependencies": {
     "ajv": "^8.17.1",

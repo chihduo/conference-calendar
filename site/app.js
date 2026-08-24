@@ -398,6 +398,36 @@ function pending(sub, now) {
   return future.filter((x) => !seen.has(baseKind(x.m.kind)) && seen.add(baseKind(x.m.kind)));
 }
 
+/* Kinds that mean "the call is open". */
+const CALL_KINDS = new Set(['abstract', 'submission']);
+
+/* pending() coming back empty has three different causes and they need three
+   different sentences. Telling someone POPL 2027 "has not published its dates"
+   is simply false - they are published, confirmed, and gone. */
+function pendingReason(sub, now) {
+  const hit = editionsIndex().get(sub.venue);
+  if (!hit) return { kind: 'unknown-venue' };
+  const kinds = RELEVANT[sub.status] || [];
+  if (!kinds.length) return { kind: 'done' };
+  const dated = hit.e.milestones
+    .filter((m) => kinds.includes(baseKind(m.kind)) && m.iso)
+    .sort((a, b) => new Date(b.iso) - new Date(a.iso));
+  if (!dated.length) return { kind: 'unpublished' };
+  if (new Date(dated[0].iso) <= now) return { kind: 'passed', last: dated[0] };
+  return { kind: 'none' };
+}
+
+/** Is this edition still accepting submissions? */
+const callOpen = (ed, now) =>
+  ed.milestones.some((m) => m.iso && CALL_KINDS.has(baseKind(m.kind)) && new Date(m.iso) > now);
+
+/** The nearest edition of the same conference whose call is still open. */
+function nextOpenEdition(confId, now) {
+  const conf = DATA.conferences.find((c) => c.id === confId);
+  return conf?.editions.filter((e) => e.status !== 'past' && callOpen(e, now))
+    .sort((a, b) => a.year - b.year)[0] || null;
+}
+
 function renderSubmissions(root, now) {
   const subs = loadSubs();
   const idx = editionsIndex();
@@ -412,7 +442,9 @@ function renderSubmissions(root, now) {
     .filter(([, v]) => v.e.status !== 'past')
     .sort((a, b) => (a[1].c.name + a[1].e.year).localeCompare(b[1].c.name + b[1].e.year))
     .forEach(([id, v]) => venue.appendChild(Object.assign(el('option'), {
-      value: id, textContent: `${v.c.name} ${v.e.year}${v.e.status === 'estimated' ? '（推估）' : ''}`,
+      value: id,
+      textContent: `${v.c.name} ${v.e.year}` +
+        (!callOpen(v.e, now) ? '（投稿已截止）' : v.e.status === 'estimated' ? '（推估）' : ''),
     })));
   const st = el('select');
   STATUSES.forEach(([v, l]) => st.appendChild(Object.assign(el('option'), { value: v, textContent: l })));
@@ -484,10 +516,33 @@ function renderSubmissions(root, now) {
     card.appendChild(line);
 
     if (!p.length) {
-      card.appendChild(el('div', 'note',
-        ['rejected', 'withdrawn'].includes(s.status) ? '沒有待辦日期。'
-          : s.status === 'registered' ? '都辦完了，等著去開會。'
-          : '這個會議還沒公布相關日期。'));
+      const r = pendingReason(s, now);
+      const note = el('div', 'note');
+      if (r.kind === 'done') {
+        note.textContent = s.status === 'registered' ? '都辦完了，等著去開會。' : '沒有待辦日期。';
+      } else if (r.kind === 'passed') {
+        note.textContent = `${r.last.label} 已於 ${r.last.date} 截止。`;
+        const nxt = hit && nextOpenEdition(hit.c.id, now);
+        if (nxt) {
+          const call = nxt.milestones
+            .filter((m) => m.iso && CALL_KINDS.has(baseKind(m.kind)) && new Date(m.iso) > now)
+            .sort((a, b) => new Date(a.iso) - new Date(b.iso))[0];
+          const b = el('button', 'chip', `改投 ${hit.c.name} ${nxt.year}`);
+          b.title = `${call.label} ${call.date}${call.confidence === 'estimated' ? '（推估）' : ''}`;
+          b.onclick = () => {
+            const list = loadSubs();
+            const t = list.find((x) => x.id === s.id);
+            t.venue = nxt.id;
+            (t.history ||= []).push({ status: t.status, on: todayLocal(), note: `venue -> ${nxt.id}` });
+            saveSubs(list); render();
+          };
+          note.appendChild(document.createTextNode(' '));
+          note.appendChild(b);
+        }
+      } else {
+        note.textContent = '這個會議還沒公布相關日期。';
+      }
+      card.appendChild(note);
     } else {
       const tb = el('table', 'ms-table');
       for (const x of p) {

@@ -14,7 +14,7 @@ npm run refresh        # 抓取所有來源並寫回 YAML（--dry-run 只印不�
 npm run add CONCUR     # 只給縮寫，自動補齊整份資料
 npm run ranks FSE      # 查 ICORE 排名
 npm run audit          # 檢查推估值:快到期了還沒確認?基準是不是太舊?
-npm run test:ui        # 用真的 DOM 對 dist/index.html 跑瀏覽器層測試
+npm test               # 用真的 DOM 對 dist/index.html 跑瀏覽器層測試
 ```
 
 ## 兩層資料模型
@@ -136,12 +136,20 @@ early-rejection 刻意不在鏈上——artifact 在有些會議是投稿時交�
 
 ## 瀏覽器層測試
 
-`npm run test:ui` 用 jsdom 對**建好的** `dist/index.html` 派發真實事件。這件事有必要，
+`npm test` 用 jsdom 對**建好的** `dist/index.html` 派發真實事件。這件事有必要，
 是因為手寫的 DOM stub 不派發事件、而且每個 API 都有實作，所以在瀏覽器裡是死的程式碼
 在它裡面照樣「通過」——刪除按鈕就是這樣漏掉的：發佈成 artifact 的頁面跑在 sandboxed
 iframe 裡，沒有 `allow-modals` 時 `confirm()` 會被瀏覽器靜默忽略並回傳 `false`，
 守衛永遠不成立。測試把 `window.confirm` 固定成 `false` 複製那個環境；頁面本身現在
-不使用任何 `confirm()` / `alert()`。已接進 `deploy.yml`。
+不使用任何 `confirm()` / `alert()`。
+
+`test/submissions.test.mjs` 顧的是另一類錯誤：訊息說了假話。`pending()` 回空集合有
+三種成因——會議還沒公布日期、日期公布了但已經過去、這個狀態本來就沒有待辦——先前
+三者共用一句「這個會議還沒公布相關日期」。對 POPL 2027 而言那是錯的：它的日期是官方
+確認的，只是 2026-07-09 就截止了。現在分開講，而且截止的情況會直接給一顆「改投下一屆」
+的按鈕（下一屆往往正是 `rollForward` 推估出來的那個）。
+
+兩套都接進 `deploy.yml`。
 
 ## 新增會議
 
