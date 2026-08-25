@@ -1,0 +1,67 @@
+id: iswc
+name: ISWC
+full_name: International Semantic Web Conference
+areas: [FM]
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 1338
+  checked_on: 2026-08-25
+  ambiguous: true
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/DB/iswc.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: iswc-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: TBD
+    milestones:
+      - {kind: abstract, date: 2027-05-01, confidence: estimated, derived_from: iswc-2026/abstract}
+      - {kind: submission, date: 2027-05-06, confidence: estimated, derived_from: iswc-2026/submission}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: iswc-2026
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2026-05-02
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/DB/iswc.yml
+      - kind: submission
+        date: 2026-05-07
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/DB/iswc.yml
+    link: https://iswc2026.semanticweb.org/
+    place: Bari, Italy
+    dates: October 25-29, 2026
+    status: past
+  - year: 2025
+    id: iswc-2025
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2025-05-06
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/DB/iswc.yml
+      - kind: submission
+        date: 2025-05-13
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/DB/iswc.yml
+      - {kind: notification, date: 2025-07-17, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=185464}
+      - {kind: camera_ready, date: 2025-07-31, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=185464}
+    link: https://iswc2025.semanticweb.org
+    place: Nara, Japan
+    dates: November 2-6, 2025
+    start_date: 2025-11-02
+    end_date: 2025-11-06
+    status: past

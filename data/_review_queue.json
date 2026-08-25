@@ -133,5 +133,32 @@
     "severity": "action",
     "detail": "derived from sefm-2023/submission, a 4-year shift - too far back to trust",
     "seen_at": "2026-08-25T04:01:34.225Z"
+  },
+  {
+    "conference": "iswc",
+    "edition": null,
+    "kind": null,
+    "reason": "newly-added",
+    "severity": "info",
+    "detail": "Could not infer the research area from \"International Semantic Web Conference\"; defaulted to FM.",
+    "seen_at": "2026-08-25T06:49:15.594Z"
+  },
+  {
+    "conference": "iswc",
+    "edition": null,
+    "kind": null,
+    "reason": "newly-added",
+    "severity": "info",
+    "detail": "ICORE has 2 venues called ISWC: A id=1338 International Semantic Web Conference | Journal Published id=708 IEEE International Symposium on Wearable Computers",
+    "seen_at": "2026-08-25T06:49:15.594Z"
+  },
+  {
+    "conference": "iswc",
+    "edition": null,
+    "kind": null,
+    "reason": "newly-added",
+    "severity": "info",
+    "detail": "2027 not published yet - estimated from iswc-2026 by +364d x 1.",
+    "seen_at": "2026-08-25T06:49:15.594Z"
   }
 ]
