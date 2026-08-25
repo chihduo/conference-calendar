@@ -15,7 +15,8 @@
     "test:subs": "node test/submissions.test.mjs",
     "test": "npm run test:ui --silent && npm run test:subs --silent && npm run test:sync --silent",
     "resolve": "node scripts/resolve.mjs",
-    "test:sync": "node test/sync.test.mjs"
+    "test:sync": "node test/sync.test.mjs",
+    "ack": "node scripts/ack.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",

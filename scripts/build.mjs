@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { DateTime } from 'luxon';
 import { ROOT, loadConferences, readReviewQueue, instantOf, kindLabel, byDateThenKind,
-         auditEstimates, severityOf } from './lib.mjs';
+         auditEstimates, severityOf, applyAcks } from './lib.mjs';
 
 const DIST = path.join(ROOT, 'dist');
 const SITE = path.join(ROOT, 'site');
@@ -55,7 +55,7 @@ function buildModel() {
   const stored = readReviewQueue().filter((r) => !r.reason?.startsWith('estimate') && r.reason !== 'stale-base');
   return {
     generated_at: DateTime.utc().toISO(), conferences: out,
-    review_queue: [...stored, ...audit],
+    review_queue: applyAcks([...stored, ...audit]),
   };
 }
 

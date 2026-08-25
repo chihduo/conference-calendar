@@ -9,6 +9,7 @@ import { DateTime } from 'luxon';
 import {
   CONF_DIR, loadYaml, saveConference, writeReviewQueue, readReviewQueue, severityOf,
   CONFIDENCE_RANK, TIER_CONFIDENCE_CEILING, editionIssues, daysBetween, shift364, byDateThenKind, auditEstimates,
+  applyAcks,
   baseKind, estimateEdition, CALL_KINDS,
 } from './lib.mjs';
 import * as ccfddl from './adapters/ccfddl.mjs';
@@ -327,10 +328,13 @@ for (const f of files) {
 if (!DRY) {
   const examined = new Set(files.map((f) => f.replace(/\.ya?ml$/, '')));
   const kept = readReviewQueue().filter((r) => !examined.has(r.conference));
-  writeReviewQueue([...kept, ...review]);
+  writeReviewQueue(applyAcks([...kept, ...review]));
 }
-console.log(`\n${touched} file(s) with changes, ${review.filter((r) => r.severity === 'action').length} item(s) needing a decision.`);
-const actionable = review.filter((r) => r.severity === 'action');
+const stillOpen = applyAcks(review).filter((r) => r.severity === 'action').length;
+const muted = review.length - applyAcks(review).filter((r) => r.severity !== 'acknowledged').length;
+console.log(`\n${touched} file(s) with changes, ${stillOpen} item(s) needing a decision`
+  + (muted ? ` (${muted} acknowledged)` : '') + '.');
+const actionable = applyAcks(review).filter((r) => r.severity === 'action');
 if (actionable.length) {
   console.log('\nNeeds a decision:');
   for (const r of actionable) console.log(`   ! [${r.reason}] ${r.conference}${r.edition ? '/' + r.edition : ''}: ${r.detail}`);

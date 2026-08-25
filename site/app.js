@@ -267,6 +267,7 @@ function renderReviewQueue(root) {
   const box = el('div', 'notice');
   const head = el('div');
   head.appendChild(el('span', 'lbl', `${items.length} 筆自動抓取待確認`));
+  head.appendChild(el('span', 'count', '看過之後用 npm run ack 確認，就不會再提示'));
   box.appendChild(head);
   const more = el('button', 'chip', '展開');
   const list = el('div');

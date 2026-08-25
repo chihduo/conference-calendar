@@ -15,6 +15,7 @@ npm run add CONCUR     # 只給縮寫，自動補齊整份資料
 npm run ranks FSE      # 查 ICORE 排名
 npm run resolve ...    # 把 issue 對話裡選的答案套用到某個會議
 npm run audit          # 檢查推估值：快到期了還沒確認？基準是不是太舊？
+npm run ack            # 列出待確認的自動抓取結果；確認過的不再提示
 npm test               # 用真的 DOM 對 dist/index.html 跑瀏覽器層測試
 ```
 
@@ -173,6 +174,10 @@ localStorage，之後沿用；按鈕上寫的是「切過去會變成什麼」�
   日期須落在合理年份區間）。不過就整批回退。
 - **`locked: true`** 可釘住任何你確認過的值。
 - 過不了的通通進 `data/_review_queue.json`，網站上會顯示。
+- **看過的可以確認掉**（`npm run ack`）。這不是可有可無的：多數項目是穩定的事實而
+  不是待辦決定——WikiCFP 上的 CADE 是別的會議，明天還是——所以無法關掉的警告會變成
+  壁紙，然後真正新的那一筆就沒人讀了。確認不是刪除，紀錄仍在 `_acknowledged.json` 裡，
+  細節有實質變動時會自己回來。
 - 每次 refresh 都是一次 bot commit，`git diff` 逐行可讀，`git revert` 就是還原鍵。
 - 部署透過 `workflow_run` 接在 refresh 之後，而不是靠 push 觸發：GitHub 規定用
   `GITHUB_TOKEN` 推的 commit **不會觸發任何 workflow**（防無限迴圈），所以 bot 更新

@@ -208,6 +208,43 @@ export function firstDiff(a, b, path = '') {
   return { path: path || '/', before: a, after: b };
 }
 
+export const ACK_FILE = path.join(ROOT, 'data', '_acknowledged.json');
+
+/* A finding that cannot be dismissed becomes wallpaper, and then a genuinely new
+   one goes unread. Most of what this queue reports is a stable fact rather than
+   a pending decision - WikiCFP's CADE is a different conference and will be
+   again tomorrow - so those need to be answerable once.
+
+   The fingerprint drops 4-digit years, which is the difference between
+   acknowledging "WikiCFP's CADE is wrong" once and re-answering it every year.
+   Everything else stays in, so a conflict whose dates move re-surfaces: that
+   one really is a new decision. */
+export const fingerprint = (item) => {
+  /* wrong-venue is a statement about a mapping, not about one year's impostor.
+     WikiCFP's CADE carries a different bogus title each year, so keying on the
+     detail would ask the same question again every December. Keying on the
+     venue answers it once - and cannot hide anything, because a correct entry
+     produces no finding at all. */
+  if (item.reason === 'wrong-venue') return `wrong-venue|${item.conference || ''}`;
+  return [
+    item.reason, item.conference || '', item.edition || '', item.kind || '',
+    String(item.detail || '').replace(/\b(19|20)\d{2}\b/g, 'Y'),
+  ].join('|');
+};
+
+export function loadAcks() {
+  try { return JSON.parse(fs.readFileSync(ACK_FILE, 'utf8')); } catch { return []; }
+}
+export function saveAcks(list) {
+  fs.mkdirSync(path.dirname(ACK_FILE), { recursive: true });
+  fs.writeFileSync(ACK_FILE, JSON.stringify(list, null, 2) + '\n');
+}
+/** Acknowledged findings stay in the file as a record; they just stop shouting. */
+export function applyAcks(items, acks = loadAcks()) {
+  const seen = new Set(acks.map((a) => a.fingerprint));
+  return items.map((it) => (seen.has(fingerprint(it)) ? { ...it, severity: 'acknowledged' } : it));
+}
+
 export function readReviewQueue() {
   try { return JSON.parse(fs.readFileSync(REVIEW_QUEUE, 'utf8')); } catch { return []; }
 }
