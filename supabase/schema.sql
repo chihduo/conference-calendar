@@ -19,6 +19,15 @@ create table if not exists public.submissions (
 
 create index if not exists submissions_user_idx on public.submissions (user_id);
 
+-- Two separate layers, and both are required. GRANT decides whether a role may
+-- touch the table at all; RLS decides which rows. A table created here in the
+-- SQL editor gets no grants at all - only dashboard-created tables do - so
+-- without this even a signed-in user is refused with 42501.
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on public.submissions to authenticated;
+-- anon is deliberately given nothing: a signed-out visitor has no business
+-- reaching this table even to be filtered by RLS.
+
 alter table public.submissions enable row level security;
 
 -- Every policy is scoped to auth.uid(). Without RLS the anon key - which ships
@@ -57,3 +66,6 @@ begin
 
   return row;
 end $$;
+
+grant execute on function public.save_submission(text, text, text, text, jsonb, text, timestamptz)
+  to authenticated;

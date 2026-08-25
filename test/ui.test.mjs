@@ -23,7 +23,10 @@ function boot() {
   window.confirm = () => false;
   window.alert = () => {};
   window.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
-  window.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]);
+  // Local-only mode: this suite is about the UI, and must not change behaviour
+  // just because data/sync-config.json exists in the checkout.
+  window.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]
+    .replace(/window\.__SYNC_CONFIG__ = [\s\S]*?;/, 'window.__SYNC_CONFIG__ = null;'));
   [...window.document.querySelectorAll('.tab')].find(t => t.textContent.includes('我的投稿')).click();
   return { dom, window };
 }
@@ -78,7 +81,10 @@ console.log('\n=== AoE 時鐘 ===');
   const w = dom.window;
   w.confirm = () => false;
   w.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
-  w.eval(html.match(/<script>([\s\S]*)<\/script>/)[1] + '\nglobalThis.__c={digitSVG,clockHTML,SEG_PATH};');
+  // Local-only mode: these suites are about the UI, and must not change
+  // behaviour just because data/sync-config.json exists in the checkout.
+  w.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]
+    .replace(/window\.__SYNC_CONFIG__ = [\s\S]*?;/, 'window.__SYNC_CONFIG__ = null;') + '\nglobalThis.__c={digitSVG,clockHTML,SEG_PATH};');
   const { digitSVG, clockHTML, SEG_PATH } = w.__c;
   const NAMES = Object.keys(SEG_PATH);
   const EXPECT = { 0:'abcdef',1:'bc',2:'abdeg',3:'abcdg',4:'bcfg',5:'acdfg',6:'acdefg',7:'abc',8:'abcdefg',9:'abcdfg' };
