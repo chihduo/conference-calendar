@@ -99,17 +99,33 @@ console.log('\n=== AoE 時鐘 ===');
 
   const dimAt = (sec) => { box.innerHTML = clockHTML(new Date(Date.UTC(2026, 7, 25, 12, 0, sec)));
     return box.querySelector('.lcd-colon').getAttribute('class').includes('dim'); };
-  check('冒號每秒閃爍', dimAt(0) === false && dimAt(1) === true && dimAt(2) === false);
+  check('冒號每秒閃爍（沒有秒數時，這是唯一在動的東西）',
+        dimAt(0) === false && dimAt(1) === true && dimAt(2) === false);
 
-  // AoE is UTC-12: the interesting cases are the ones that cross a boundary
-  let rollOk = 0;
-  for (const [iso, wantDate] of [['2026-08-25T11:59:59Z', '2026-08-24'],
-                                 ['2026-08-25T12:00:00Z', '2026-08-25'],
-                                 ['2026-01-01T00:00:00Z', '2025-12-31']]) {
+  /* Read the panel back the way an eye would: decode the lit segments of each
+     digit rather than trusting a text node, so a mis-mapped digit fails here. */
+  const readField = (sel) => [...box.querySelectorAll(`${sel} .lcd-digit`)]
+    .map((d) => Object.entries(EXPECT).find(([, v]) => [...v].sort().join('') === segsOf(d))?.[0] ?? '?')
+    .join('');
+
+  box.innerHTML = clockHTML(new Date('2026-08-25T12:00:00Z'));
+  check('日期用七段顯示，和時間同一尺寸',
+        box.querySelectorAll('.lcd-date .lcd-digit').length === 4 &&
+        box.querySelectorAll('.lcd-time .lcd-digit').length === 4,
+        `日期 ${box.querySelectorAll('.lcd-date .lcd-digit').length} 位，時間 ${box.querySelectorAll('.lcd-time .lcd-digit').length} 位`);
+  check('不顯示秒數（總共 8 位數字）',
+        box.querySelectorAll('.lcd-digit').length === 8);
+
+  let rollOk = 0, rolls = [];
+  for (const [iso, wantDate, wantTime] of [['2026-08-25T11:59:00Z', '0824', '2359'],
+                                           ['2026-08-25T12:00:00Z', '0825', '0000'],
+                                           ['2026-01-01T00:00:00Z', '1231', '1200']]) {
     box.innerHTML = clockHTML(new Date(iso));
-    if (box.querySelector('.lcd-date').textContent === wantDate) rollOk++;
+    const got = `${readField('.lcd-date')} ${readField('.lcd-time')}`;
+    rolls.push(got);
+    if (got === `${wantDate} ${wantTime}`) rollOk++;
   }
-  check('AoE 日期比 UTC 慢 12 小時（含跨日、跨年）', rollOk === 3, rollOk + '/3');
+  check('AoE 比 UTC 慢 12 小時（含跨日、跨年）', rollOk === 3, rolls.join(' | '));
 
   const clock = w.document.querySelector('#clock');
   check('時鐘在 header 裡（render() 不會重置它）',

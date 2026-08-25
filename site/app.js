@@ -718,14 +718,23 @@ const WD_EN = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 function clockHTML(now) {
   const aoe = new Date(now.getTime() - 12 * 3600 * 1000);   // AoE is a fixed UTC-12
   const p = (n) => String(n).padStart(2, '0');
-  const [hh, mm, ss] = [aoe.getUTCHours(), aoe.getUTCMinutes(), aoe.getUTCSeconds()].map(p);
-  const date = `${aoe.getUTCFullYear()}-${p(aoe.getUTCMonth() + 1)}-${p(aoe.getUTCDate())}`;
-  // the colon blinking on the second is what makes a digital clock look alive
-  const colon = `<span class="lcd-colon${aoe.getUTCSeconds() % 2 ? ' dim' : ''}"><i></i><i></i></span>`;
+  const [MM, DD] = [aoe.getUTCMonth() + 1, aoe.getUTCDate()].map(p);
+  const [hh, mm] = [aoe.getUTCHours(), aoe.getUTCMinutes()].map(p);
+  /* The date gets the same size as the time, because it is the operative half:
+     a deadline reads "2026-09-16 23:59:59 AoE", so what you check is whether it
+     is still the 16th. Seconds are dropped for the same reason - they never
+     change the answer. The year and weekday stay as small labels; nobody is
+     unsure which year it is. */
   const dig = (str) => [...str].map(digitSVG).join('');
+  // With no seconds on show, the blinking colon is the only sign it is live.
+  const colon = `<span class="lcd-colon${aoe.getUTCSeconds() % 2 ? ' dim' : ''}"><i></i><i></i></span>`;
   return `<div class="lcd-top"><span class="lcd-tag">AoE</span>` +
-         `<span class="lcd-date">${date}</span><span class="lcd-wd">${WD_EN[aoe.getUTCDay()]}</span></div>` +
-         `<div class="lcd-time">${dig(hh)}${colon}${dig(mm)}${colon}${dig(ss)}</div>`;
+         `<span class="lcd-year">${aoe.getUTCFullYear()}</span>` +
+         `<span class="lcd-wd">${WD_EN[aoe.getUTCDay()]}</span></div>` +
+         `<div class="lcd-readout">` +
+           `<span class="lcd-field lcd-date">${dig(MM)}<span class="lcd-dash"></span>${dig(DD)}</span>` +
+           `<span class="lcd-field lcd-time">${dig(hh)}${colon}${dig(mm)}</span>` +
+         `</div>`;
 }
 
 function initClock() {
