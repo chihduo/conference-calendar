@@ -33,17 +33,9 @@ jobs:
 
       - name: Commit changes
         run: |
-          git config user.name  'deadline-bot'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/
-          if git diff --staged --quiet; then
-            echo 'No changes.'
-          else
-            git commit -m "chore(data): refresh deadlines $(date -u +%Y-%m-%d)
+          scripts/ci-commit.sh "chore(data): refresh deadlines $(date -u +%Y-%m-%d)
 
-          $(node -e "const q=require('./data/_review_queue.json');console.log(q.length?q.length+' item(s) need review':'No review items')")"
-            git push
-          fi
+          $(node -e "const q=require('./data/_review_queue.json');console.log(q.filter(r=>r.severity==='action').length+' item(s) need a decision')")"
 
       - name: Publish the run log
         if: always()

@@ -99,13 +99,7 @@ jobs:
       - name: Commit
         if: steps.resolve.outputs.code != '3'
         run: |
-          git config user.name  'deadline-bot'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/
-          git diff --staged --quiet || {
-            git commit -m "feat(data): ${{ steps.acro.outputs.acronym }} via issue #${{ github.event.issue.number }}"
-            git push
-          }
+          scripts/ci-commit.sh "feat(data): ${{ steps.acro.outputs.acronym }} via issue #${{ github.event.issue.number }}"
 
       - name: Reply on the issue
         if: always() && github.event_name != 'workflow_dispatch'
