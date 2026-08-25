@@ -110,7 +110,7 @@ jobs:
             const acro = '${{ steps.acro.outputs.acronym }}';
             const id = '${{ steps.acro.outputs.id }}';
             const log = fs.existsSync('add.log') ? fs.readFileSync('add.log', 'utf8') : '';
-            const resolveOut = `${{ toJSON(steps.resolve.outputs.out) }}` || '';
+            const resolveOut = (${{ toJSON(steps.resolve.outputs.out) }} || '').toString();
             const code = '${{ steps.resolve.outputs.code }}';
 
             // Could not tell which option was meant - ask again, keep the thread open.
@@ -155,6 +155,11 @@ jobs:
               owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
               body: `${body}\n\n<details><summary>完整輸出</summary>\n\n\`\`\`\n${log.trim().slice(0, 55000)}\n\`\`\`\n</details>`,
             });
+            // the question is answered; the label must stop saying otherwise
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number, name: 'needs-choice',
+            }).catch(() => {});
             await github.rest.issues.update({
               owner: context.repo.owner, repo: context.repo.repo,
               issue_number: context.issue.number, state: 'closed',
