@@ -16,7 +16,8 @@
     "test": "npm run test:ui --silent && npm run test:subs --silent && npm run test:sync --silent",
     "resolve": "node scripts/resolve.mjs",
     "test:sync": "node test/sync.test.mjs",
-    "ack": "node scripts/ack.mjs"
+    "ack": "node scripts/ack.mjs",
+    "lint:docs": "node scripts/lint-docs.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -26,6 +27,7 @@
     "node-html-parser": "^9.0.1"
   },
   "devDependencies": {
-    "jsdom": "^24.1.3"
+    "jsdom": "^24.1.3",
+    "mermaid": "^10.9.8"
   }
 }

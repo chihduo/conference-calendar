@@ -17,6 +17,7 @@ npm run resolve ...    # 把 issue 對話裡選的答案套用到某個會議
 npm run audit          # 檢查推估值：快到期了還沒確認？基準是不是太舊？
 npm run ack            # 列出待確認的自動抓取結果；確認過的不再提示
 npm test               # 用真的 DOM 對 dist/index.html 跑瀏覽器層測試
+npm run lint:docs      # 驗證 README 裡的 mermaid 圖能解析
 ```
 
 ## 兩層資料模型
@@ -50,22 +51,100 @@ notification 才會浮上來；標成 `accepted` 之後才輪到 camera-ready �
 沒有 `data/sync-config.json` 時同步關閉，個人層就只存在瀏覽器 localStorage。設定之後
 改走 Supabase + GitHub 登入，做法見 `supabase/SETUP.md`。
 
-架構是**線上寫入 + 唯讀快取**：
+```mermaid
+flowchart LR
+    subgraph A["裝置 A"]
+        PA["靜態頁面<br/>單檔 HTML"]
+        CA[("唯讀快取")]
+    end
+    subgraph B["裝置 B"]
+        PB["靜態頁面"]
+        CB[("唯讀快取")]
+    end
+    subgraph S["Supabase"]
+        GT["GoTrue<br/>/auth/v1"]
+        PR["PostgREST<br/>/rest/v1"]
+        PG[("Postgres<br/>submissions<br/>GRANT + RLS")]
+    end
+    GH["GitHub<br/>OAuth"]
 
-- 寫入一律進資料庫，瀏覽器**不持有可寫副本**。兩台裝置因此不可能各自前進——
-  沒有合併邏輯，也沒有衝突解決，那是 local-first 才需要背的複雜度。
-- 離線時仍看得到上次同步的內容，但控制項全部停用。**不能離線編輯正是分歧無法產生的
-  機制**，不是使用上的不便。
-- 剩下唯一的風險是過期分頁覆寫掉它沒看過的變更。`save_submission` 收下前端讀到的
-  `updated_at`，不符就拒絕，前端重新載入並說明，而不是默默蓋掉。
+    PA -- "讀 / 寫" --> PR
+    PB -- "讀 / 寫" --> PR
+    PR --> PG
+    PR -. "拉取後填入" .-> CA
+    PR -.-> CB
+    CA -. "離線時顯示" .-> PA
+    CB -.-> PB
+    PA -- "登入" --> GT
+    PB -- "登入" --> GT
+    GT <-- "授權碼交換<br/>在伺服器端" --> GH
+```
 
-安全性靠兩層，缺一不可：**GRANT** 決定角色能不能碰這張表（只給 `authenticated`，
-`anon` 什麼都沒有），**RLS** 決定能碰哪些列（全部綁 `auth.uid()`）。網頁裡的
-publishable key 本來就設計成公開，真正的防線是這兩層。
+**圖裡最重要的是不存在的那條線:快取沒有回寫箭頭。** 快取由伺服器的回應填入、離線時
+供顯示，永遠不是寫入資料庫的來源。兩台裝置因此不可能各自前進——沒有合併邏輯，也沒有
+衝突解決，那是 local-first 才需要背的複雜度。
+
+離線時控制項全部停用。**不能離線編輯正是分歧無法產生的機制**，不是使用上的不便。
+
+#### 登入為什麼不需要 secret
+
+授權碼換 token 需要 client secret，而靜態頁藏不住 secret。GoTrue 把那一步放在**它自己的
+伺服器**上：頁面只是導向 `/auth/v1/authorize`，回來時 token 已經在 URL fragment 裡
+（隨即被 `history.replaceState` 清掉，fragment 會留在瀏覽紀錄裡）。
+
+這正是選 Supabase 而不是 Firebase 的決定性理由——Firebase 要嘛內嵌 SDK，要嘛自己跑完
+GitHub OAuth 流程（於是又需要一個後端）。
+
+#### 唯一剩下的風險:過期分頁
+
+同一個人、兩台裝置，仍有一種順序會出事——早上開著的分頁，寫入時帶的是早上讀到的狀態。
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant A as 筆電（早上開著沒關）
+    participant B as 手機（中午）
+    participant DB as Postgres
+
+    A->>DB: 讀取
+    DB-->>A: status=submitted, updated_at=T1
+    B->>DB: 寫入 accepted（expected=T1）
+    DB-->>B: OK, updated_at=T2
+    Note over A: 分頁沒重整，仍以為是 T1
+    A->>DB: 寫入 rejected（expected=T1）
+    DB-->>A: 拒絕 stale_write（現況 T2）
+    A->>DB: 重新讀取
+    DB-->>A: status=accepted
+    Note over A: 畫面更新並說明<br/>而不是默默蓋掉手機那次變更
+```
+
+`save_submission` 收下前端讀到的 `updated_at` 當 compare-and-set token，不符就丟
+`stale_write`。這是**一個欄位**的成本，不是一套合併演算法——因為要處理的是「寫入時的
+前提已經過期」，不是「兩份分歧的資料要合流」。
+
+#### 安全性:兩層,缺一不可
+
+網頁裡的 publishable key 本來就設計成公開，真正的防線是資料庫這兩層：
+
+| 層 | 管什麼 | 這裡的設定 |
+|---|---|---|
+| **GRANT** | 角色能不能碰這張表 | 只給 `authenticated`；`anon` 什麼都沒有 |
+| **RLS** | 能碰哪些列 | 四條 policy 全綁 `auth.uid()` |
+
+兩層分開這件事很容易踩到:SQL Editor 建的表**不會**自動授權(只有 dashboard 建的才會)，
+少了 GRANT 連登入的使用者都會拿到 `42501`，而錯誤訊息會讓人以為是 RLS 設錯。
+
+#### 其他
 
 沒有用 Supabase 的 SDK——那是約 150 KB 的 bundle 換四個 fetch，而這頁「單檔、不吃 CDN」
 的性質更值錢（也是 artifact 預覽能在嚴格 CSP 下運作的原因）。`site/sync.js` 135 行，
-零依賴。免費專案 7 天無活動會暫停，`refresh.yml` 每晚順手 ping 一次擋掉。
+零依賴，直接打 REST。
+
+免費專案 7 天無活動會暫停，`refresh.yml` 每晚順手 ping 一次擋掉。
+
+真實的 OAuth 往返沒辦法自動測，需要實際專案憑證；`test/sync.test.mjs` 用 stub 過的後端
+涵蓋 session 處理、唯讀快取、離線拒寫、CAS、401 過期，以及登入導回時把 token 從網址列
+清掉。
 
 ## 里程碑是開放詞彙
 

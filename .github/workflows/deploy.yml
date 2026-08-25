@@ -35,6 +35,9 @@ jobs:
       - run: npm ci
       # A schema or guard failure must stop the deploy, not ship broken dates.
       - run: npm run validate
+      # A broken mermaid block renders as an error box on GitHub, and the syntax
+      # is not something a reviewer reliably catches by eye.
+      - run: npm run lint:docs
       - run: npm run build
       # Browser-level checks run against the built page, so they must follow the build.
       - run: npm test
