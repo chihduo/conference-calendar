@@ -42,7 +42,21 @@ JSON
 npm run build
 ```
 
-anon key 進版控是正確的——它是 publishable key，真正的防線是 RLS。
+這把金鑰進版控是正確的——它本來就設計成公開，真正的防線是 RLS。
+
+Supabase 已把金鑰改名：**`anon` → `sb_publishable_...`**、`service_role` → `sb_secret_...`，
+舊名稱 2026 年底棄用。兩者目前都能用。設定檔的欄位仍叫 `anonKey`（那是我們自己的欄位名），
+填新的 publishable key 即可。
+
+**絕對不要填 `sb_secret_` 開頭的那把。** 它會繞過 RLS，放進公開 repo 等於把整個資料庫交出去。
+
+## 免費方案會暫停
+
+Supabase 對免費專案有 **7 天無活動即暫停**的規則。放假兩週沒開這個站，回來同步就是壞的，
+要手動到 dashboard 按 Restore。
+
+`refresh.yml` 每晚會順手 ping 一次資料庫（設定檔存在才執行），計時器因此不會歸零。
+不需要額外服務，也不需要付費。
 
 ## 這個設計會怎麼運作
 

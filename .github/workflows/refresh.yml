@@ -19,6 +19,20 @@ jobs:
 
       # Expand the wishlist first, so anything added tonight is also fetched
       # tonight rather than waiting another day.
+      # Supabase pauses a free project after 7 days without database activity,
+      # which would break sync exactly when you come back from a break. This
+      # cron already runs nightly, so one request costs nothing. RLS returns no
+      # rows to an anonymous caller - the point is that Postgres was touched.
+      - name: Keep the Supabase project awake
+        if: hashFiles('data/sync-config.json') != ''
+        continue-on-error: true
+        run: |
+          URL=$(node -p "require('./data/sync-config.json').url")
+          KEY=$(node -p "require('./data/sync-config.json').anonKey")
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
+            -H "apikey: $KEY" "$URL/rest/v1/submissions?select=id&limit=1")
+          echo "supabase ping: HTTP $code"
+
       - name: Expand data/wishlist.txt
         run: npm run add | tee add.log
 
