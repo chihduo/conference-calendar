@@ -70,6 +70,53 @@ console.log('\n=== 刪光之後 ===');
   dom.window.close();
 }
 
+console.log('\n=== AoE 時鐘 ===');
+{
+  const html = fs.readFileSync('dist/index.html', 'utf8');
+  const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
+    { runScripts: 'dangerously', url: 'https://example.org/' });
+  const w = dom.window;
+  w.confirm = () => false;
+  w.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
+  w.eval(html.match(/<script>([\s\S]*)<\/script>/)[1] + '\nglobalThis.__c={digitSVG,clockHTML,SEG_PATH};');
+  const { digitSVG, clockHTML, SEG_PATH } = w.__c;
+  const NAMES = Object.keys(SEG_PATH);
+  const EXPECT = { 0:'abcdef',1:'bc',2:'abdeg',3:'abcdg',4:'bcfg',5:'acdfg',6:'acdefg',7:'abc',8:'abcdefg',9:'abcdfg' };
+  const box = w.document.createElement('div');
+  const segsOf = (node) => [...node.querySelectorAll('polygon')]
+    .map((p, i) => p.getAttribute('class').includes('on') ? NAMES[i] : null).filter(Boolean).sort().join('');
+
+  let bad = [];
+  for (const d of '0123456789') {
+    box.innerHTML = digitSVG(d);
+    if (segsOf(box) !== [...EXPECT[d]].sort().join('')) bad.push(d);
+  }
+  check('十個數字的七段對應都正確', bad.length === 0, bad.length ? '錯的: ' + bad.join(',') : '');
+
+  box.innerHTML = digitSVG('8');
+  check('未點亮的段也畫出來（鬼影，LCD 的關鍵）',
+        box.querySelectorAll('polygon').length === 7);
+
+  const dimAt = (sec) => { box.innerHTML = clockHTML(new Date(Date.UTC(2026, 7, 25, 12, 0, sec)));
+    return box.querySelector('.lcd-colon').getAttribute('class').includes('dim'); };
+  check('冒號每秒閃爍', dimAt(0) === false && dimAt(1) === true && dimAt(2) === false);
+
+  // AoE is UTC-12: the interesting cases are the ones that cross a boundary
+  let rollOk = 0;
+  for (const [iso, wantDate] of [['2026-08-25T11:59:59Z', '2026-08-24'],
+                                 ['2026-08-25T12:00:00Z', '2026-08-25'],
+                                 ['2026-01-01T00:00:00Z', '2025-12-31']]) {
+    box.innerHTML = clockHTML(new Date(iso));
+    if (box.querySelector('.lcd-date').textContent === wantDate) rollOk++;
+  }
+  check('AoE 日期比 UTC 慢 12 小時（含跨日、跨年）', rollOk === 3, rollOk + '/3');
+
+  const clock = w.document.querySelector('#clock');
+  check('時鐘在 header 裡（render() 不會重置它）',
+        !!clock && !w.document.querySelector('#main').contains(clock));
+  dom.window.close();
+}
+
 console.log('\n=== 主題預設 ===');
 {
   const html = fs.readFileSync('dist/index.html', 'utf8');

@@ -176,3 +176,32 @@ footer { margin-top: 38px; padding-top: 15px; border-top: 1px solid var(--line);
 .mine-chip.live { background: var(--petrol); color: var(--paper); border-color: var(--petrol); font-weight: 620; }
 
 .chip.danger { color: var(--rust); border-color: currentColor; font-weight: 620; }
+
+/* ---- AoE clock ----
+   Styled as a physical LCD and deliberately identical in both themes: an
+   instrument set into a panel does not restyle itself when the room lights
+   change. The ghost segments (.seg at low opacity) are the whole illusion. */
+.lcd {
+  display: inline-flex; flex-direction: column; align-items: stretch; gap: 3px;
+  background: linear-gradient(#a3b48f, #93a67e);
+  border: 1px solid #59684d; border-radius: 4px; padding: 5px 9px 6px;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, .38), 0 1px 0 rgba(255, 255, 255, .1);
+  user-select: none; flex: 0 0 auto;
+}
+.lcd-top { display: flex; gap: 7px; align-items: baseline; color: #29331f;
+  font: 700 9px/1 var(--mono); letter-spacing: .12em; opacity: .78; }
+.lcd-date, .lcd-wd { font-variant-numeric: tabular-nums; }
+.lcd-time { display: flex; align-items: center; gap: 1px; }
+.lcd-digit { height: 22px; width: auto; display: block; }
+.seg { fill: #222b1b; opacity: .075; }          /* unlit, but still visible */
+.seg.on { opacity: .93; }
+.lcd-colon { display: inline-flex; flex-direction: column; justify-content: center;
+  gap: 6px; padding: 0 3px; }
+.lcd-colon i { width: 2.6px; height: 2.6px; background: #222b1b; border-radius: 1px; opacity: .93; }
+.lcd-colon.dim i { opacity: .1; }
+@media (prefers-reduced-motion: reduce) { .lcd-colon.dim i { opacity: .93; } }
+@media (max-width: 700px) {
+  .lcd-date, .lcd-wd { display: none; }
+  .lcd-digit { height: 17px; }
+  .lcd { padding: 4px 7px 5px; }
+}

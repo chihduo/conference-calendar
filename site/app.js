@@ -684,6 +684,61 @@ function render(opts = {}) {
   }
 }
 
+/* ---------- AoE clock ----------
+   Every deadline in this calendar is quoted in AoE, so the question behind
+   "how long have I got" is really "what time is it in AoE right now".
+
+   The digits are drawn as seven-segment polygons rather than set in a monospace
+   face, because the thing that makes an LCD read as an LCD is the ghost
+   segments - all seven faintly visible whether lit or not. Without them this
+   would just be numerals in a green box. */
+const SEG_T = 2.3;
+const hseg = (y, x1, x2) => { const h = SEG_T / 2;
+  return `${x1},${y} ${x1 + h},${y - h} ${x2 - h},${y - h} ${x2},${y} ${x2 - h},${y + h} ${x1 + h},${y + h}`; };
+const vseg = (x, y1, y2) => { const h = SEG_T / 2;
+  return `${x},${y1} ${x + h},${y1 + h} ${x + h},${y2 - h} ${x},${y2} ${x - h},${y2 - h} ${x - h},${y1 + h}`; };
+const SEG_PATH = {
+  a: hseg(2.4, 2.4, 10.6), g: hseg(11.5, 2.4, 10.6), d: hseg(20.6, 2.4, 10.6),
+  f: vseg(2.4, 2.4, 11.5),  b: vseg(10.6, 2.4, 11.5),
+  e: vseg(2.4, 11.5, 20.6), c: vseg(10.6, 11.5, 20.6),
+};
+const SEG_ON = { 0: 'abcdef', 1: 'bc', 2: 'abdeg', 3: 'abcdg', 4: 'bcfg',
+                 5: 'acdfg', 6: 'acdefg', 7: 'abc', 8: 'abcdefg', 9: 'abcdfg' };
+
+const digitSVG = (ch) => {
+  const lit = SEG_ON[ch] ?? '';
+  const segs = Object.entries(SEG_PATH)
+    .map(([k, pts]) => `<polygon class="seg${lit.includes(k) ? ' on' : ''}" points="${pts}"/>`)
+    .join('');
+  return `<svg class="lcd-digit" viewBox="0 0 13 23" aria-hidden="true">${segs}</svg>`;
+};
+
+const WD_EN = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
+function clockHTML(now) {
+  const aoe = new Date(now.getTime() - 12 * 3600 * 1000);   // AoE is a fixed UTC-12
+  const p = (n) => String(n).padStart(2, '0');
+  const [hh, mm, ss] = [aoe.getUTCHours(), aoe.getUTCMinutes(), aoe.getUTCSeconds()].map(p);
+  const date = `${aoe.getUTCFullYear()}-${p(aoe.getUTCMonth() + 1)}-${p(aoe.getUTCDate())}`;
+  // the colon blinking on the second is what makes a digital clock look alive
+  const colon = `<span class="lcd-colon${aoe.getUTCSeconds() % 2 ? ' dim' : ''}"><i></i><i></i></span>`;
+  const dig = (str) => [...str].map(digitSVG).join('');
+  return `<div class="lcd-top"><span class="lcd-tag">AoE</span>` +
+         `<span class="lcd-date">${date}</span><span class="lcd-wd">${WD_EN[aoe.getUTCDay()]}</span></div>` +
+         `<div class="lcd-time">${dig(hh)}${colon}${dig(mm)}${colon}${dig(ss)}</div>`;
+}
+
+function initClock() {
+  const box = $('#clock');
+  if (!box) return;
+  /* Lives in the header, outside #main, so render() replacing the view never
+     resets it - the seconds keep running while you filter and switch tabs. */
+  box.title = 'Anywhere on Earth (UTC−12)：所有截稿日的基準時區';
+  const tick = () => { box.innerHTML = clockHTML(new Date()); };
+  tick();
+  setInterval(tick, 1000);
+}
+
 /* theme */
 /* Dark unless the reader has chosen otherwise. The CSS already paints dark with
    no data-theme set, so this only records the choice explicitly. */
@@ -703,5 +758,6 @@ function initTheme() {
 $('#gen').textContent = DATA.generated_at.slice(0, 10);
 $('#count').textContent = String(DATA.conferences.length);
 initTheme();
+initClock();
 render();
 setInterval(() => { if (state.view === 'deadlines') render(); }, 60000);
