@@ -167,7 +167,15 @@ for (const [file, cfg] of Object.entries(feeds)) {
 model.feeds = feedUris;
 
 const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
-const js  = fs.readFileSync(path.join(SITE, 'app.js'), 'utf8');
+/* Sync config is optional. With no file the whole feature reports status 'off'
+   and the page behaves exactly as it did before any of this existed - which is
+   also what keeps it working inside the artifact preview, where a strict CSP
+   blocks every external host. */
+const cfgPath = path.join(ROOT, 'data', 'sync-config.json');
+const syncCfg = fs.existsSync(cfgPath) ? fs.readFileSync(cfgPath, 'utf8').trim() : 'null';
+const js  = `window.__SYNC_CONFIG__ = ${syncCfg};\n`
+          + fs.readFileSync(path.join(SITE, 'sync.js'), 'utf8') + '\n'
+          + fs.readFileSync(path.join(SITE, 'app.js'), 'utf8');
 const html = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8')
   .replace('/*__CSS__*/', () => css)
   .replace('/*__JS__*/', () => js)

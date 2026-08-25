@@ -13,8 +13,9 @@
     "audit": "node scripts/audit.mjs",
     "test:ui": "node test/ui.test.mjs",
     "test:subs": "node test/submissions.test.mjs",
-    "test": "npm run test:ui --silent && npm run test:subs --silent",
-    "resolve": "node scripts/resolve.mjs"
+    "test": "npm run test:ui --silent && npm run test:subs --silent && npm run test:sync --silent",
+    "resolve": "node scripts/resolve.mjs",
+    "test:sync": "node test/sync.test.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",

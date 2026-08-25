@@ -215,3 +215,6 @@ footer { margin-top: 38px; padding-top: 15px; border-top: 1px solid var(--line);
   background: var(--surface); color: var(--ink); border-radius: 3px;
   padding: 3px 8px; font: 620 15px var(--ui); }
 .card h3 { gap: 6px; }
+
+.sync-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-left-color: var(--petrol); }
+.chip:disabled, select:disabled, input:disabled { opacity: .45; cursor: not-allowed; }

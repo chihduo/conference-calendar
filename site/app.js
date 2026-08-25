@@ -363,14 +363,81 @@ const RELEVANT = {
   withdrawn:         [],
 };
 
-function loadSubs() {
+/* Rendering is synchronous, so the database cannot be read inline. Memory is
+   the render source; sync runs behind it and re-renders when it lands. */
+let subsMem = [];
+let syncBusy = false;
+let syncNote = null;
+
+const localLoad = () => {
   try {
     const raw = JSON.parse(localStorage.getItem(SUB_KEY) || '{}');
     return Array.isArray(raw.submissions) ? raw.submissions : [];
   } catch { return []; }
-}
+};
+const localSave = (list) => localStorage.setItem(SUB_KEY, JSON.stringify({ schema: 1, submissions: list }));
+
+/* Hand back a copy. Callers mutate what they get and pass it to saveSubs, a
+   habit from when this read localStorage fresh each time; returning the live
+   array made prev and next the same objects, so the diff found no change and
+   silently issued no write at all. */
+function loadSubs() { return subsMem.map((s) => ({ ...s, history: [...(s.history || [])] })); }
+
 function saveSubs(list) {
-  localStorage.setItem(SUB_KEY, JSON.stringify({ schema: 1, submissions: list }));
+  if (SYNC.status() === 'off') { subsMem = list; localSave(list); return; }
+  if (SYNC.status() !== 'live') {
+    // Refusing the write is the whole point: a local edit made offline is
+    // exactly the divergence this design exists to prevent.
+    syncNote = { kind: 'error', text: '目前離線，無法修改。連上網路後再試。' };
+    render();
+    return;
+  }
+  const prev = subsMem;
+  subsMem = list;
+  pushChanges(prev, list);
+}
+
+const sameRecord = (a, b) => ['paper', 'venue', 'status', 'notes'].every((k) => a[k] === b[k])
+  && JSON.stringify(a.history || []) === JSON.stringify(b.history || []);
+
+let syncPending = Promise.resolve();
+async function pushChanges(prev, next) {
+  syncPending = (async () => {
+  syncBusy = true; syncNote = null; render();
+  try {
+    const before = new Map(prev.map((s) => [s.id, s]));
+    for (const s of next) {
+      const old = before.get(s.id);
+      if (!old || !sameRecord(old, s)) await SYNC.save({ ...s, updated_at: old?.updated_at ?? s.updated_at });
+      before.delete(s.id);
+    }
+    for (const gone of before.values()) await SYNC.remove(gone.id);
+    subsMem = await SYNC.pull();
+  } catch (e) {
+    syncNote = e.stale
+      ? { kind: 'error', text: '這筆在別的裝置上已經改過了，畫面已重新載入，請確認後再改一次。' }
+      : { kind: 'error', text: '同步失敗：' + e.message };
+    try { subsMem = await SYNC.pull(); } catch { subsMem = prev; }
+  }
+  syncBusy = false;
+  render();
+  })();
+  return syncPending;
+}
+
+async function initSync() {
+  syncPending = (async () => {
+  SYNC.init();
+  if (SYNC.status() === 'off') { subsMem = localLoad(); return; }
+  subsMem = SYNC.readCache();          // instant, possibly stale, never written back
+  render();
+  if (SYNC.status() === 'live') {
+    try { subsMem = await SYNC.pull(); }
+    catch (e) { syncNote = { kind: 'error', text: '讀取失敗，顯示的是上次同步的內容：' + e.message }; }
+    render();
+  }
+  })();
+  return syncPending;
 }
 function editionsIndex() {
   const idx = new Map();
@@ -428,7 +495,51 @@ function nextOpenEdition(confId, now) {
     .sort((a, b) => a.year - b.year)[0] || null;
 }
 
+function renderSyncBar(root) {
+  const st = SYNC.status();
+  if (st === 'off') return true;            // not configured: behave exactly as before
+
+  const bar = el('div', 'notice sync-bar');
+  const lbl = el('span', 'lbl');
+  if (syncBusy) lbl.textContent = '同步中…';
+  else lbl.textContent = { 'signed-out': '未登入', live: '已同步', offline: '離線' }[st];
+  bar.appendChild(lbl);
+
+  if (st === 'signed-out') {
+    bar.appendChild(el('span', 'count', '登入後投稿紀錄會存在你的帳號下，換裝置自動跟著走。'));
+    const b = el('button', 'chip on', '用 GitHub 登入');
+    b.onclick = () => SYNC.signIn();
+    bar.appendChild(b);
+    const local = localLoad();
+    if (local.length) bar.appendChild(el('span', 'count', `（本機還有 ${local.length} 筆舊紀錄，登入後可以上傳）`));
+  } else if (st === 'offline') {
+    bar.appendChild(el('span', 'count', '顯示的是上次同步的內容，唯讀。連上網路才能修改。'));
+  } else {
+    const out = el('button', 'chip', '登出');
+    out.onclick = () => { SYNC.signOut(); subsMem = SYNC.readCache(); render(); };
+    bar.appendChild(out);
+    const local = localLoad();
+    if (local.length) {
+      const up = el('button', 'chip on', `上傳本機的 ${local.length} 筆`);
+      up.onclick = () => { const merged = [...subsMem]; const have = new Set(merged.map((x) => x.id));
+        for (const r of local) if (!have.has(r.id)) merged.push(r);
+        localStorage.removeItem(SUB_KEY); saveSubs(merged); };
+      bar.appendChild(up);
+    }
+  }
+  if (syncNote) {
+    const n = el('div', 'count');
+    n.style.color = 'var(--rust)';
+    n.style.width = '100%';
+    n.textContent = syncNote.text;
+    bar.appendChild(n);
+  }
+  root.appendChild(bar);
+  return st === 'live';
+}
+
 function renderSubmissions(root, now) {
+  const writable = renderSyncBar(root);
   const subs = loadSubs();
   const idx = editionsIndex();
 
@@ -451,6 +562,7 @@ function renderSubmissions(root, now) {
   st.value = 'planned';
   const add = el('button', 'chip on', '新增');
   add.type = 'submit';
+  if (!writable) { add.disabled = true; title.disabled = true; venue.disabled = true; st.disabled = true; }
   form.append(title, venue, st, add);
   form.onsubmit = (ev) => {
     ev.preventDefault();
@@ -519,6 +631,7 @@ function renderSubmissions(root, now) {
     const sel = el('select');
     STATUSES.forEach(([v, l]) => sel.appendChild(Object.assign(el('option'), { value: v, textContent: l })));
     sel.value = s.status;
+    sel.disabled = !writable;
     sel.onchange = () => {
       const list = loadSubs(); const t = list.find((x) => x.id === s.id);
       t.status = sel.value;
@@ -528,6 +641,7 @@ function renderSubmissions(root, now) {
     line.appendChild(sel);
     const edit = el('button', 'chip', '改標題');
     edit.title = '投出去之前標題常常還會動';
+    edit.disabled = !writable;
     edit.onclick = beginEdit;
     line.appendChild(edit);
     /* Confirm inline instead of through window.confirm: the published page runs
@@ -535,6 +649,7 @@ function renderSubmissions(root, now) {
        so the button did nothing at all, with no dialog and no error. A two-step
        button needs no modal API and behaves the same from file://. */
     const del = el('button', 'chip', '刪除');
+    del.disabled = !writable;
     let armed = false, armTimer = null;
     const disarm = () => { armed = false; del.textContent = '刪除'; del.className = 'chip'; };
     del.onclick = () => {
@@ -805,5 +920,6 @@ $('#gen').textContent = DATA.generated_at.slice(0, 10);
 $('#count').textContent = String(DATA.conferences.length);
 initTheme();
 initClock();
+initSync();
 render();
 setInterval(() => { if (state.view === 'deadlines') render(); }, 60000);
