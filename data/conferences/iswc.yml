@@ -7,7 +7,6 @@ rank:
   value: A
   icore_id: 1338
   checked_on: 2026-08-25
-  ambiguous: true
 sources:
   - {tier: 1, adapter: ccfddl, ref: conference/DB/iswc.yml}
   - {tier: 3, adapter: wikicfp}
