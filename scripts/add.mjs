@@ -81,7 +81,11 @@ const guessAreas = (title) => {
 };
 
 async function discover(acronym) {
-  const report = { acronym, layers: {}, notes: [], next: [] };
+  const report = { acronym, layers: {}, notes: [], next: [], choices: [] };
+  /* Ambiguities that are a pick-from-a-list are recorded structurally as well as
+     in prose, so the issue bot can offer them as numbered options instead of
+     telling someone on a phone to go edit a YAML field. */
+  const choose = (field, question, options) => report.choices.push({ field, question, options });
   /* "Reported rather than guessed" is only useful if the report says what to do
      about it. Every condition that needs a human names the file and the field. */
   const act = (how) => { if (!report.next.includes(how)) report.next.push(how); };
@@ -107,6 +111,8 @@ async function discover(acronym) {
       if (hits.length > 1) {
         report.notes.push(`ICORE has ${hits.length} venues called ${acronym}: ${hits.map((h) => `${h.value} id=${h.icore_id} ${h.title}`).join(' | ')}`);
         act(`挑對排名：編 data/conferences/${doc.id}.yml 的 rank.icore_id 與 rank.value，並移除 rank.ambiguous`);
+        choose('icore_id', `ICORE 裡有 ${hits.length} 筆叫 ${acronym} 的會議，是哪一個？`,
+          hits.map((h) => ({ value: h.icore_id, label: `${h.value} — ${h.title}` })));
       }
     }
   } catch (e) { report.layers.icore = 'failed: ' + e.message; }
@@ -143,6 +149,8 @@ async function discover(acronym) {
       if (r.ambiguous) {
         report.notes.push(`researchr track could not be identified among: ${r.tracks.join(' / ')}`);
         act(`指定 track：在 data/conferences/${doc.id}.yml 的 researchr 那筆 sources 加 track: "<主 track 名>"，然後 npm run refresh ${doc.id}`);
+        choose('track', `researchr 的 ${r.id} 有 ${r.tracks.length} 個 track，主 track 是哪一個？`,
+          r.tracks.map((t) => ({ value: t, label: t })));
       }
     }
   } catch (e) { report.layers.researchr = 'failed: ' + e.message; }
@@ -241,14 +249,22 @@ if (!queued.length) { console.log('Nothing to add. Pass acronyms, or list them i
    A venue too new for any source can start resolving on a later night. */
 const unresolved = new Map();
 
+const REPORT_FILE = path.join(CONF_DIR, '..', '..', 'add-report.json');
+const reports = [];
+
 const review = readReviewQueue();
 const dropPrior = (id) => { for (let i = review.length - 1; i >= 0; i--) if (review[i].conference === id) review.splice(i, 1); };
 let added = 0, skipped = 0, failed = 0;
 for (const acro of queued) {
   const file = path.join(CONF_DIR, `${acro.toLowerCase()}.yml`);
-  if (fs.existsSync(file)) { console.log(`${acro}: already present, skipped`); skipped++; continue; }
+  if (fs.existsSync(file)) {
+    console.log(`${acro}: already present, skipped`);
+    reports.push({ acronym: acro, id: acro.toLowerCase(), status: 'skipped', choices: [], next: [], notes: [] });
+    skipped++; continue;
+  }
 
   const { doc, report } = await discover(acro);
+  reports.push(report);
   const dated = doc.editions.reduce((n, e) => n + e.milestones.filter((m) => m.date).length, 0);
   console.log(`\n${acro}  ->  ${doc.full_name || '(no title)'}`);
   for (const [k, v] of Object.entries(report.layers)) console.log(`   ${k.padEnd(10)} ${v}`);
@@ -267,6 +283,7 @@ for (const acro of queued) {
     dropPrior(doc.id);
     review.push({ conference: doc.id, edition: null, kind: null, reason: 'add-rejected',
                   severity: severityOf('add-rejected'), detail: report.issues.join('; '), seen_at: new Date().toISOString() });
+    report.status = 'rejected';
     unresolved.set(acro, `guard: ${report.issues[0]}`);
     failed++; continue;
   }
@@ -276,6 +293,7 @@ for (const acro of queued) {
       console.log('   ── 下一步 ──');
       report.next.forEach((a, i) => console.log(`   ${i + 1}. ${a}`));
     }
+    report.status = 'rejected';
     unresolved.set(acro, 'no dates found by any source');
     failed++; continue;
   }
@@ -283,6 +301,8 @@ for (const acro of queued) {
     console.log('   ── 下一步 ──');
     report.next.forEach((a, i) => console.log(`   ${i + 1}. ${a}`));
   }
+  report.status = report.choices.length ? 'needs-choice' : 'added';
+  report.id = doc.id;
   if (!DRY) saveConference({ ...doc, _file: `${doc.id}.yml` });
   dropPrior(doc.id);   // a successful add supersedes anything said about it before
   for (const n of report.notes)
@@ -301,4 +321,5 @@ if (fromWishlist && !DRY && fs.existsSync(wishlist)) {
   if (done) console.log(`\nwishlist: removed ${done} resolved line(s), ${unresolved.size} still outstanding.`);
 }
 
+fs.writeFileSync(REPORT_FILE, JSON.stringify(reports, null, 2) + '\n');
 console.log(`\n${added} added, ${skipped} skipped, ${failed} rejected.${DRY ? ' (dry run - nothing written)' : ''}`);

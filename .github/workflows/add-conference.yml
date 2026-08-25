@@ -3,6 +3,8 @@ name: Add conference
 on:
   issues:
     types: [opened, labeled]
+  issue_comment:
+    types: [created]
   workflow_dispatch:
     inputs:
       acronym:
@@ -15,11 +17,16 @@ permissions:
 
 jobs:
   add:
-    # Only the repo owner can drive this. The acronym reaches a shell, and on a
-    # public repo anyone can open an issue.
+    # Only the repo owner drives this: the acronym reaches a shell, and on a
+    # public repo anyone can open an issue or comment on one.
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (github.event.issue.user.login == github.repository_owner &&
+      (github.event_name == 'issues' &&
+       github.event.issue.user.login == github.repository_owner &&
+       contains(github.event.issue.labels.*.name, 'add-conference')) ||
+      (github.event_name == 'issue_comment' &&
+       github.event.comment.user.login == github.repository_owner &&
+       github.event.issue.state == 'open' &&
        contains(github.event.issue.labels.*.name, 'add-conference'))
     runs-on: ubuntu-latest
     steps:
@@ -40,41 +47,119 @@ jobs:
             exit 1
           fi
           echo "acronym=$CLEAN" >> "$GITHUB_OUTPUT"
+          echo "id=$(printf '%s' "$CLEAN" | tr 'A-Z' 'a-z')" >> "$GITHUB_OUTPUT"
+
+      # A reply carries the answer to a question the bot asked earlier. The
+      # options live in that earlier comment, so the thread is the state store -
+      # no side file to keep in sync with a conversation.
+      - name: Apply the reply to an open question
+        id: reply
+        if: github.event_name == 'issue_comment'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number, per_page: 100,
+            });
+            const marker = /<!--\s*cc-choices:\s*(\{[\s\S]*?\})\s*-->/;
+            const asked = comments.filter((c) => marker.test(c.body || '')).pop();
+            if (!asked) { core.setOutput('handled', 'false'); return; }
+            core.setOutput('choices', JSON.stringify(JSON.parse(marker.exec(asked.body)[1]).choices));
+            core.setOutput('handled', 'true');
+
+      - name: Resolve
+        id: resolve
+        if: steps.reply.outputs.handled == 'true'
+        env:
+          BODY: ${{ github.event.comment.body }}
+          CHOICES: ${{ steps.reply.outputs.choices }}
+        run: |
+          set +e
+          OUT=$(node scripts/resolve.mjs "${{ steps.acro.outputs.id }}" --choices="$CHOICES" --reply="$BODY" 2>&1)
+          CODE=$?
+          set -e
+          echo "$OUT"
+          { echo "out<<EOF"; echo "$OUT"; echo "EOF"; } >> "$GITHUB_OUTPUT"
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+          # exit 3 means "could not tell which option" - ask again, do not fail the run
+          [ "$CODE" -eq 0 ] || [ "$CODE" -eq 3 ]
+
+      # Re-fetch with the corrected settings so the answer actually changes data.
+      - name: Refresh the venue
+        if: steps.resolve.outputs.code == '0'
+        run: npm run refresh -- ${{ steps.acro.outputs.id }} | tee add.log
 
       - name: Run the discovery cascade
+        if: github.event_name != 'issue_comment'
         run: npm run add -- '${{ steps.acro.outputs.acronym }}' | tee add.log
 
       - run: npm run validate
 
       - name: Commit
+        if: steps.resolve.outputs.code != '3'
         run: |
           git config user.name  'deadline-bot'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add data/
           git diff --staged --quiet || {
-            git commit -m "feat(data): add ${{ steps.acro.outputs.acronym }} via discovery cascade"
+            git commit -m "feat(data): ${{ steps.acro.outputs.acronym }} via issue #${{ github.event.issue.number }}"
             git push
           }
 
-      - name: Report back on the issue
-        if: always() && github.event_name == 'issues'
+      - name: Reply on the issue
+        if: always() && github.event_name != 'workflow_dispatch'
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            const log = fs.existsSync('add.log') ? fs.readFileSync('add.log', 'utf8') : '(no output)';
-            // Lead with what the human has to do; the full trace goes underneath.
-            const steps = log.split('\n')
-              .filter((l) => /^\s+\d+\.\s/.test(l))
-              .map((l) => l.trim());
-            const head = steps.length
-              ? '**需要你處理 ' + steps.length + ' 件事：**\n' + steps.map((s) => '- ' + s).join('\n') + '\n\n'
-              : '**全部自動解析完成，不需要手動處理。**\n\n';
+            const acro = '${{ steps.acro.outputs.acronym }}';
+            const id = '${{ steps.acro.outputs.id }}';
+            const log = fs.existsSync('add.log') ? fs.readFileSync('add.log', 'utf8') : '';
+            const resolveOut = `${{ toJSON(steps.resolve.outputs.out) }}` || '';
+            const code = '${{ steps.resolve.outputs.code }}';
+
+            // Could not tell which option was meant - ask again, keep the thread open.
+            if (code === '3') {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
+                body: resolveOut.trim() || '看不懂這個回覆，請回覆選項編號。',
+              });
+              return;
+            }
+
+            let report = [];
+            try { report = JSON.parse(fs.readFileSync('add-report.json', 'utf8')); } catch {}
+            const r = report.find((x) => (x.acronym || '').toUpperCase() === acro.toUpperCase());
+
+            // Something is genuinely a pick-from-a-list: ask, and carry the options
+            // in this comment so the reply handler can read them back.
+            if (r && r.status === 'needs-choice' && r.choices?.length) {
+              const c = r.choices[0];
+              const list = c.options.map((o, i) => `**${i + 1}.** ${o.label}`).join('\n');
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
+                body: `已建立 \`data/conferences/${id}.yml\`，但有一處需要你決定。\n\n` +
+                      `### ${c.question}\n\n${list}\n\n` +
+                      `直接回覆編號（例如 \`1\`）即可，也可以回覆完整名稱。\n\n` +
+                      `<!-- cc-choices: ${JSON.stringify({ acronym: acro, id, choices: r.choices })} -->\n\n` +
+                      `<details><summary>完整輸出</summary>\n\n\`\`\`\n${log.trim().slice(0, 55000)}\n\`\`\`\n</details>`,
+              });
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: context.issue.number, labels: ['needs-choice'],
+              });
+              return;   // leave the issue open, waiting on a human
+            }
+
+            const steps = log.split('\n').filter((l) => /^\s+\d+\.\s/.test(l)).map((s) => s.trim());
+            const head = resolveOut.trim() ? resolveOut.trim() + '\n\n' : '';
+            const body = steps.length
+              ? `${head}**需要你處理 ${steps.length} 件事：**\n` + steps.map((s) => `- ${s}`).join('\n')
+              : `${head}**全部自動解析完成，不需要手動處理。**`;
             await github.rest.issues.createComment({
-              owner: context.repo.owner, repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: head + '<details><summary>完整輸出</summary>\n\n```\n' +
-                    log.trim().slice(0, 60000) + '\n```\n</details>',
+              owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
+              body: `${body}\n\n<details><summary>完整輸出</summary>\n\n\`\`\`\n${log.trim().slice(0, 55000)}\n\`\`\`\n</details>`,
             });
             await github.rest.issues.update({
               owner: context.repo.owner, repo: context.repo.repo,

@@ -10,9 +10,11 @@ body:
         A workflow will look it up in ICORE, ccf-deadlines, conf.researchr.org
         and WikiCFP, commit the result, and reply here with what it found.
 
-        Nothing is guessed. Anything it could not resolve comes back as a
-        numbered **下一步 / next steps** list naming the file and field to edit —
-        so a partial result is still something you can finish, not a dead end.
+        Nothing is guessed. If something is genuinely a pick-from-a-list — say
+        ICORE holds two venues called `FSE` — the bot posts the candidates and
+        waits; **reply with the number** and it applies your answer, re-fetches
+        and closes. Anything that is not a simple choice comes back as a numbered
+        next-steps list naming the file and field to edit.
   - type: textarea
     id: notes
     attributes:

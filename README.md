@@ -191,6 +191,30 @@ iframe 裡，沒有 `allow-modals` 時 `confirm()` 會被瀏覽器靜默忽略�
 
 從 issue 觸發時，這份清單會**放在回覆的最上面**，完整輸出收在 `<details>` 裡。
 
+### issue 是對話，不是單向回報
+
+真正屬於「從清單裡挑一個」的歧義，bot 不會叫你去改 YAML——它把候選列出來等你回覆：
+
+> 已建立 `data/conferences/fse.yml`，但有一處需要你決定。
+>
+> **ICORE 裡有 2 筆叫 FSE 的會議，是哪一個？**
+> **1.** A* — ACM International Conference on the Foundations of Software Engineering
+> **2.** B — International Workshop on Fast Software Encryption
+>
+> 直接回覆編號（例如 `1`）即可，也可以回覆完整名稱。
+
+回一個 `1`，bot 就套用、重新抓一次該會議、commit 並關閉 issue。這條路**全程在手機上
+可以完成**，這也是當初讓 issue 觸發存在的理由。
+
+實作上有兩個決定：
+
+- **候選清單放在 bot 自己那則留言裡**（`<!-- cc-choices: … -->`），所以狀態就在對話裡，
+  不需要另外存一份跟對話同步的檔案。
+- **對不上就不猜。** 回覆比對接受編號、選項原值、以及能唯一指認的名稱片段；`International`
+  同時符合兩個選項時會再問一次而不是挑一個。挑錯會把會議標成錯的等級，代價比多問一次高。
+
+目前支援兩種選擇題:ICORE 同名多筆、researchr 主 track 判不出來。
+
 ## 自動化
 
 三支 workflow，跑在 `chihduo/conference-calendar`：
