@@ -477,8 +477,41 @@ function renderSubmissions(root, now) {
     const hit = idx.get(s.venue);
     const card = el('div', 'card');
     const h = el('h3');
-    h.appendChild(el('span', null, s.paper));
+    const titleText = el('span', null, s.paper);
+    h.appendChild(titleText);
     card.appendChild(h);
+
+    /* Edited in place rather than through prompt(): a modal call is ignored
+       outright in the sandboxed iframe the published page runs in, exactly as
+       confirm() was. Nothing here calls render() until the edit settles, or the
+       rebuild would wipe the field mid-typing. */
+    const beginEdit = () => {
+      const input = el('input');
+      input.type = 'text';
+      input.className = 'title-edit';
+      input.value = s.paper;
+      const save = el('button', 'chip on', '儲存');
+      const cancel = el('button', 'chip', '取消');
+      const abort = () => h.replaceChildren(titleText);
+      const commit = () => {
+        const v = input.value.trim();
+        if (!v) { input.focus(); return; }   // a card with no title cannot be told apart
+        if (v === s.paper) return abort();
+        const list = loadSubs();
+        list.find((x) => x.id === s.id).paper = v;
+        saveSubs(list);
+        render();
+      };
+      input.onkeydown = (ev) => {
+        if (ev.key === 'Enter') { ev.preventDefault(); commit(); }
+        if (ev.key === 'Escape') { ev.preventDefault(); abort(); }
+      };
+      save.onclick = commit;
+      cancel.onclick = abort;
+      h.replaceChildren(input, save, cancel);
+      input.focus();
+      try { input.setSelectionRange(input.value.length, input.value.length); } catch { /* not focusable in tests */ }
+    };
 
     const line = el('div', 'ed-head');
     line.appendChild(el('span', 'mkind', hit ? `${hit.c.name} ${hit.e.year}` : s.venue));
@@ -493,6 +526,10 @@ function renderSubmissions(root, now) {
       saveSubs(list); render();
     };
     line.appendChild(sel);
+    const edit = el('button', 'chip', '改標題');
+    edit.title = '投出去之前標題常常還會動';
+    edit.onclick = beginEdit;
+    line.appendChild(edit);
     /* Confirm inline instead of through window.confirm: the published page runs
        in a sandboxed iframe, where a modal call is ignored and returns false -
        so the button did nothing at all, with no dialog and no error. A two-step

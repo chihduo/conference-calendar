@@ -68,5 +68,50 @@ console.log('\n=== 下拉選單先標示,降低誤選 ===');
   dom.window.close();
 }
 
+console.log('\n=== 改標題 ===');
+{
+  const { dom, window: w } = boot([{ id: 'a', paper: '舊標題', venue: 'vmcai-2027', status: 'submitted', history: [] }]);
+  const doc = w.document;
+  const titleOf = () => doc.querySelector('#main .card h3')?.textContent.trim();
+  const btn = (t) => [...doc.querySelectorAll('#main .card button')].find((b) => b.textContent === t);
+  const field = () => doc.querySelector('#main .title-edit');
+  const stored = () => JSON.parse(w.localStorage.getItem('cc-submissions')).submissions[0].paper;
+
+  check('一開始顯示標題', titleOf() === '舊標題', titleOf());
+  btn('改標題').click();
+  check('點「改標題」出現輸入框並帶入原值', field()?.value === '舊標題', field()?.value);
+
+  field().value = '新的標題';
+  btn('儲存').click();
+  check('儲存後畫面更新', titleOf() === '新的標題', titleOf());
+  check('儲存後寫進 localStorage', stored() === '新的標題', stored());
+
+  btn('改標題').click();
+  field().value = '不該存下的東西';
+  btn('取消').click();
+  check('取消不會改到資料', stored() === '新的標題', stored());
+  check('取消後回到純文字', titleOf() === '新的標題' && !field());
+
+  btn('改標題').click();
+  field().value = '   ';
+  btn('儲存').click();
+  check('空白標題不接受（卡片會變得無法辨識）', stored() === '新的標題' && !!field());
+  dom.window.close();
+}
+
+{
+  // the timeline chip reads the same field, so a rename must show up there too
+  const { dom, window: w } = boot([{ id: 'a', paper: '原標題', venue: 'vmcai-2027', status: 'submitted', history: [] }]);
+  const doc = w.document;
+  [...doc.querySelectorAll('#main .card button')].find((b) => b.textContent === '改標題').click();
+  doc.querySelector('#main .title-edit').value = '改過的標題';
+  [...doc.querySelectorAll('#main .card button')].find((b) => b.textContent === '儲存').click();
+  [...doc.querySelectorAll('.tab')].find((t) => t.textContent.includes('截稿時間軸')).click();
+  const chips = [...doc.querySelectorAll('#main .mine-chip')].map((c) => c.textContent.replace('▸ ', ''));
+  check('時間軸上的標籤跟著改名', chips.length > 0 && chips.every((c) => c === '改過的標題'),
+        chips[0]);
+  dom.window.close();
+}
+
 console.log(`\n${pass}/${total} 通過`);
 process.exit(pass === total ? 0 : 1);
