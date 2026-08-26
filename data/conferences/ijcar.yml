@@ -17,22 +17,25 @@ editions:
     place: TBD
     status: estimated
     needs_review: true
-    dates: TBD
+    dates: Jul 25-28, 2027 (estimated)
     milestones:
       - {kind: abstract, date: 2027-02-05, confidence: estimated, derived_from: ijcar-2026/abstract}
-      - {kind: notification, confidence: unknown}
+      - {kind: notification, confidence: estimated, date: 2027-04-13, derived_from: ijcar-2026/notification}
       - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
+    start_date: 2027-07-25
+    end_date: 2027-07-28
   - year: 2026
     id: ijcar-2026
     timezone: AoE
     milestones:
-      - kind: abstract
-        date: 2026-02-06
-        time: '23:59:59'
-        confidence: announced
-        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/CT/ijcar.yml
-    link: https://www.floc26.org/ijcar
+      - {kind: abstract, date: 2026-02-06, confidence: confirmed, locked: true}
+      - {kind: submission, date: 2026-02-13, confidence: confirmed, locked: true}
+      - {kind: notification, date: 2026-04-14, confidence: confirmed, locked: true}
+    link: https://ijcar.org/
     place: Lisbon, Portugal
-    dates: July 26-29, 2026
+    dates: Jul 26-29, 2026
     status: past
+    start_date: 2026-07-26
+    end_date: 2026-07-29
+    note: Part of FLoC 2026.

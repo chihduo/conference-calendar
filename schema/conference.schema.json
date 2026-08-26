@@ -15,6 +15,10 @@
       "items": { "enum": ["FM", "PL", "AI", "SE", "LOGIC", "SEC"] }
     },
     "dblp":   { "type": "string", "description": "Suffix in dblp.org/db/conf/<dblp>" },
+    "cadence_years": {
+      "type": "integer", "minimum": 1, "maximum": 4, "default": 1,
+      "description": "How often the series runs. Declared rather than inferred: a gap in our data looks exactly like a biennial cadence, and guessing long makes the calendar skip a real deadline."
+    },
     "hidden": { "type": "boolean", "default": false, "description": "Keep the file but omit from the site" },
     "note":   { "type": "string" },
     "rank": {

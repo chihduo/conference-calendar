@@ -1,32 +1,5 @@
 [
   {
-    "conference": "fm",
-    "edition": "fm-2027",
-    "kind": "abstract",
-    "reason": "estimate-unconfirmed",
-    "severity": "action",
-    "detail": "estimated 2026-11-24 is 90 day(s) away and still unconfirmed - check the official CFP",
-    "seen_at": "2026-08-26T04:04:44.677Z"
-  },
-  {
-    "conference": "icaps",
-    "edition": "icaps-2025",
-    "kind": null,
-    "reason": "guard",
-    "severity": "action",
-    "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-26T04:04:44.677Z"
-  },
-  {
-    "conference": "icaps",
-    "edition": "icaps-2025",
-    "kind": null,
-    "reason": "guard",
-    "severity": "action",
-    "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-26T04:04:44.677Z"
-  },
-  {
     "conference": "icfp",
     "edition": null,
     "kind": null,
@@ -45,51 +18,6 @@
     "seen_at": "2026-08-26T04:04:44.677Z"
   },
   {
-    "conference": "ijcar",
-    "edition": "ijcar-2026",
-    "kind": null,
-    "reason": "guard",
-    "severity": "action",
-    "detail": "submission (2025-02-15) precedes abstract (2026-02-06)",
-    "seen_at": "2026-08-26T04:04:44.677Z"
-  },
-  {
-    "conference": "lpar",
-    "edition": "lpar-2027",
-    "kind": "abstract",
-    "reason": "stale-base",
-    "severity": "action",
-    "detail": "derived from lpar-2024/abstract, a 3-year shift - too far back to trust",
-    "seen_at": "2026-08-26T04:04:44.677Z"
-  },
-  {
-    "conference": "lpar",
-    "edition": "lpar-2027",
-    "kind": "submission",
-    "reason": "stale-base",
-    "severity": "action",
-    "detail": "derived from lpar-2024/submission, a 3-year shift - too far back to trust",
-    "seen_at": "2026-08-26T04:04:44.677Z"
-  },
-  {
-    "conference": "lpar",
-    "edition": "lpar-2027",
-    "kind": "notification",
-    "reason": "stale-base",
-    "severity": "action",
-    "detail": "derived from lpar-2024/notification, a 3-year shift - too far back to trust",
-    "seen_at": "2026-08-26T04:04:44.677Z"
-  },
-  {
-    "conference": "lpar",
-    "edition": "lpar-2027",
-    "kind": "camera_ready",
-    "reason": "stale-base",
-    "severity": "action",
-    "detail": "derived from lpar-2024/camera_ready, a 3-year shift - too far back to trust",
-    "seen_at": "2026-08-26T04:04:44.677Z"
-  },
-  {
     "conference": "sas",
     "edition": null,
     "kind": null,
@@ -99,12 +27,21 @@
     "seen_at": "2026-08-26T04:04:44.677Z"
   },
   {
-    "conference": "sefm",
-    "edition": "sefm-2027",
-    "kind": "submission",
-    "reason": "stale-base",
+    "conference": "icaps",
+    "edition": "icaps-2025",
+    "kind": null,
+    "reason": "guard",
     "severity": "action",
-    "detail": "derived from sefm-2023/submission, a 4-year shift - too far back to trust",
-    "seen_at": "2026-08-26T04:04:44.677Z"
+    "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
+    "seen_at": "2026-08-26T06:27:38.192Z"
+  },
+  {
+    "conference": "icaps",
+    "edition": "icaps-2025",
+    "kind": null,
+    "reason": "guard",
+    "severity": "action",
+    "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
+    "seen_at": "2026-08-26T06:27:38.192Z"
   }
 ]

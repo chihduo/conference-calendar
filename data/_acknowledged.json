@@ -22,5 +22,21 @@
     "detail": "WikiCFP \"SAS 2026\" is \"Animate Experience - The 37th Annual Conference of the Society for Animation Studies\" (similarity 0) - discarded, not the same conference",
     "on": "2026-08-25",
     "note": "縮寫跨領域撞名，已由標題相似度正確擋下"
+  },
+  {
+    "fingerprint": "guard|icaps|icaps-2025||abstract: Y-10-25 is after the conference start Y-09-09",
+    "reason": "guard",
+    "conference": "icaps",
+    "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
+    "on": "2026-08-26",
+    "note": "上游把 ICAPS 2024 的會議日期掛在 2025 那一屆;護欄每次都正確擋下,不會寫進資料。上游不修就會一直報。"
+  },
+  {
+    "fingerprint": "guard|icaps|icaps-2025||submission: Y-11-01 is after the conference start Y-09-09",
+    "reason": "guard",
+    "conference": "icaps",
+    "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
+    "on": "2026-08-26",
+    "note": "上游把 ICAPS 2024 的會議日期掛在 2025 那一屆;護欄每次都正確擋下,不會寫進資料。上游不修就會一直報。"
   }
 ]

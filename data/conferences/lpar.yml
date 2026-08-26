@@ -1,24 +1,40 @@
 id: lpar
 name: LPAR
 areas: [FM, LOGIC, AI]
+cadence_years: 2
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:
-  - year: 2027
-    id: lpar-2027
+  - year: 2028
+    id: lpar-2028
     timezone: AoE
     place: TBD
     status: estimated
     needs_review: true
-    dates: 2027-05-23 ~ 2027-05-28 (estimated)
-    start_date: 2027-05-23
-    end_date: 2027-05-28
+    dates: Oct 22-27, 2028 (estimated)
+    start_date: 2028-10-22
+    end_date: 2028-10-27
     milestones:
-      - {kind: abstract, date: 2027-02-12, confidence: estimated, derived_from: lpar-2024/abstract}
-      - {kind: submission, date: 2027-02-19, confidence: estimated, derived_from: lpar-2024/submission}
-      - {kind: notification, date: 2027-04-12, confidence: estimated, derived_from: lpar-2024/notification}
-      - {kind: camera_ready, date: 2027-05-02, confidence: estimated, derived_from: lpar-2024/camera_ready}
+      - {kind: abstract, date: 2028-05-31, confidence: estimated, derived_from: lpar-2026/abstract}
+      - {kind: submission, date: 2028-06-18, confidence: estimated, derived_from: lpar-2026/submission}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: lpar-2026
+    link: https://easychair.org/cfp/lpar26
+    timezone: AoE
+    place: Spetses, Greece
+    dates: Oct 25-30, 2026
+    start_date: 2026-10-25
+    end_date: 2026-10-30
+    status: confirmed
+    note: LPAR-26。系列已改為兩年一次（LPAR-25 是 2024），所以沒有 2027 屆。
+    milestones:
+      - {kind: abstract, date: 2026-06-03, confidence: confirmed, locked: true}
+      - {kind: submission, date: 2026-06-21, confidence: confirmed, locked: true}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
   - year: 2024
     id: lpar-2024
     timezone: AoE

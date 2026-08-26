@@ -10,17 +10,16 @@ editions:
     id: fm-2027
     timezone: AoE
     place: TBD
-    status: estimated
+    status: announced
     needs_review: true
-    dates: 2027-05-19 ~ 2027-05-21 (estimated)
-    start_date: 2027-05-19
-    end_date: 2027-05-21
+    dates: autumn 2027, TBA
     milestones:
-      - {kind: abstract, date: 2026-11-24, confidence: estimated, derived_from: fm-2026/abstract}
-      - {kind: submission, date: 2026-12-01, confidence: estimated, derived_from: fm-2026/submission}
-      - {kind: notification, date: 2027-02-05, confidence: estimated, derived_from: fm-2026/notification}
-      - {kind: camera_ready, date: 2027-03-01, confidence: estimated, derived_from: fm-2026/camera_ready}
+      - {kind: abstract, confidence: unknown}
+      - {kind: submission, confidence: unknown}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
+    note: FM 的舉辦季節逐屆變動（2023 三月、2024 九月、2026 五月），而 FMEurope 說明 FM 2027 在秋季、2026 年初仍在徵求主辦單位。因此不從 2026 推估——推錯季節比沒有推估更糟。
   - year: 2026
     id: fm-2026
     timezone: AoE

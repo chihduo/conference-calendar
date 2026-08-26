@@ -168,6 +168,14 @@ function reestimate(doc, changes) {
    edition eventually, but a venue announces six to nine months out, and the
    whole point of an estimate is to fill exactly that gap.
    Runs only when no future call exists, so it cannot pile up speculative years. */
+/* Declared, not inferred. Reading the gap out of the editions we hold cannot
+   tell a biennial series from a series we simply lack a year for - SEFM is
+   annual and looked like a 3-year cadence because 2024 and 2025 are missing.
+   The two errors are not symmetric either: a phantom edition merely misleads,
+   while skipping a real one costs a deadline. So the default is annual and a
+   venue that runs otherwise says so. */
+const seriesGap = (doc) => doc.cadence_years || 1;
+
 function rollForward(doc, changes) {
   const hasOpenCall = doc.editions.some((e) =>
     e.status !== 'past' &&
@@ -180,7 +188,8 @@ function rollForward(doc, changes) {
     .sort((a, b) => b.year - a.year)[0];
   if (!base) return;
 
-  const year = Math.max(base.year, THIS_YEAR) + 1;
+  const gap = seriesGap(doc);
+  const year = Math.max(base.year + gap, THIS_YEAR + 1);
   if (doc.editions.some((e) => e.year === year)) return;
 
   const est = estimateEdition(doc.id, base, year);
@@ -191,7 +200,7 @@ function rollForward(doc, changes) {
     return;
   }
   doc.editions.push(est);
-  changes.push(`${est.id}: projected from ${base.id} (no open call remained)`);
+  changes.push(`${est.id}: projected from ${base.id} (+${gap} 年，依系列實際週期)`);
 }
 
 async function refreshOne(file) {
@@ -328,7 +337,24 @@ for (const f of files) {
 if (!DRY) {
   const examined = new Set(files.map((f) => f.replace(/\.ya?ml$/, '')));
   const kept = readReviewQueue().filter((r) => !examined.has(r.conference));
-  writeReviewQueue(applyAcks([...kept, ...review]));
+
+  /* An edition can be dropped by a repair pass or by a corrected upstream, and
+     its findings then outlive it - the queue kept asking about icaps-2025 long
+     after nothing by that name existed. A question about something that is gone
+     cannot be answered, only ignored, which is how a queue rots. */
+  const live = new Set();
+  for (const f of fs.readdirSync(CONF_DIR).filter((x) => /\.ya?ml$/.test(x))) {
+    const doc = loadYaml(fs.readFileSync(path.join(CONF_DIR, f), 'utf8'));
+    for (const e of doc.editions || []) live.add(e.id);
+  }
+  /* Only carried-over entries can go stale. This run's findings are current by
+     definition - and the ones about an edition that no longer exists are
+     precisely the guard reporting that it refused to import it, which is the
+     thing worth recording. */
+  const prunedKept = kept.filter((r) => !r.edition || live.has(r.edition));
+  if (prunedKept.length !== kept.length)
+    console.log(`\n清掉 ${kept.length - prunedKept.length} 筆指向已不存在屆別的舊項目。`);
+  writeReviewQueue(applyAcks([...prunedKept, ...review]));
 }
 const stillOpen = applyAcks(review).filter((r) => r.severity === 'action').length;
 const muted = review.length - applyAcks(review).filter((r) => r.severity !== 'acknowledged').length;

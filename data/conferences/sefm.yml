@@ -10,14 +10,29 @@ editions:
     place: TBD
     status: estimated
     needs_review: true
-    dates: 2027-11-01 ~ 2027-11-05 (estimated)
-    start_date: 2027-11-01
-    end_date: 2027-11-05
+    dates: Nov 22-26, 2027 (estimated)
+    start_date: 2027-11-22
+    end_date: 2027-11-26
     milestones:
-      - {kind: submission, date: 2027-06-18, confidence: estimated, derived_from: sefm-2023/submission}
+      - {kind: submission, date: 2027-06-22, confidence: estimated, derived_from: sefm-2026/submission}
       - {kind: notification, confidence: unknown}
       - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: sefm-2026
+    link: https://sefm-conference.github.io/2026/
+    timezone: AoE
+    place: Malta
+    dates: Nov 23-27, 2026
+    start_date: 2026-11-23
+    end_date: 2026-11-27
+    status: confirmed
+    milestones:
+      - {kind: abstract, date: 2026-06-16, confidence: confirmed, locked: true}
+      - {kind: submission, date: 2026-06-23, confidence: confirmed, locked: true}
+      - {kind: artifact_submission, date: 2026-07-22, confidence: confirmed, locked: true, note: tool and regular papers}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
   - year: 2023
     id: sefm-2023
     timezone: AoE
