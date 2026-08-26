@@ -1,13 +1,5 @@
 [
   {
-    "fingerprint": "wrong-venue|cade",
-    "reason": "wrong-venue",
-    "conference": "cade",
-    "detail": "WikiCFP \"CADE 2026\" is \"International Conference on AI and the Digital Economy\" (similarity 0) - discarded, not the same conference",
-    "on": "2026-08-25",
-    "note": "縮寫跨領域撞名，已由標題相似度正確擋下"
-  },
-  {
     "fingerprint": "wrong-venue|icfp",
     "reason": "wrong-venue",
     "conference": "icfp",

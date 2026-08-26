@@ -11,11 +11,14 @@ body:
         **預設是刪除檔案。** 那會一併失去手工成果——官方確認過的日期、`locked` 釘住的值、
         pin 過的 researchr track——重新加回來時抓取層補不回這些。bot 會先列出即將失去什麼，
         再告訴你怎麼還原（commit 都在，`git revert` 就回來了）。
-
-        只是**不想再看到它**的話，在下面寫上 `hide`：檔案與資料完整保留，只是不顯示，
-        把 `hidden: true` 拿掉隨時可以恢復。
+  - type: checkboxes
+    id: mode
+    attributes:
+      label: 選項
+      options:
+        - label: 只隱藏，不要刪除（檔案與資料完整保留，隨時可以恢復）
   - type: textarea
     id: notes
     attributes:
-      label: 備註（可留空；寫 hide 表示只隱藏不刪除）
-      placeholder: hide
+      label: 備註
+      placeholder: 為什麼要移除（可留空）

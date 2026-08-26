@@ -46,18 +46,24 @@ jobs:
           fi
           echo "acronym=$CLEAN" >> "$GITHUB_OUTPUT"
 
-      # "hide" is opt-in from the issue body, so a plain issue does what its
-      # label says rather than quietly doing something gentler.
+      # Read a ticked checkbox, not a keyword. Matching free text against the
+      # whole body is fragile precisely because the form's own chrome is part of
+      # that body: the previous version searched for "hide" and the field label
+      # said "寫 hide 表示只隱藏不刪除", so every issue matched and nothing was
+      # ever deleted. A checkbox renders as `- [x]`, which the template cannot
+      # accidentally contain.
       - name: Decide hide vs delete
         id: mode
         env:
           BODY: ${{ github.event.issue.body }}
           INPUT_HIDE: ${{ github.event.inputs.hide }}
         run: |
-          if [ "$INPUT_HIDE" = "true" ] || printf '%s' "$BODY" | grep -qiE '(^|[^a-z])hide([^a-z]|$)|隱藏'; then
+          if [ "$INPUT_HIDE" = "true" ] || printf '%s' "$BODY" | grep -qE '^[[:space:]]*-[[:space:]]*\[[xX]\]'; then
             echo "flag=--hide" >> "$GITHUB_OUTPUT"
+            echo "mode: hide"
           else
             echo "flag=" >> "$GITHUB_OUTPUT"
+            echo "mode: delete"
           fi
 
       - name: Remove
