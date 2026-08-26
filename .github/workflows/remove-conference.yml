@@ -87,14 +87,18 @@ jobs:
           script: |
             const out = (${{ toJSON(steps.remove.outputs.out) }} || '').toString().trim();
             const ok = '${{ steps.remove.outputs.code }}' === '0';
-            const sha = process.env.GITHUB_SHA;
-            const head = ok
-              ? '已處理。以下是移除掉的東西：'
-              : '沒有做任何變更：';
-            const undo = ok
-              ? `\n\n還原：\`git revert\` 這次的 commit，或到 commit 歷史把檔案取回。` +
-                `\n只是想讓它不顯示的話，在 issue 內文寫上 \`hide\` 再開一次——資料會完整保留。`
-              : '';
+            const hid = '${{ steps.mode.outputs.flag }}' === '--hide';
+            // The wording has to follow the mode: telling someone who just hid a
+            // venue that it was "removed", and then advising them to hide it, is
+            // both wrong and slightly insulting.
+            const head = !ok ? '沒有做任何變更：'
+              : hid ? '已隱藏。資料完整保留，以下是它的內容：'
+                    : '已刪除。以下是隨檔案一起消失的東西：';
+            const undo = !ok ? ''
+              : hid
+                ? '\n\n要讓它回來：把 `data/conferences/` 底下那個檔案的 `hidden: true` 拿掉即可。'
+                : '\n\n還原：`git revert` 這次的 commit，或到 commit 歷史把檔案取回。' +
+                  '\n下次只想讓它不顯示的話，在 issue 內文寫 `hide`——檔案與資料會完整保留。';
             await github.rest.issues.createComment({
               owner: context.repo.owner, repo: context.repo.repo,
               issue_number: context.issue.number,

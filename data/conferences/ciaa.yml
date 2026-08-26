@@ -38,4 +38,3 @@ editions:
       - {kind: notification, date: 2025-06-20, confidence: announced}
       - {kind: camera_ready, date: 2025-06-30, confidence: announced}
     note: Estimation base - no 2026 edition data was available at seed time.
-hidden: true
