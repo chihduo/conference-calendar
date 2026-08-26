@@ -13,11 +13,13 @@
     "audit": "node scripts/audit.mjs",
     "test:ui": "node test/ui.test.mjs",
     "test:subs": "node test/submissions.test.mjs",
-    "test": "npm run test:ui --silent && npm run test:subs --silent && npm run test:sync --silent",
+    "test": "npm run test:ui --silent && npm run test:subs --silent && npm run test:sync --silent && npm run test:remove --silent",
     "resolve": "node scripts/resolve.mjs",
     "test:sync": "node test/sync.test.mjs",
     "ack": "node scripts/ack.mjs",
-    "lint:docs": "node scripts/lint-docs.mjs"
+    "lint:docs": "node scripts/lint-docs.mjs",
+    "remove": "node scripts/remove.mjs",
+    "test:remove": "node test/remove.test.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",

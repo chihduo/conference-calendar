@@ -17,6 +17,7 @@ npm run ranks FSE      # 查 ICORE 排名
 npm run resolve ...    # 把 issue 對話裡選的答案套用到某個會議
 npm run audit          # 檢查推估值：快到期了還沒確認？基準是不是太舊？
 npm run ack            # 列出待確認的自動抓取結果；確認過的不再提示
+npm run remove CIAA    # 移除會議（--hide 只隱藏，可逆）
 npm test               # 用真的 DOM 對 dist/index.html 跑瀏覽器層測試
 npm run lint:docs      # 驗證 README 裡的 mermaid 圖能解析
 ```
@@ -341,6 +342,21 @@ localStorage，之後沿用；按鈕上寫的是「切過去會變成什麼」�
 
 目前支援兩種選擇題:ICORE 同名多筆、researchr 主 track 判不出來。
 
+### 移除會議
+
+同樣三條路,標籤換成 `remove-conference`(標題一樣只放縮寫),或 `npm run remove CIAA`。
+
+刪除前會先列出**即將失去什麼**:官方確認過的日期、`locked` 釘住的值、手寫註記、pin 過的
+researchr track。這些抓取層補不回來——重新加一次會拿到全新的推估,而不是你當初核對過的
+那份。所以回報裡一定附上 `git revert` 的還原方式。
+
+`--hide`(或在 issue 內文寫 `hide`)只設 `hidden: true`:檔案與資料完整保留,只是不顯示,
+把那一行拿掉就回來。**多數時候你要的是這個**——但預設仍是照標籤說的刪除,不擅自改成
+比較溫和的動作。
+
+刪除會一併清掉指向它的東西:`wishlist.txt` 那一行(否則今晚的 cron 會把它加回來)、
+待確認項目、確認紀錄。
+
 ## 自動化
 
 三支 workflow，跑在 `chihduo/conference-calendar`：
@@ -349,7 +365,8 @@ localStorage，之後沿用；按鈕上寫的是「切過去會變成什麼」�
 |---|---|---|
 | `refresh.yml` | 每日 **03:17 UTC** + 手動 | 展開 wishlist → 抓所有來源 → 驗證 → 由 `deadline-bot` commit |
 | `deploy.yml` | push 到 main、refresh 完成、手動 | validate → build → `npm test` → 發佈到 Pages |
-| `add-conference.yml` | 貼 `add-conference` 標籤的 issue、手動 | 跑發現 cascade → commit → 在 issue 回報並關閉 |
+| `add-conference.yml` | 貼 `add-conference` 標籤的 issue、issue 回覆、手動 | 跑發現 cascade → commit → 在 issue 回報;有歧義就列候選等你回覆 |
+| `remove-conference.yml` | 貼 `remove-conference` 標籤的 issue、手動 | 先列出即將失去什麼 → 刪除或隱藏 → commit → 回報還原方式 |
 
 **deploy 是靠 `workflow_run` 接在 refresh 後面，不是靠 push 觸發。** GitHub 規定用
 `GITHUB_TOKEN` 推的 commit 不會觸發任何 workflow（防無限迴圈），所以 bot 的資料 commit
@@ -367,14 +384,17 @@ localStorage，之後沿用；按鈕上寫的是「切過去會變成什麼」�
    deploy 會以 404 失敗，錯誤訊息會直接指到這裡
 2. **Settings → Actions → General → Workflow permissions = Read and write**。新 repo 預設
    唯讀，`deadline-bot` 會推不動 commit
-3. **建立 `add-conference` 標籤**，否則第三條新增路徑不會被觸發
+3. **建立 `add-conference`、`needs-choice`、`remove-conference` 三個標籤**，否則 issue
+   觸發的路徑不會啟動
 
 用 CLI 一次做完：
 
 ```bash
 gh api -X POST repos/OWNER/REPO/pages -f build_type=workflow
 gh api -X PUT repos/OWNER/REPO/actions/permissions/workflow -f default_workflow_permissions=write
-gh label create add-conference --description "Run the discovery cascade for the acronym in the title" --color 0E8A16
+gh label create add-conference    --description "Run the discovery cascade for the acronym in the title" --color 0E8A16
+gh label create needs-choice      --description "Bot asked a question; waiting on a reply in the thread"   --color FBCA04
+gh label create remove-conference --description "Remove the conference named in the title"                 --color D93F0B
 ```
 
 ## 排名

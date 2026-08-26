@@ -1,0 +1,106 @@
+name: Remove conference
+
+# Kept separate from Add rather than folded in as a branch: this path destroys
+# hand-curation that no fetcher can rebuild, and its owner gate is worth being
+# readable on its own rather than buried in a shared conditional.
+
+on:
+  issues:
+    types: [opened, labeled]
+  workflow_dispatch:
+    inputs:
+      acronym:
+        description: 'Conference acronym to remove, e.g. CIAA'
+        required: true
+      hide:
+        description: 'Hide instead of delete (reversible)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  remove:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.user.login == github.repository_owner &&
+       contains(github.event.issue.labels.*.name, 'remove-conference'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: npm }
+      - run: npm ci
+
+      - name: Extract acronym
+        id: acro
+        env:
+          RAW: ${{ github.event.inputs.acronym || github.event.issue.title }}
+        run: |
+          CLEAN=$(printf '%s' "$RAW" | tr -d '\n' | grep -oE '^[A-Za-z][A-Za-z0-9+-]{1,15}$' || true)
+          if [ -z "$CLEAN" ]; then
+            echo "::error::'$RAW' is not a plausible conference acronym"
+            exit 1
+          fi
+          echo "acronym=$CLEAN" >> "$GITHUB_OUTPUT"
+
+      # "hide" is opt-in from the issue body, so a plain issue does what its
+      # label says rather than quietly doing something gentler.
+      - name: Decide hide vs delete
+        id: mode
+        env:
+          BODY: ${{ github.event.issue.body }}
+          INPUT_HIDE: ${{ github.event.inputs.hide }}
+        run: |
+          if [ "$INPUT_HIDE" = "true" ] || printf '%s' "$BODY" | grep -qiE '(^|[^a-z])hide([^a-z]|$)|隱藏'; then
+            echo "flag=--hide" >> "$GITHUB_OUTPUT"
+          else
+            echo "flag=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Remove
+        id: remove
+        run: |
+          set +e
+          OUT=$(npm run remove --silent -- '${{ steps.acro.outputs.acronym }}' ${{ steps.mode.outputs.flag }} 2>&1)
+          CODE=$?
+          set -e
+          echo "$OUT"
+          { echo "out<<CCEOF"; echo "$OUT"; echo "CCEOF"; } >> "$GITHUB_OUTPUT"
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+          [ "$CODE" -eq 0 ] || [ "$CODE" -eq 1 ]      # 1 = no such venue, report it rather than failing
+
+      - run: npm run validate
+        if: steps.remove.outputs.code == '0'
+
+      - name: Commit
+        if: steps.remove.outputs.code == '0'
+        run: |
+          scripts/ci-commit.sh "chore(data): remove ${{ steps.acro.outputs.acronym }} via issue #${{ github.event.issue.number }}"
+
+      - name: Reply on the issue
+        if: always() && github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const out = (${{ toJSON(steps.remove.outputs.out) }} || '').toString().trim();
+            const ok = '${{ steps.remove.outputs.code }}' === '0';
+            const sha = process.env.GITHUB_SHA;
+            const head = ok
+              ? '已處理。以下是移除掉的東西：'
+              : '沒有做任何變更：';
+            const undo = ok
+              ? `\n\n還原：\`git revert\` 這次的 commit，或到 commit 歷史把檔案取回。` +
+                `\n只是想讓它不顯示的話，在 issue 內文寫上 \`hide\` 再開一次——資料會完整保留。`
+              : '';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `${head}\n\n\`\`\`\n${out.slice(0, 55000)}\n\`\`\`${undo}`,
+            });
+            if (ok) await github.rest.issues.update({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number, state: 'closed',
+            });
