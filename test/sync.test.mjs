@@ -78,7 +78,9 @@ console.log('=== 未登入 ===');
   const { dom, w } = boot({ backend: makeBackend(), signedIn: false });
   check('顯示登入按鈕', !!btn(w, '用 GitHub 登入'));
   check('狀態列標示未登入', txt(w, '.sync-bar .lbl') === '未登入', txt(w, '.sync-bar .lbl'));
-  check('新增表單被停用', w.document.querySelector('#main .subform button').disabled === true);
+  check('新增表單被停用（沒有可以寫入的帳號）',
+        w.document.querySelector('#main .subform button').disabled === true);
+  check('狀態列說明登入後會怎樣', /登入後.*帳號/.test(txt(w, '.sync-bar')), '');
   dom.window.close();
 }
 
