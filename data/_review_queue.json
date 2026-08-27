@@ -1,23 +1,5 @@
 [
   {
-    "conference": "icaps",
-    "edition": "icaps-2025",
-    "kind": null,
-    "reason": "guard",
-    "severity": "acknowledged",
-    "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-27T14:14:40.045Z"
-  },
-  {
-    "conference": "icaps",
-    "edition": "icaps-2025",
-    "kind": null,
-    "reason": "guard",
-    "severity": "acknowledged",
-    "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-27T14:14:40.045Z"
-  },
-  {
     "conference": "icfp",
     "edition": null,
     "kind": null,
