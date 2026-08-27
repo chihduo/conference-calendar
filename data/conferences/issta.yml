@@ -20,6 +20,8 @@ editions:
     link: https://conf.researchr.org/home/issta-2027
     status: confirmed
     needs_review: true
+    place: Singapore
+    dates: September 7-10, 2027
   - year: 2026
     id: issta-2026
     timezone: AoE
