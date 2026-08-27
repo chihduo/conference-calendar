@@ -1,6 +1,6 @@
 # FM/PL/AI 會議截稿行事曆
 
-網站： [https://chihduo.github.io/conference-calendar/](https://chihduo.github.io/conference-calendar/)
+網站：[https://chihduo.github.io/conference-calendar/](https://chihduo.github.io/conference-calendar/)
 
 追蹤形式方法、程式語言與人工智慧領域會議的截稿日與後續里程碑，資料以 YAML 保存、由分層抓取自動維護，輸出成一頁靜態網站與可訂閱的 `.ics`。
 
@@ -18,12 +18,12 @@ npm run audit          # 檢查推估值：快到期了還沒確認？基準是�
 npm run ack            # 列出待確認的自動抓取結果；確認過的不再提示
 npm run remove CIAA    # 移除會議（--hide 只隱藏，可逆）
 npm test               # 用真的 DOM 對 dist/index.html 跑瀏覽器層測試
-npm run lint:docs      # 驗證文件：mermaid 圖能解析、中文段落沒有硬斷行
+npm run lint:docs      # 驗證文件：mermaid 圖、中文不硬斷行、中文標點用全形
 ```
 
 ## 兩層資料模型
 
-**會議層**（`data/conferences/*.yml`，進版控）記錄 CFP 公布的事實。 **個人層**（你的帳號底下，或未設定同步時放在瀏覽器裡）記錄你自己投了什麼、進行到哪一步。
+**會議層**（`data/conferences/*.yml`，進版控）記錄 CFP 公布的事實。**個人層**（你的帳號底下，或未設定同步時放在瀏覽器裡）記錄你自己投了什麼、進行到哪一步。
 
 分開的理由很實際：repo 是公開的，而「哪篇論文正在哪裡審、哪一篇被拒過」不該留在公開的 git 歷史裡。這一層從來不進版控。
 
@@ -38,7 +38,7 @@ npm run lint:docs      # 驗證文件：mermaid 圖能解析、中文段落沒�
 
 反白取的是 `pending()` 的第一筆，也就是「我的投稿」列最上面那一筆，所以兩個檢視不可能對不上。
 
-還有第三種狀態:**灰字**。一個會議的投稿已經截止、而你沒有追蹤它的論文時，它後續的 notification、rebuttal、camera-ready 就是別人的行程表——灰掉而不是隱藏，因為知道某個會議什麼時候放榜仍然值得一瞥。投稿與摘要本身永遠不灰（那才是你要決定的事），而滾動截稿的會議只要還有下一輪可投就整屆維持正常。目前 193 個未來里程碑裡有 15 個屬於這類。
+還有第三種狀態：**灰字**。一個會議的投稿已經截止、而你沒有追蹤它的論文時，它後續的 notification、rebuttal、camera-ready 就是別人的行程表——灰掉而不是隱藏，因為知道某個會議什麼時候放榜仍然值得一瞥。投稿與摘要本身永遠不灰（那才是你要決定的事），而滾動截稿的會議只要還有下一輪可投就整屆維持正常。目前 193 個未來里程碑裡有 15 個屬於這類。
 
 急迫度走左側色條、歸屬走背景色、無關走文字顏色，三個獨立通道疊加而不互相蓋掉。沒有投稿紀錄時時間軸完全不變，不會多出任何雜訊。
 
@@ -75,7 +75,7 @@ flowchart LR
     GT <-- "授權碼交換<br/>在伺服器端" --> GH
 ```
 
-**圖裡最重要的是不存在的那條線:快取沒有回寫箭頭。** 快取由伺服器的回應填入、離線時供顯示，永遠不是寫入資料庫的來源。兩台裝置因此不可能各自前進——沒有合併邏輯，也沒有衝突解決，那是 local-first 才需要背的複雜度。
+**圖裡最重要的是不存在的那條線：快取沒有回寫箭頭。** 快取由伺服器的回應填入、離線時供顯示，永遠不是寫入資料庫的來源。兩台裝置因此不可能各自前進——沒有合併邏輯，也沒有衝突解決，那是 local-first 才需要背的複雜度。
 
 控制項在兩種狀態下停用，理由不同：**未登入**時沒有可以寫入的帳號；**離線**時則是刻意的——**不能離線編輯正是分歧無法產生的機制**，不是使用上的不便。少了它，本機就會累積一批稍後需要合併的變更，而合併正是這個架構要避開的東西。
 
@@ -87,7 +87,7 @@ flowchart LR
 
 這正是選 Supabase 而不是 Firebase 的決定性理由——Firebase 要嘛內嵌 SDK，要嘛自己跑完 GitHub OAuth 流程（於是又需要一個後端）。
 
-#### 唯一剩下的風險:過期分頁
+#### 唯一剩下的風險：過期分頁
 
 同一個人、兩台裝置，仍有一種順序會出事——早上開著的分頁，寫入時帶的是早上讀到的狀態。
 
@@ -112,7 +112,7 @@ sequenceDiagram
 
 `save_submission` 收下前端讀到的 `updated_at` 當 compare-and-set token，不符就丟 `stale_write`。這是**一個欄位**的成本，不是一套合併演算法——因為要處理的是「寫入時的前提已經過期」，不是「兩份分歧的資料要合流」。
 
-#### 安全性:兩層,缺一不可
+#### 安全性：兩層，缺一不可
 
 網頁裡的 publishable key 本來就設計成公開，真正的防線是資料庫這兩層：
 
@@ -121,7 +121,7 @@ sequenceDiagram
 | **GRANT** | 角色能不能碰這張表 | 只給 `authenticated`；`anon` 什麼都沒有 |
 | **RLS** | 能碰哪些列 | 四條 policy 全綁 `auth.uid()` |
 
-兩層分開這件事很容易踩到:SQL Editor 建的表**不會**自動授權(只有 dashboard 建的才會)，少了 GRANT 連登入的使用者都會拿到 `42501`，而錯誤訊息會讓人以為是 RLS 設錯。
+兩層分開這件事很容易踩到：SQL Editor 建的表**不會**自動授權（只有 dashboard 建的才會），少了 GRANT 連登入的使用者都會拿到 `42501`，而錯誤訊息會讓人以為是 RLS 設錯。
 
 #### 其他
 
@@ -221,7 +221,7 @@ sequenceDiagram
 
 `test/submissions.test.mjs` 顧的是另一類錯誤：**訊息說了假話**。`pending()` 回空集合有三種成因——會議還沒公布日期、日期公布了但已經過去、這個狀態本來就沒有待辦——三者需要三句不同的話。對 POPL 2027 說「還沒公布日期」是錯的：它的日期是官方確認的，只是 2026-07-09 就截止了。截止的情況還會給一顆「改投下一屆」按鈕，而下一屆往往正是 `rollForward` 推估出來的那個。
 
-三套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、 `npm run test:sync`（同步層，對 stub 過的後端）。`npm test` 一次跑完，`deploy.yml` 也是。
+三套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）。`npm test` 一次跑完，`deploy.yml` 也是。
 
 同步層的**真實 OAuth 往返沒有辦法自動測**，需要實際專案憑證；`supabase/SETUP.md` 列出設定完該手動確認的幾件事。
 
@@ -271,17 +271,17 @@ sequenceDiagram
 - **候選清單放在 bot 自己那則留言裡**（`<!-- cc-choices: … -->`），所以狀態就在對話裡，不需要另外存一份跟對話同步的檔案。
 - **對不上就不猜。** 回覆比對接受編號、選項原值、以及能唯一指認的名稱片段；`International` 同時符合兩個選項時會再問一次而不是挑一個。挑錯會把會議標成錯的等級，代價比多問一次高。
 
-目前支援兩種選擇題:ICORE 同名多筆、researchr 主 track 判不出來。
+目前支援兩種選擇題：ICORE 同名多筆、researchr 主 track 判不出來。
 
 ### 移除會議
 
-同樣三條路,標籤換成 `remove-conference`(標題一樣只放縮寫),或 `npm run remove CIAA`。
+同樣三條路，標籤換成 `remove-conference`（標題一樣只放縮寫），或 `npm run remove CIAA`。
 
-刪除前會先列出**即將失去什麼**:官方確認過的日期、`locked` 釘住的值、手寫註記、pin 過的 researchr track。這些抓取層補不回來——重新加一次會拿到全新的推估,而不是你當初核對過的那份。所以回報裡一定附上 `git revert` 的還原方式。
+刪除前會先列出**即將失去什麼**：官方確認過的日期、`locked` 釘住的值、手寫註記、pin 過的 researchr track。這些抓取層補不回來——重新加一次會拿到全新的推估，而不是你當初核對過的那份。所以回報裡一定附上 `git revert` 的還原方式。
 
-`--hide`(或在 issue 內文寫 `hide`)只設 `hidden: true`:檔案與資料完整保留,只是不顯示, 把那一行拿掉就回來。**多數時候你要的是這個**——但預設仍是照標籤說的刪除,不擅自改成比較溫和的動作。
+`--hide`（或在 issue 內文寫 `hide`）只設 `hidden: true`：檔案與資料完整保留，只是不顯示，把那一行拿掉就回來。**多數時候你要的是這個**——但預設仍是照標籤說的刪除，不擅自改成比較溫和的動作。
 
-刪除會一併清掉指向它的東西:`wishlist.txt` 那一行(否則今晚的 cron 會把它加回來)、待確認項目、確認紀錄。
+刪除會一併清掉指向它的東西：`wishlist.txt` 那一行（否則今晚的 cron 會把它加回來）、待確認項目、確認紀錄。
 
 ## 自動化
 
@@ -291,7 +291,7 @@ sequenceDiagram
 |---|---|---|
 | `refresh.yml` | 每日 **03:17 UTC** + 手動 | 展開 wishlist → 抓所有來源 → 驗證 → 由 `deadline-bot` commit |
 | `deploy.yml` | push 到 main、refresh 完成、手動 | validate → build → `npm test` → 發佈到 Pages |
-| `add-conference.yml` | 貼 `add-conference` 標籤的 issue、issue 回覆、手動 | 跑發現 cascade → commit → 在 issue 回報;有歧義就列候選等你回覆 |
+| `add-conference.yml` | 貼 `add-conference` 標籤的 issue、issue 回覆、手動 | 跑發現 cascade → commit → 在 issue 回報；有歧義就列候選等你回覆 |
 | `remove-conference.yml` | 貼 `remove-conference` 標籤的 issue、手動 | 先列出即將失去什麼 → 刪除或隱藏 → commit → 回報還原方式 |
 
 **deploy 是靠 `workflow_run` 接在 refresh 後面，不是靠 push 觸發。** GitHub 規定用 `GITHUB_TOKEN` 推的 commit 不會觸發任何 workflow（防無限迴圈），所以 bot 的資料 commit 雖然符合 `paths: ['data/**']` 卻不會重建網站——資料每晚前進、站台卻停在上次人工推送的版本。refresh 失敗時不部署，帶著沒過關的資料上線比不更新更糟。

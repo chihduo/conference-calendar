@@ -58,4 +58,34 @@ for (const f of DOCS) {
 if (wrapped) console.log(`  ${wrapped} 處中文硬斷行（中文段落請寫成一行，不要折行）`);
 else console.log('  ok   中文段落沒有硬斷行');
 
-process.exit(ok === blocks.length && wrapped === 0 ? 0 : 1);
+/* Half-width punctuation next to Chinese, and a stray space after a full-width
+   mark. Both render as a gap the source does not show - the same failure mode
+   as the wrapping above, which is why it belongs to a linter rather than to a
+   proofreader. Anything inside a code span or fence is left alone: a comma in
+   `a,b` is code. */
+const HALF = new RegExp(`(?:[${CJK}][,;:!?()]|[,;:!?()][${CJK}])`);
+const STRAY = new RegExp(`[，。、；：！？）」] +(?=[*_\`\\[]|[${CJK}])`);
+let punct = 0;
+for (const f of DOCS) {
+  let fence = false;
+  fs.readFileSync(f, 'utf8').split('\n').forEach((raw, i) => {
+    if (raw.trim().startsWith('```')) { fence = !fence; return; }
+    if (fence || raw.trim().startsWith('|')) return;
+    /* HALF reads the line with code spans blanked, because a comma inside
+       `a,b` is code. STRAY has to read the raw line: blanking a span turns
+       「，`code`」 into a comma followed by spaces and fabricates the very
+       defect it is looking for. */
+    const bare = raw.replace(/`[^`\n]*`/g, (m) => ' '.repeat(m.length));
+    for (const [re, why, subject] of [[HALF, '中文旁用了半形標點', bare],
+                                      [STRAY, '全形標點後多了空格', raw]]) {
+      const m = re.exec(subject);
+      if (!m) continue;
+      punct++;
+      if (punct <= 5) console.log(`  FAIL ${f}:${i + 1} ${why}\n       …${raw.slice(Math.max(0, m.index - 14), m.index + 16)}…`);
+    }
+  });
+}
+if (punct) console.log(`  ${punct} 處中文標點問題`);
+else console.log('  ok   中文標點都是全形，且沒有多餘空格');
+
+process.exit(ok === blocks.length && wrapped === 0 && punct === 0 ? 0 : 1);
