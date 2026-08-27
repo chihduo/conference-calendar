@@ -218,3 +218,11 @@ footer { margin-top: 38px; padding-top: 15px; border-top: 1px solid var(--line);
 
 .sync-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-left-color: var(--petrol); }
 .chip:disabled, select:disabled, input:disabled { opacity: .45; cursor: not-allowed; }
+
+/* Someone else's schedule: the call has closed and you have no paper in it.
+   Greys the text rather than dimming the row, so it still composes with .past
+   (opacity) and .mine (background) instead of fighting them. */
+.row.moot .cname, .row.moot .cname a, .row.moot .mkind { color: var(--faint); font-weight: 500; }
+.row.moot .dt b { color: var(--slate); font-weight: 500; }
+.row.moot .cd { color: var(--faint); }
+.row.moot .rank, .row.moot .area, .row.moot .conf-dot, .row.moot .est-mark { opacity: .45; }

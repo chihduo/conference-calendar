@@ -73,6 +73,49 @@ console.log('\n=== 刪光之後 ===');
   dom.window.close();
 }
 
+console.log('\n=== 與我無關的列要灰掉 ===');
+{
+  const html = fs.readFileSync('dist/index.html', 'utf8');
+  const mk = (subs) => {
+    const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
+      { runScripts: 'dangerously', url: 'https://example.org/' });
+    const w = dom.window; w.confirm = () => false;
+    w.localStorage.setItem('cc-submissions', JSON.stringify({ schema: 1, submissions: subs }));
+    w.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
+    w.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]
+      .replace(/window\.__SYNC_CONFIG__ = [\s\S]*?;/, 'window.__SYNC_CONFIG__ = null;'));
+    return dom;
+  };
+  const rows = (w) => [...w.document.querySelectorAll('#main .row')].map((r) => ({
+    cls: r.className,
+    txt: [...r.querySelectorAll('.cname,.mkind')].map((n) => n.textContent).join(' ').trim(),
+  }));
+
+  let d = mk([]);
+  const all = rows(d.window);
+  const moot = all.filter((r) => r.cls.includes('moot'));
+  check('投稿已截止且沒追蹤的後續日期會變灰', moot.length > 0, `${moot.length}/${all.length} 列`);
+  check('投稿與摘要本身永遠不灰（那才是你要決定的）',
+        !moot.some((r) => /Submission|Abstract/.test(r.txt)));
+  check('已過期的列不重複套用（.past 已經處理）',
+        !moot.some((r) => r.cls.includes('past')));
+  d.window.close();
+
+  // tracking a paper makes the whole edition relevant again
+  d = mk([{ id: 'a', paper: 'P', venue: 'icse-2027', status: 'submitted', history: [] }]);
+  const icse = rows(d.window).filter((r) => /ICSE 2027/.test(r.txt));
+  check('追蹤了論文之後該會議整屆恢復正常',
+        icse.length > 0 && !icse.some((r) => r.cls.includes('moot')), `${icse.length} 列`);
+  d.window.close();
+
+  // a venue still taking submissions in a later round must not be greyed
+  d = mk([]);
+  const csf = rows(d.window).filter((r) => /CSF 2027/.test(r.txt));
+  check('滾動截稿：還有下一輪可投時整屆都不灰',
+        csf.length > 0 && !csf.some((r) => r.cls.includes('moot')), `${csf.length} 列`);
+  d.window.close();
+}
+
 console.log('\n=== AoE 時鐘 ===');
 {
   const html = fs.readFileSync('dist/index.html', 'utf8');

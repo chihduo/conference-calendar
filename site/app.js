@@ -162,7 +162,16 @@ function renderDeadlines(root, now) {
     /* Two independent channels: the left stripe carries urgency, the background
        carries ownership. Overloading one would make them unreadable together. */
     const mine = subs.get(e.id) || [];
-    const row = el('div', 'row' + sev + (mine.length ? ' mine' : ''));
+
+    /* A notification or rebuttal date only means something if you might be in
+       it. Once the call has closed and you are not tracking a paper here, the
+       row is someone else's schedule - greyed rather than hidden, because
+       knowing when a venue announces is still worth a glance. Rows for a venue
+       still accepting submissions stay bright: you could yet be in it. */
+    const moot = !isPast && !mine.length && !callOpen(e, now) && !CALL_KINDS.has(baseKind(m.kind));
+
+    const row = el('div', 'row' + sev + (mine.length ? ' mine' : '') + (moot ? ' moot' : ''));
+    if (moot) row.title = '投稿已截止，而你沒有追蹤這個會議的論文';
 
     const dt = el('div', 'dt');
     dt.innerHTML = fmtDate(m);
