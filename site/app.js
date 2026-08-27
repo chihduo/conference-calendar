@@ -728,8 +728,17 @@ function renderSubmissions(root, now) {
 
   /* backup + personal feed */
   root.appendChild(Object.assign(el('h2', 'sec'), { textContent: '備份與匯出' }));
-  root.appendChild(el('div', 'count',
-    '這些紀錄只存在這個瀏覽器裡，不會上傳，也不在 repo 中。換裝置或清快取前請先匯出。'));
+  /* Where the records actually live depends on whether sync is on, and saying
+     "only in this browser, never uploaded" once sync is configured is simply
+     false - and false in the direction that matters, since someone may be
+     deciding what to write down on the strength of it. */
+  const WHERE = {
+    off: '這些紀錄只存在這個瀏覽器裡，不會上傳，也不在 repo 中。換裝置或清快取前請先匯出。',
+    'signed-out': '目前未登入，這些紀錄只存在這個瀏覽器裡。登入之後會存到你的帳號下，並在裝置之間同步。',
+    live: '這些紀錄存在你帳號底下的資料庫，裝置之間會同步；不會進入這個公開 repo。匯出是為了留一份離線備份。',
+    offline: '目前離線，顯示的是上次同步的內容。這些紀錄存在你帳號底下的資料庫，不會進入這個公開 repo。',
+  };
+  root.appendChild(el('div', 'count', WHERE[SYNC.status()] || WHERE.off));
   const box = el('div', 'subs');
 
   const exp = el('a', null, '匯出 JSON');

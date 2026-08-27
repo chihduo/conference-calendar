@@ -81,6 +81,8 @@ console.log('=== 未登入 ===');
   check('新增表單被停用（沒有可以寫入的帳號）',
         w.document.querySelector('#main .subform button').disabled === true);
   check('狀態列說明登入後會怎樣', /登入後.*帳號/.test(txt(w, '.sync-bar')), '');
+  check('不謊稱資料只留在瀏覽器且永不上傳',
+        /登入之後會存到你的帳號下/.test(w.document.querySelector('#main').textContent));
   dom.window.close();
 }
 
@@ -92,6 +94,12 @@ console.log('\n=== 已登入、線上 ===');
   check('從資料庫拉到資料', T.loadSubs().length === 1 && T.loadSubs()[0].paper === '雲端那筆', T.loadSubs()[0]?.paper);
   check('狀態列標示已同步', txt(w, '.sync-bar .lbl') === '已同步', txt(w, '.sync-bar .lbl'));
   check('控制項可用', cardSelect(w).disabled === false);
+  /* This line said "only in this browser, never uploaded" long after sync
+     started uploading. Someone decides what to write down on the strength of
+     it, so it has to track the actual state. */
+  check('已登入時說明資料在帳號底下的資料庫',
+        /存在你帳號底下的資料庫/.test(w.document.querySelector('#main').textContent) &&
+        !/不會上傳/.test(w.document.querySelector('#main').textContent));
 
   // change status -> must reach the database, not just memory
   const sel = cardSelect(w);
