@@ -25,23 +25,5 @@
     "severity": "acknowledged",
     "detail": "WikiCFP \"SAS 2026\" is \"Animate Experience - The 37th Annual Conference of the Society for Animation Studies\" (similarity 0) - discarded, not the same conference",
     "seen_at": "2026-08-26T04:04:44.677Z"
-  },
-  {
-    "conference": "icaps",
-    "edition": "icaps-2025",
-    "kind": null,
-    "reason": "guard",
-    "severity": "action",
-    "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-26T06:27:38.192Z"
-  },
-  {
-    "conference": "icaps",
-    "edition": "icaps-2025",
-    "kind": null,
-    "reason": "guard",
-    "severity": "action",
-    "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
-    "seen_at": "2026-08-26T06:27:38.192Z"
   }
 ]
