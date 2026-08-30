@@ -1,0 +1,56 @@
+id: icst
+name: ICST
+full_name: International Conference on Software Testing, Verification and Validation
+areas: [FM, SE]
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 1221
+  checked_on: 2026-08-30
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/icst.yml}
+  - {tier: 2, adapter: researchr, ref: icst-2027, track: Research Papers}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: icst-2027
+    timezone: AoE
+    milestones:
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icst-2027, kind: submission, date: 2026-11-02}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icst-2027, kind: notification, date: 2026-12-22}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icst-2027, kind: revision, date: 2027-01-31}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icst-2027, kind: final_notification, date: 2027-02-20}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icst-2027, kind: camera_ready, date: 2027-03-18}
+    link: https://conf.researchr.org/home/icst-2027
+    status: confirmed
+    needs_review: true
+  - year: 2026
+    id: icst-2026
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2025-12-15, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=191211}
+      - kind: submission
+        date: 2025-12-22
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icst.yml
+      - {kind: notification, date: 2026-02-20, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=191211}
+      - {kind: camera_ready, date: 2026-03-06, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=191211}
+    link: https://conf.researchr.org/home/icst-2026
+    place: Daejeon, South Korea
+    dates: May 18-22, 2026
+    start_date: 2026-05-18
+    end_date: 2026-05-22
+    status: past
+  - year: 2025
+    id: icst-2025
+    timezone: AoE
+    milestones:
+      - {kind: abstract, date: 2024-09-24, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182844}
+      - {kind: submission, date: 2024-10-02, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182844}
+      - {kind: notification, date: 2024-12-18, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182844}
+      - {kind: camera_ready, date: 2025-01-22, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182844}
+    place: Naples, Italy
+    start_date: 2025-03-31
+    end_date: 2025-04-04
+    status: past
