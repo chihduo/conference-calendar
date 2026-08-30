@@ -1,0 +1,44 @@
+id: icfem
+name: ICFEM
+full_name: International Conference on Formal Engineering Methods
+areas: [FM]
+rank:
+  source: ICORE2026
+  value: C
+  icore_id: 1031
+  checked_on: 2026-08-30
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SE/icfem.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: icfem-2027
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: TBD
+    milestones:
+      - {kind: abstract, date: 2027-05-23, confidence: estimated, derived_from: icfem-2025/abstract}
+      - {kind: submission, date: 2027-05-30, confidence: estimated, derived_from: icfem-2025/submission}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2025
+    id: icfem-2025
+    timezone: AoE
+    milestones:
+      - kind: abstract
+        date: 2025-05-25
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icfem.yml
+      - kind: submission
+        date: 2025-06-01
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icfem.yml
+    link: https://icfem2025.github.io/
+    place: Hangzhou, China
+    dates: November 10 - 13, 2025
+    status: past
