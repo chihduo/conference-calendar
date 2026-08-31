@@ -1,12 +1,30 @@
 [
   {
+    "conference": "icaps",
+    "edition": "icaps-2025",
+    "kind": null,
+    "reason": "guard",
+    "severity": "acknowledged",
+    "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
+    "seen_at": "2026-08-31T09:47:59.395Z"
+  },
+  {
+    "conference": "icaps",
+    "edition": "icaps-2025",
+    "kind": null,
+    "reason": "guard",
+    "severity": "acknowledged",
+    "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
+    "seen_at": "2026-08-31T09:47:59.395Z"
+  },
+  {
     "conference": "icfp",
     "edition": null,
     "kind": null,
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"ICFP 2022\" is \"https://icfp22.sigplan.org/\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-30T09:16:29.492Z"
+    "seen_at": "2026-08-31T09:47:59.395Z"
   },
   {
     "conference": "iclr",
@@ -15,7 +33,7 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"ICLR 2025\" is \"Call for Workshops\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-30T09:16:29.492Z"
+    "seen_at": "2026-08-31T09:47:59.395Z"
   },
   {
     "conference": "sas",
@@ -24,15 +42,6 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"SAS 2026\" is \"Animate Experience - The 37th Annual Conference of the Society for Animation Studies\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-08-30T09:16:29.492Z"
-  },
-  {
-    "conference": "icfem",
-    "edition": null,
-    "kind": null,
-    "reason": "newly-added",
-    "severity": "info",
-    "detail": "2027 not published yet - estimated from icfem-2025 by +364d x 2.",
-    "seen_at": "2026-08-30T14:15:04.380Z"
+    "seen_at": "2026-08-31T09:47:59.395Z"
   }
 ]
