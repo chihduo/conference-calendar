@@ -6,7 +6,7 @@
     "reason": "guard",
     "severity": "acknowledged",
     "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
-    "seen_at": "2026-09-02T07:56:27.856Z"
+    "seen_at": "2026-09-03T08:05:15.687Z"
   },
   {
     "conference": "icaps",
@@ -15,7 +15,7 @@
     "reason": "guard",
     "severity": "acknowledged",
     "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
-    "seen_at": "2026-09-02T07:56:27.856Z"
+    "seen_at": "2026-09-03T08:05:15.687Z"
   },
   {
     "conference": "icfp",
@@ -24,7 +24,7 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"ICFP 2022\" is \"https://icfp22.sigplan.org/\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-09-02T07:56:27.856Z"
+    "seen_at": "2026-09-03T08:05:15.687Z"
   },
   {
     "conference": "iclr",
@@ -33,7 +33,7 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"ICLR 2025\" is \"Call for Workshops\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-09-02T07:56:27.856Z"
+    "seen_at": "2026-09-03T08:05:15.687Z"
   },
   {
     "conference": "sas",
@@ -42,6 +42,6 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"SAS 2026\" is \"Animate Experience - The 37th Annual Conference of the Society for Animation Studies\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-09-02T07:56:27.856Z"
+    "seen_at": "2026-09-03T08:05:15.687Z"
   }
 ]
