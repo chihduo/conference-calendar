@@ -49,7 +49,11 @@ Supabase 已把金鑰改名：**`anon` → `sb_publishable_...`**、`service_rol
 
 Supabase 對免費專案有 **7 天無活動即暫停**的規則。放假兩週沒開這個站，回來同步就是壞的，要手動到 dashboard 按 Restore。
 
-`refresh.yml` 每晚會順手 ping 一次資料庫（設定檔存在才執行），計時器因此不會歸零。不需要額外服務，也不需要付費。
+`refresh.yml` 每晚會 ping 一次資料庫（設定檔存在才執行），計時器因此不會歸零。不需要額外服務，也不需要付費。
+
+**必須跑 `supabase/0003-heartbeat.sql`。** ping 讀的是一張專門用來被讀到的 `heartbeat` 表，因為**被拒絕的請求不算活動**——最初的版本讀 `submissions`，而 anon 對那張表沒有授權，於是每晚都回 401，log 看起來正常但計時器照樣走完，專案還是暫停了。那張表沒有任何內容，授權 anon 讀取不會洩漏什麼，而且只給 select、不給任何寫入 policy。
+
+ping 現在堅持要拿到 200，拿不到就在 Actions 上發一則 warning。一個從來沒成功過卻顯示綠燈的步驟，比直接紅燈更糟。
 
 ## 這個設計會怎麼運作
 
