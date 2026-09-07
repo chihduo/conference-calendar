@@ -26,9 +26,9 @@ editions:
       - {kind: submission, date: 2026-09-16, confidence: confirmed}
       - {kind: artifact_registration, date: 2026-09-18, confidence: confirmed}
       - {kind: artifact_submission, date: 2026-09-23, confidence: confirmed}
+      - {kind: registration, confidence: confirmed, date: 2026-09-23, source_url: https://conf.researchr.org/dates/VMCAI-2027}
       - {kind: notification, date: 2026-11-06, confidence: confirmed, note: paper and artifact}
       - {kind: camera_ready, date: 2026-11-20, confidence: confirmed}
-      - {kind: registration, confidence: unknown}
     provenance:
       - {adapter: researchr, url: https://conf.researchr.org/dates/VMCAI-2027, fetched_at: 2026-08-23T00:00:00Z}
     note: Co-located with POPL 2027. At least one author must present in person.
