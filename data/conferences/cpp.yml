@@ -4,6 +4,21 @@ areas: [FM, PL, LOGIC]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: cpp-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: Jan 10-11, 2028 (estimated)
+    start_date: 2028-01-10
+    end_date: 2028-01-11
+    milestones:
+      - {kind: abstract, date: 2027-09-02, confidence: estimated, derived_from: cpp-2027/abstract}
+      - {kind: submission, date: 2027-09-09, confidence: estimated, derived_from: cpp-2027/submission}
+      - {kind: notification, date: 2027-11-09, confidence: estimated, derived_from: cpp-2027/notification}
+      - {kind: camera_ready, date: 2027-11-24, confidence: estimated, derived_from: cpp-2027/camera_ready}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: cpp-2027
     link: https://popl27.sigplan.org/home/CPP-2027
