@@ -127,7 +127,7 @@ sequenceDiagram
 
 沒有用 Supabase 的 SDK——那是約 150 KB 的 bundle 換四個 fetch，而這頁「單檔、不吃 CDN」的性質更值錢（也是 artifact 預覽能在嚴格 CSP 下運作的原因）。`site/sync.js` 135 行，零依賴，直接打 REST。
 
-免費專案 7 天無活動會暫停，`refresh.yml` 每晚順手 ping 一次擋掉。
+免費專案 7 天無活動會暫停，`keepalive.yml` 每 4 小時呼叫一次 `touch_heartbeat()` 擋掉。這裡「活動」指的是**資料庫活動**，而且是「每天幾次」——一天一次就是規則要抓的那種低活動，所以它是獨立 workflow 而不是掛在每晚的 refresh 上。做法與踩過的坑見 `supabase/SETUP.md`。
 
 真實的 OAuth 往返沒辦法自動測，需要實際專案憑證；`test/sync.test.mjs` 用 stub 過的後端涵蓋 session 處理、唯讀快取、離線拒寫、CAS、401 過期，以及登入導回時把 token 從網址列清掉。
 
@@ -290,6 +290,7 @@ sequenceDiagram
 | workflow | 觸發 | 做什麼 |
 |---|---|---|
 | `refresh.yml` | 每日 **03:17 UTC** + 手動 | 展開 wishlist → 抓所有來源 → 驗證 → 由 `deadline-bot` commit |
+| `keepalive.yml` | 每 **4 小時** + 手動 | 呼叫 `touch_heartbeat()`，避免免費專案因閒置被暫停 |
 | `deploy.yml` | push 到 main、refresh 完成、手動 | validate → build → `npm test` → 發佈到 Pages |
 | `add-conference.yml` | 貼 `add-conference` 標籤的 issue、issue 回覆、手動 | 跑發現 cascade → commit → 在 issue 回報；有歧義就列候選等你回覆 |
 | `remove-conference.yml` | 貼 `remove-conference` 標籤的 issue、手動 | 先列出即將失去什麼 → 刪除或隱藏 → commit → 回報還原方式 |

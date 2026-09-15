@@ -1,0 +1,42 @@
+name: Supabase keep-alive
+
+# Separate from the nightly refresh, and far more often than it.
+#
+# The pause rule looks for "a few user requests to the database each day", and
+# the refresh job ran once - which is precisely the low activity the rule exists
+# to catch. It is also a heavy job (checkout, npm ci, dozens of fetches) and
+# tying a four-line health ping to it made the ping only as reliable as the
+# whole thing.
+
+on:
+  schedule:
+    - cron: '23 */4 * * *'      # six times a day
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4      # only for data/sync-config.json
+      - name: Touch the database
+        run: |
+          if [ ! -f data/sync-config.json ]; then echo 'sync not configured'; exit 0; fi
+          URL=$(node -p "require('./data/sync-config.json').url")
+          KEY=$(node -p "require('./data/sync-config.json').anonKey")
+
+          # A write, not just a read. Whether a PostgREST read counts toward the
+          # pause metric is not documented and two guesses have already been
+          # wrong; an UPDATE is activity under any reading of it.
+          body=$(curl -s -w '\n%{http_code}' --max-time 20 -X POST \
+            -H "apikey: $KEY" -H "Content-Type: application/json" \
+            "$URL/rest/v1/rpc/touch_heartbeat" -d '{}' || echo $'\n000')
+          code=$(printf '%s' "$body" | tail -1)
+          echo "touch_heartbeat: HTTP $code  $(printf '%s' "$body" | head -1)"
+
+          if [ "$code" != "200" ]; then
+            echo "::warning title=Supabase keep-alive failed::HTTP $code — the pause timer is running. Check supabase/0004-heartbeat-write.sql has been applied, or resume the project."
+            exit 1
+          fi

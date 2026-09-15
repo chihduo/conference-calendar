@@ -19,27 +19,6 @@ jobs:
 
       # Expand the wishlist first, so anything added tonight is also fetched
       # tonight rather than waiting another day.
-      # Supabase pauses a free project after 7 days without database activity.
-      # A rejected request does not count: this used to read `submissions`, which
-      # anon has no grant on, so every ping returned 401 and the pause timer ran
-      # down regardless. It reads a table that exists to be readable instead, and
-      # insists on 200 - a green step that never worked is worse than a red one,
-      # and continue-on-error had been hiding this for a fortnight.
-      - name: Keep the Supabase project awake
-        if: hashFiles('data/sync-config.json') != ''
-        run: |
-          URL=$(node -p "require('./data/sync-config.json').url")
-          KEY=$(node -p "require('./data/sync-config.json').anonKey")
-          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
-            -H "apikey: $KEY" "$URL/rest/v1/heartbeat?select=ok&limit=1" || echo 000)
-          echo "supabase heartbeat: HTTP $code"
-          if [ "$code" != "200" ]; then
-            # Not fatal - the refresh itself is the point of this job - but it
-            # must be visible, since the symptom otherwise appears weeks later
-            # as a paused project.
-            echo "::warning title=Supabase keep-alive failed::HTTP $code — the pause timer is running. Run supabase/0003-heartbeat.sql, or resume the project if it is already paused."
-          fi
-
       - name: Expand data/wishlist.txt
         run: npm run add | tee add.log
 

@@ -47,13 +47,28 @@ Supabase 已把金鑰改名：**`anon` → `sb_publishable_...`**、`service_rol
 
 ## 免費方案會暫停
 
-Supabase 對免費專案有 **7 天無活動即暫停**的規則。放假兩週沒開這個站，回來同步就是壞的，要手動到 dashboard 按 Restore。
+Supabase 對免費專案有 **7 天無活動即暫停**的規則，而「活動」指的是**資料庫活動**，不是 API 呼叫、也不是你有沒有開 dashboard。官方的說法是「每天幾次對資料庫的請求」。
 
-`refresh.yml` 每晚會 ping 一次資料庫（設定檔存在才執行），計時器因此不會歸零。不需要額外服務，也不需要付費。
+`keepalive.yml` 每 4 小時呼叫一次 `touch_heartbeat()`（一天六次），是獨立的 workflow，不掛在每晚的 refresh 上。
 
-**必須跑 `supabase/0003-heartbeat.sql`。** ping 讀的是一張專門用來被讀到的 `heartbeat` 表，因為**被拒絕的請求不算活動**——最初的版本讀 `submissions`，而 anon 對那張表沒有授權，於是每晚都回 401，log 看起來正常但計時器照樣走完，專案還是暫停了。那張表沒有任何內容，授權 anon 讀取不會洩漏什麼，而且只給 select、不給任何寫入 policy。
+**必須先跑 `supabase/0003-heartbeat.sql` 和 `supabase/0004-heartbeat-write.sql`。**
 
-ping 現在堅持要拿到 200，拿不到就在 Actions 上發一則 warning。一個從來沒成功過卻顯示綠燈的步驟，比直接紅燈更糟。
+這件事我做錯過兩次，兩次都是一週後專案暫停才發現：
+
+1. 第一版讀 `submissions`，但 anon 對那張表沒有授權，每晚回 `401`。**被拒絕的請求不算活動**，而 `continue-on-error` 讓那個步驟顯示綠燈。
+2. 第二版讀 `heartbeat` 成功拿到 `200`，但**一天只打一次**——那正是規則要抓的「low activity」。
+
+所以現在是：**寫入**（`UPDATE` 在任何解讀下都算資料庫活動，讀取算不算沒有文件保證）、**一天六次**、而且**留下可查的痕跡**。
+
+隨時可以確認它有沒有真的抵達資料庫：
+
+```bash
+URL=$(node -p "require('./data/sync-config.json').url")
+KEY=$(node -p "require('./data/sync-config.json').anonKey")
+curl -s -H "apikey: $KEY" "$URL/rest/v1/heartbeat?select=last_seen,hits"
+```
+
+`last_seen` 應該在 4 小時之內。前兩次失敗之所以拖了一週才發現，正是因為當時沒有這個東西可以問。
 
 ## 這個設計會怎麼運作
 
