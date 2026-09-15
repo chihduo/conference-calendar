@@ -14,6 +14,11 @@ editions:
     needs_review: true
     dates: TBD
     milestones:
+      - kind: submission
+        date: 2026-10-14
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/oopsla.yml
       - {kind: submission_cycle1, date: 2026-10-14, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
       - {kind: rebuttal_start_cycle1, date: 2026-12-01, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
       - {kind: rebuttal_end_cycle1, date: 2026-12-05, confidence: confirmed, source_url: https://conf.researchr.org/dates/splash-2027}
