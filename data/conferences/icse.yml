@@ -18,7 +18,7 @@ editions:
     milestones:
       - {kind: abstract, date: 2027-06-22, confidence: estimated, derived_from: icse-2027/abstract}
       - {kind: submission, date: 2027-06-29, confidence: estimated, derived_from: icse-2027/submission}
-      - {kind: rebuttal_start, date: 2027-09-24, confidence: estimated, derived_from: icse-2027/rebuttal_start}
+      - {kind: rebuttal_start, date: 2027-09-22, confidence: estimated, derived_from: icse-2027/rebuttal_start}
       - {kind: notification, date: 2027-10-19, confidence: estimated, derived_from: icse-2027/notification}
       - {kind: revision, date: 2027-11-16, confidence: estimated, derived_from: icse-2027/revision}
       - {kind: camera_ready, date: 2027-11-23, confidence: estimated, derived_from: icse-2027/camera_ready}
@@ -31,7 +31,8 @@ editions:
     milestones:
       - {kind: abstract, date: 2026-06-23, time: '23:59:59', confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027}
       - {kind: submission, date: 2026-06-30, time: '23:59:59', confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027}
-      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027, kind: rebuttal_start, date: 2026-09-25}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027, kind: rebuttal_start, date: 2026-09-23}
+      - {kind: rebuttal_end, date: 2026-09-25, confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027, kind: notification, date: 2026-10-20}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027, kind: revision, date: 2026-11-17}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icse-2027, kind: camera_ready, date: 2026-11-24}
