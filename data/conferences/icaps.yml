@@ -10,7 +10,12 @@ editions:
     timezone: AoE
     milestones:
       - {kind: abstract, date: 2026-12-07, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201408}
-      - {kind: submission, date: 2026-12-13, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201408}
+      - kind: submission
+        date: 2026-12-14
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/icaps.yml
+        time: '23:59:59'
+        needs_review: true
       - {kind: notification, date: 2027-02-12, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201408}
       - {kind: camera_ready, date: 2027-03-01, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=201408}
     place: Columbia, South Carolina, USA
@@ -18,6 +23,8 @@ editions:
     end_date: 2027-07-02
     status: announced
     needs_review: true
+    link: https://icaps27.icaps-conference.org/
+    dates: June 27 - July 2, 2027
   - year: 2026
     id: icaps-2026
     timezone: UTC-12
