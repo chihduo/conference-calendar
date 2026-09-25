@@ -19,6 +19,8 @@ editions:
     link: https://conf.researchr.org/home/icfp-2027
     status: confirmed
     needs_review: true
+    place: Nijmegen, Netherlands
+    dates: September 26 - October 1, 2027
   - year: 2026
     id: icfp-2026
     timezone: AoE

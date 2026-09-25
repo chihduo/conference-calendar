@@ -20,6 +20,7 @@ editions:
       - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
     note: FM 的舉辦季節逐屆變動（2023 三月、2024 九月、2026 五月），而 FMEurope 說明 FM 2027 在秋季、2026 年初仍在徵求主辦單位。因此不從 2026 推估——推錯季節比沒有推估更糟。
+    link: https://www.fmeurope.org/feature/upcoming_conferences/
   - year: 2026
     id: fm-2026
     timezone: AoE

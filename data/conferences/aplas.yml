@@ -31,6 +31,8 @@ editions:
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/aplas-2026, kind: camera_ready, date: 2026-09-04}
     link: https://conf.researchr.org/home/aplas-2026
     status: past
+    place: Hong Kong SAR, China
+    dates: December 1-4, 2026
   - year: 2025
     id: aplas-2025
     timezone: AoE

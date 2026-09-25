@@ -20,6 +20,7 @@ editions:
       - {kind: notification, date: 2027-04-15, confidence: estimated, derived_from: lics-2026/notification}
       - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
+    link: https://lics.siglog.org/lics27/
   - year: 2026
     id: lics-2026
     timezone: AoE

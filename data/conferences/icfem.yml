@@ -24,6 +24,19 @@ editions:
       - {kind: notification, confidence: unknown}
       - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
+  - year: 2026
+    id: icfem-2026
+    timezone: AoE
+    status: announced
+    milestones:
+      - kind: submission
+        date: 2026-06-22
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icfem.yml
+    link: https://icfem2026.github.io/
+    place: Southampton, UK
+    dates: November 17-20, 2026
   - year: 2025
     id: icfem-2025
     timezone: AoE

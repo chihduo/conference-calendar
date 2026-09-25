@@ -26,6 +26,7 @@ editions:
       - {kind: notification, date: 2027-04-12, confidence: estimated, derived_from: kr-2026/notification}
       - {kind: camera_ready, date: 2027-05-02, confidence: estimated, derived_from: kr-2026/camera_ready}
       - {kind: registration, confidence: unknown}
+    link: https://kr.org/
   - year: 2026
     id: kr-2026
     link: https://kr.org/KR2026/

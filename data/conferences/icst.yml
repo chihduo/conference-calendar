@@ -24,6 +24,8 @@ editions:
     link: https://conf.researchr.org/home/icst-2027
     status: confirmed
     needs_review: true
+    place: San Sebastian, Spain
+    dates: May 17-21, 2027
   - year: 2026
     id: icst-2026
     timezone: AoE

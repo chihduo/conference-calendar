@@ -5,6 +5,19 @@ sources:
   - {tier: 1, adapter: ccfddl, ref: conference/AI/iclr.yml}
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: iclr-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: TBD
+    milestones:
+      - {kind: abstract, date: 2027-09-17, confidence: estimated, derived_from: iclr-2027/abstract}
+      - {kind: submission, date: 2027-09-24, confidence: estimated, derived_from: iclr-2027/submission}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: iclr-2027
     timezone: AoE

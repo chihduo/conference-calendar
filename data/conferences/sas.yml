@@ -25,6 +25,11 @@ editions:
     id: sas-2026
     timezone: AoE
     milestones:
+      - kind: abstract
+        date: 2026-05-01
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/sas.yml
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: registration, date: 2026-05-01}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: submission, date: 2026-05-07}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: artifact_submission, date: 2026-05-08}
@@ -34,6 +39,8 @@ editions:
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/sas-2026, kind: camera_ready, date: 2026-07-20}
     link: https://conf.researchr.org/home/sas-2026
     status: past
+    place: Oakland, California, USA
+    dates: October 6-8, 2026
   - year: 2025
     id: sas-2025
     timezone: AoE

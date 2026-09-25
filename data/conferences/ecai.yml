@@ -20,11 +20,34 @@ editions:
     dates: TBD
     status: announced
     milestones:
+      - kind: submission
+        confidence: announced
+        date: 2027-04-14
+        time: '23:59:59'
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ecai.yml
       - {kind: abstract, confidence: unknown}
-      - {kind: submission, confidence: unknown}
       - {kind: notification, confidence: unknown}
       - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
+    link: https://ecai2027.org/
+  - year: 2026
+    id: ecai-2026
+    timezone: UTC-12
+    status: announced
+    milestones:
+      - kind: abstract
+        date: 2026-01-12
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ecai.yml
+      - kind: submission
+        date: 2026-01-19
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ecai.yml
+    link: https://2026.ijcai.org/
+    place: Bremen, Germany
+    dates: August 15-21, 2026
   - year: 2025
     id: ecai-2025
     timezone: UTC-12
