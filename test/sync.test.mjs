@@ -22,11 +22,21 @@ function makeBackend(rows = []) {
   const backend = {
     db, calls,
     expire: false,          // flip to make the next call return 401
+    refreshOk: true,        // GoTrue accepts the refresh token
+    refreshes: [],          // refresh tokens presented, in order
+    dead: null,             // an access token PostgREST now rejects
     fetch: async (url, opts = {}) => {
       // no Edge Function in this project: conference management stays off here
       if (url.includes('/functions/v1/')) return { ok: false, status: 404, json: async () => ({}), text: async () => '' };
-      calls.push({ url, method: opts.method || 'GET' });
+      if (url.includes('/auth/v1/token?grant_type=refresh_token')) {
+        backend.refreshes.push(JSON.parse(opts.body).refresh_token);
+        return backend.refreshOk
+          ? { ok: true, status: 200, json: async () => ({ access_token: 'tok2', refresh_token: 'r2', expires_in: 3600 }) }
+          : { ok: false, status: 400, json: async () => ({ error: 'invalid_grant' }), text: async () => 'invalid_grant' };
+      }
+      calls.push({ url, method: opts.method || 'GET', auth: opts.headers?.Authorization });
       if (backend.expire) return { ok: false, status: 401, text: async () => 'JWT expired' };
+      if (backend.dead && opts.headers?.Authorization === `Bearer ${backend.dead}`) return { ok: false, status: 401, text: async () => 'JWT expired' };
       const res = (status, body) => ({ ok: status < 400, status, json: async () => body, text: async () => JSON.stringify(body) });
 
       if (url.includes('/rpc/save_submission')) {
@@ -50,7 +60,7 @@ function makeBackend(rows = []) {
   return backend;
 }
 
-function boot({ backend, signedIn = true, online = true, cache = null, legacy = null, hash = '' } = {}) {
+function boot({ backend, signedIn = true, session = null, online = true, cache = null, legacy = null, hash = '' } = {}) {
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
     { runScripts: 'dangerously', url: 'https://example.org/site/' + hash });
   const w = dom.window;
@@ -59,7 +69,7 @@ function boot({ backend, signedIn = true, online = true, cache = null, legacy = 
   if (backend) w.fetch = backend.fetch;
   Object.defineProperty(w.navigator, 'onLine', { value: online, configurable: true });
   if (signedIn) w.localStorage.setItem('cc-session',
-    JSON.stringify({ access_token: 'tok', expires_at: Math.floor(w.Date.now() / 1000) + 3600 }));
+    JSON.stringify(session || { access_token: 'tok', expires_at: Math.floor(w.Date.now() / 1000) + 3600 }));
   if (cache) w.localStorage.setItem('cc-subs-cache', JSON.stringify(cache));
   if (legacy) w.localStorage.setItem('cc-submissions', JSON.stringify({ schema: 1, submissions: legacy }));
 
@@ -154,6 +164,43 @@ console.log('\n=== session 過期 ===');
   const { dom, w, T } = boot({ backend: be });
   await T.pending;
   check('401 之後回到未登入', w.__t.SYNC.status() === 'signed-out', w.__t.SYNC.status());
+  dom.window.close();
+}
+
+console.log('\n=== 登入不會一小時就失效 ===');
+{
+  /* The access token lasts an hour. This page used to treat the first expired
+     one as signed out, so a visit the next day found you logged out - and on
+     依會議 the management card was simply missing. */
+  const be = makeBackend([{ id: 'r1', paper: 'P', venue: 'vmcai-2027', status: 'submitted', history: [], notes: '', updated_at: 't1' }]);
+  const past = Math.floor(Date.parse('2026-09-20T00:00:00Z') / 1000);
+  const { dom, w, T } = boot({ backend: be, session: { access_token: 'tok', refresh_token: 'r1', expires_at: past } });
+  await T.pending;
+  check('過期的 access token 用 refresh token 續期，仍是已同步', txt(w, '.sync-bar .lbl') === '已同步' && T.loadSubs().length === 1, txt(w, '.sync-bar .lbl'));
+  check('之後的請求帶的是新 token', be.calls.length > 0 && be.calls.every((c) => c.auth === 'Bearer tok2'), be.calls.map((c) => c.auth).join());
+  const s = JSON.parse(w.localStorage.getItem('cc-session'));
+  check('新的 refresh token 存下來（舊的只能用一次）', s.access_token === 'tok2' && s.refresh_token === 'r2');
+  check('兩個請求同時要 token，只續期一次', be.refreshes.length === 1, be.refreshes.join());
+  dom.window.close();
+}
+{
+  const be = makeBackend();
+  be.refreshOk = false;
+  const past = Math.floor(Date.parse('2026-09-20T00:00:00Z') / 1000);
+  const { dom, w, T } = boot({ backend: be, session: { access_token: 'tok', refresh_token: 'r1', expires_at: past } });
+  await T.pending;
+  check('refresh token 被撤銷：回到未登入', txt(w, '.sync-bar .lbl') === '未登入' && !w.localStorage.getItem('cc-session'), txt(w, '.sync-bar .lbl'));
+  dom.window.close();
+}
+{
+  // a token can die before its stated expiry (signed out elsewhere, key rotated)
+  const be = makeBackend([{ id: 'r1', paper: 'P', venue: 'vmcai-2027', status: 'submitted', history: [], notes: '', updated_at: 't1' }]);
+  be.dead = 'tok';
+  const future = Math.floor(Date.parse('2026-09-24T12:00:00Z') / 1000) + 3600;
+  const { dom, w, T } = boot({ backend: be, session: { access_token: 'tok', refresh_token: 'r1', expires_at: future } });
+  await T.pending;
+  check('提前失效的 token：續期一次、重試成功', T.loadSubs().length === 1 && be.refreshes.length === 1 && txt(w, '.sync-bar .lbl') === '已同步',
+        `${be.refreshes.length} 次續期`);
   dom.window.close();
 }
 

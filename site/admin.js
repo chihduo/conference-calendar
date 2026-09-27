@@ -15,7 +15,7 @@ const ADMIN = (() => {
   let pollMs = 6000;
   const POLLS = 60;                           // six minutes; a cascade takes one or two
 
-  let state = 'off';                          // off | checking | owner | not-owner
+  let state = 'off';                          // off | checking | owner | not-owner | error
   let owner = null;
   let requests = [];                          // newest first, as the function summarizes them
   let note = null;                            // the last failure, shown by the form
@@ -23,13 +23,23 @@ const ADMIN = (() => {
   const listeners = [];
   const emit = () => listeners.forEach((f) => { try { f(); } catch { /* a bad listener must not stall the rest */ } });
 
+  /* The card only exists for the owner, so the owner signed out gets no hint
+     that it is there - which is how it went missing the first time. A browser
+     that has seen you as the owner remembers it, and only there does 依會議
+     remind you to sign in. Anyone else's page stays as it always was. */
+  const OWNER_KEY = 'cc-admin-owner';
+  const wasOwner = () => { try { return localStorage.getItem(OWNER_KEY) === '1'; } catch { return false; } };
+  const rememberOwner = (yes) => {
+    try { if (yes) localStorage.setItem(OWNER_KEY, '1'); else localStorage.removeItem(OWNER_KEY); } catch { /* storage blocked: no reminder */ }
+  };
+
   async function call(method, { query = '', body } = {}) {
-    const s = SYNC.session;
-    if (!CFG || !s) throw Object.assign(new Error('請先登入'), { status: 401 });
+    const tok = CFG ? await SYNC.token() : null;
+    if (!tok) throw Object.assign(new Error('請先登入'), { status: 401 });
     const res = await fetch(`${CFG.url}/functions/v1/conference-requests${query}`, {
       method,
       headers: {
-        apikey: CFG.anonKey, Authorization: `Bearer ${s.access_token}`,
+        apikey: CFG.anonKey, Authorization: `Bearer ${tok}`,
         ...(body ? { 'Content-Type': 'application/json' } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
@@ -71,12 +81,17 @@ const ADMIN = (() => {
     state = 'checking';
     try {
       const r = await call('GET');
-      state = 'owner'; owner = r.owner; requests = [];
+      state = 'owner'; owner = r.owner; requests = []; note = null;
+      rememberOwner(true);
       (r.requests || []).slice().reverse().forEach(keep);
     } catch (e) {
-      // 403: signed in, but not the owner. Anything else - 404 before the
-      // function is deployed, a CORS refusal off the real site - means off.
-      state = e.status === 403 ? 'not-owner' : 'off';
+      // 403: signed in as someone else. 404 before the function is deployed,
+      // or no status at all (a CORS refusal off the real site): the feature
+      // is simply off. Anything else is a fault worth saying out loud, such as
+      // an expired GitHub token.
+      if (e.status === 403) { state = 'not-owner'; rememberOwner(false); }
+      else if (e.status === 404 || !e.status) state = 'off';
+      else { state = 'error'; note = e.message; }
     }
     emit();
   }
@@ -96,6 +111,7 @@ const ADMIN = (() => {
     get owner() { return owner; },
     get requests() { return requests; },
     get note() { return note; },
+    get wasOwner() { return wasOwner(); },
     probe,
     submit: (action, acronym) => act({ action, acronym }),
     reply: (issue, text) => act({ action: 'reply', issue, text }),

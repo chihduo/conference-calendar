@@ -125,7 +125,9 @@ sequenceDiagram
 
 #### 其他
 
-沒有用 Supabase 的 SDK——那是約 150 KB 的 bundle 換四個 fetch，而這頁「單檔、不吃 CDN」的性質更值錢（也是 artifact 預覽能在嚴格 CSP 下運作的原因）。`site/sync.js` 135 行，零依賴，直接打 REST。
+沒有用 Supabase 的 SDK——那是約 150 KB 的 bundle 換四個 fetch，而這頁「單檔、不吃 CDN」的性質更值錢（也是 artifact 預覽能在嚴格 CSP 下運作的原因）。`site/sync.js` 約 180 行，零依賴，直接打 REST。
+
+登入不會一小時就失效。access token 只有一小時效期，但登入時一起拿到的 refresh token 會一直有效到你登出，網站在 token 快到期時用它續期。以前網站把過期的 token 直接當成登出，隔天打開就變成未登入；這件事在「依會議」上看不出來，結果是管理卡片默默不見。只有 refresh token 被撤銷時才會回到未登入。
 
 免費專案 7 天無活動會暫停，`keepalive.yml` 每 4 小時呼叫一次 `touch_heartbeat()` 擋掉。這裡「活動」指的是**資料庫活動**，而且是「每天幾次」——一天一次就是規則要抓的那種低活動，所以它是獨立 workflow 而不是掛在每晚的 refresh 上。做法與踩過的坑見 `supabase/SETUP.md`。
 
@@ -333,6 +335,8 @@ sequenceDiagram
 token 只存在 Supabase 的 Edge Function Secrets，瀏覽器和 repo 都看不到，而且只有這個 repo 的 Issues 讀寫權限：不能 push，也不能改 workflow。就算外洩，最壞也只是有人以你的名義開 issue、觸發新增或移除，兩者都在 git 裡，`git revert` 就回來了。
 
 規則仍然全在 workflow 那一端。函式只負責開 issue 和讀回覆；縮寫在函式和兩支 workflow 各檢查一次（`test/function.test.mjs` 會比對三者用的是同一個白名單），抓取、驗證、commit 都跟以前一樣，issue 也照樣留下完整紀錄。
+
+沒登入的時候，曾經以 owner 身分登入過的瀏覽器會在「依會議」提醒你登入；函式出錯（例如 GitHub token 過期）也會在同一處說明原因，而不是讓卡片默默消失。其他訪客的瀏覽器什麼都不會顯示。
 
 設定方式見 `supabase/SETUP.md` 的第 5 步，沒設定之前網站完全照舊。被隱藏的會議不會出現在網站上，所以也沒辦法從網站復原：要到 `data/conferences/` 把那個檔案的 `hidden: true` 拿掉。
 

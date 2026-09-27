@@ -27,14 +27,19 @@ const SYNC = (() => {
 
   const configured = () => !!(CFG && CFG.url && CFG.anonKey);
 
-  /* ---- session ---- */
+  /* ---- session ----
+     The access token lasts an hour; the refresh token that comes with it lasts
+     until you sign out. The page used to drop the session once the access
+     token ran out, so any visit more than an hour after logging in found you
+     signed out - on 依會議 that just meant the management card was missing.
+     An expired session that still carries a refresh token now counts as
+     signed in, and token() renews it before use. */
+  const stored = () => { try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch { return null; } };
+  const expired = (s, slackMs = 0) => !!s.expires_at && s.expires_at * 1000 - slackMs < Date.now();
   const readSession = () => {
-    try {
-      const s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
-      if (!s?.access_token) return null;
-      if (s.expires_at && s.expires_at * 1000 < Date.now()) return null;
-      return s;
-    } catch { return null; }
+    const s = stored();
+    if (!s?.access_token) return null;
+    return expired(s) && !s.refresh_token ? null : s;
   };
   const writeSession = (s) => {
     if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
@@ -64,19 +69,62 @@ const SYNC = (() => {
   };
   const signOut = () => { writeSession(null); emit(); };
 
+  /* One renewal at a time: refresh tokens rotate, and presenting a used one
+     can get the whole session revoked. */
+  let refreshing = null;
+  function refresh() {
+    refreshing ??= (async () => {
+      const s = stored();
+      if (!s?.refresh_token) return null;
+      let res;
+      try {
+        res = await fetch(`${CFG.url}/auth/v1/token?grant_type=refresh_token`, {
+          method: 'POST',
+          headers: { apikey: CFG.anonKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh_token: s.refresh_token }),
+        });
+      } catch { return null; }                         // no network: keep it for later
+      if (!res.ok) { writeSession(null); emit(); return null; }   // revoked: sign in again
+      const t = await res.json();
+      writeSession({
+        access_token: t.access_token, refresh_token: t.refresh_token || s.refresh_token,
+        expires_at: t.expires_at || Math.floor(Date.now() / 1000) + Number(t.expires_in || 3600),
+      });
+      return session;
+    })().finally(() => { refreshing = null; });
+    return refreshing;
+  }
+
+  /** An access token good for at least another minute; null when there is none to be had. */
+  async function token() {
+    if (!session) return null;
+    if (!expired(session, 60e3)) return session.access_token;
+    return (await refresh())?.access_token || null;
+  }
+
   /* ---- transport ---- */
   async function api(path, opts = {}) {
-    if (!session) throw new Error('not signed in');
-    const res = await fetch(`${CFG.url}/rest/v1/${path}`, {
+    const tok = await token();
+    if (!tok) throw new Error(session ? '登入暫時無法更新，請稍後再試' : 'not signed in');
+    const send = (t) => fetch(`${CFG.url}/rest/v1/${path}`, {
       ...opts,
       headers: {
         apikey: CFG.anonKey,
-        Authorization: `Bearer ${session.access_token}`,
+        Authorization: `Bearer ${t}`,
         'Content-Type': 'application/json',
         ...(opts.headers || {}),
       },
     });
-    if (res.status === 401) { writeSession(null); emit(); throw new Error('session expired'); }
+    let res = await send(tok);
+    // an access token can die before its stated expiry; renew once, then give up
+    if (res.status === 401 && session?.refresh_token) {
+      const s = await refresh();
+      if (s) res = await send(s.access_token);
+    }
+    if (res.status === 401) {
+      if (session) { writeSession(null); emit(); }
+      throw new Error('session expired');
+    }
     if (!res.ok) {
       const body = await res.text().catch(() => '');
       const err = new Error(`${res.status} ${body.slice(0, 200)}`);
@@ -128,6 +176,7 @@ const SYNC = (() => {
     configured, status, signIn, signOut, consumeRedirect,
     init: () => { consumeRedirect(); session = readSession(); },
     get session() { return session; },
+    token,
     pull, save, remove, readCache, writeCache,
     onChange: (f) => listeners.push(f),
     _setOnline: (v) => { online = v; emit(); },     // tests

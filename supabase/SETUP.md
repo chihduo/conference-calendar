@@ -76,7 +76,9 @@ KEY=$(node -p "require('./data/sync-config.json').anonKey")
 curl -s -H "apikey: $KEY" "$URL/functions/v1/conference-requests"
 ```
 
-然後重新整理網站、確認已登入，「依會議」最上面應該出現「管理會議」。沒有出現的話，網站只會安靜地維持原樣，原因通常是其中之一：函式沒部署成功（網站收到 404，當作沒有這個功能）、登入的不是 token 主人的 GitHub 帳號（403），或是 Enforce JWT Verification 沒關而閘道拒絕了登入。
+然後重新整理網站並登入（登入按鈕在「我的投稿」），「依會議」最上面應該出現「管理會議」。第一次最常見的原因就是沒登入：「依會議」本身不顯示登入狀態。確認過一次之後，這台瀏覽器會記住你是 owner，之後沒登入時「依會議」會直接提醒。
+
+還是沒有出現的話，原因通常是其中之一：函式沒部署成功（網站收到 404，當作沒有這個功能）、登入的不是 token 主人的 GitHub 帳號（403），或是 Enforce JWT Verification 沒關而閘道拒絕了登入。
 
 ## 免費方案會暫停
 

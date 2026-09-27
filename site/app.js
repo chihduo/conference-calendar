@@ -331,8 +331,28 @@ function adminControls(c) {
   return box;
 }
 
+/* Only where this browser has seen you as the owner (see admin.js): signed
+   out, say where the card went; broken, say why. */
+function renderAdminHint(root) {
+  if (!ADMIN.wasOwner) return;
+  const st = SYNC.status();
+  const bar = el('div', 'notice admin-hint');
+  if (st === 'signed-out') {
+    bar.appendChild(el('span', 'count', '登入後可以在這裡新增或移除會議。'));
+    const b = el('button', 'chip on', '用 GitHub 登入');
+    b.onclick = () => SYNC.signIn();
+    bar.appendChild(b);
+  } else if (st === 'offline') {
+    bar.appendChild(el('span', 'count', '離線中，連上網路後才能新增或移除會議。'));
+  } else if (ADMIN.state === 'error') {
+    bar.appendChild(el('span', 'count', `管理會議暫時無法使用：${ADMIN.note}`));
+  } else return;
+  root.appendChild(bar);
+}
+
 function renderConferences(root, now) {
   if (ADMIN.state === 'owner') renderAdmin(root);
+  else renderAdminHint(root);
   const list = DATA.conferences.filter(passesFilter);
   root.appendChild(Object.assign(el('div', 'count'), { textContent: `${list.length} 個會議` }));
   if (!list.length) { root.appendChild(el('div', 'empty', '沒有符合條件的會議。')); return; }

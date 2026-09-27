@@ -27,7 +27,7 @@ function makeFunction({ status = 200, requests = [], onPost } = {}) {
       const method = opts.method || 'GET';
       const body = opts.body ? JSON.parse(opts.body) : null;
       calls.push({ method, url, body, headers: opts.headers });
-      if (status !== 200) return res(status, { error: status === 403 ? '只有 chihduo 可以管理會議' : 'Requested function was not found' });
+      if (status !== 200) return res(status, { error: { 403: '只有 chihduo 可以管理會議', 502: 'GitHub token 無效或已過期：到 Supabase 的 Edge Function Secrets 更新 CC_GITHUB_TOKEN。' }[status] || 'Requested function was not found' });
       const q = Number(new URL(url).searchParams.get('issue')) || 0;
       if (method === 'GET' && !q) return res(200, { owner: 'chihduo', requests: [...issues.values()].reverse() });
       if (method === 'GET') {
@@ -50,7 +50,7 @@ function makeFunction({ status = 200, requests = [], onPost } = {}) {
   };
 }
 
-async function boot({ fn, signedIn = true } = {}) {
+async function boot({ fn, signedIn = true, wasOwner = false } = {}) {
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
     { runScripts: 'dangerously', url: 'https://chihduo.github.io/conference-calendar/' });
   const w = dom.window;
@@ -59,6 +59,7 @@ async function boot({ fn, signedIn = true } = {}) {
   w.fetch = fn.fetch;
   if (signedIn) w.localStorage.setItem('cc-session',
     JSON.stringify({ access_token: 'tok', expires_at: Math.floor(w.Date.now() / 1000) + 3600 }));
+  if (wasOwner) w.localStorage.setItem('cc-admin-owner', '1');
   w.document.body.innerHTML = HTML.replace(/<script>[\s\S]*<\/script>/, '');
   w.eval(HTML.match(/<script>([\s\S]*)<\/script>/)[1]
     .replace('window.__SYNC_CONFIG__ = null;', `window.__SYNC_CONFIG__ = ${JSON.stringify(CFG)};`)
@@ -99,6 +100,43 @@ for (const [name, opts] of [['沒登入', { signedIn: false }], ['函式還沒�
   check('帶著登入 token 問函式', call?.headers?.Authorization === 'Bearer tok' && call?.headers?.apikey === 'anon-key');
   tab(w, '截稿時間軸');
   check('截稿時間軸不放管理介面', !$(w, '#main .card.admin'));
+  dom.window.close();
+}
+
+console.log('\n=== 沒登入時提醒 owner，只提醒 owner ===');
+{
+  const fn = makeFunction();
+  const { dom, w } = await boot({ fn, signedIn: false, wasOwner: true });
+  const hint = $(w, '#main .admin-hint');
+  check('這台瀏覽器當過 owner、現在沒登入：提醒登入', /登入後可以在這裡新增或移除會議/.test(hint?.textContent || '') &&
+        buttons(w, hint, '用 GitHub 登入').length === 1, hint?.textContent);
+  check('提醒不等於管理介面', !$(w, '#main .card.admin'));
+  dom.window.close();
+}
+{
+  const fn = makeFunction();
+  const { dom, w } = await boot({ fn, signedIn: false });
+  check('沒當過 owner 的瀏覽器（其他訪客）：什麼都不提', !$(w, '#main .admin-hint'));
+  dom.window.close();
+}
+{
+  const fn = makeFunction();
+  const { dom, w } = await boot({ fn });
+  check('確認是 owner 之後，這台瀏覽器記住了', w.localStorage.getItem('cc-admin-owner') === '1');
+  dom.window.close();
+}
+{
+  const fn = makeFunction({ status: 403 });
+  const { dom, w } = await boot({ fn, wasOwner: true });
+  check('換了別的帳號登入（403）：忘掉，也不再提醒', !w.localStorage.getItem('cc-admin-owner') && !$(w, '#main .admin-hint'));
+  dom.window.close();
+}
+for (const [who, wasOwner] of [['owner 的瀏覽器', true], ['其他瀏覽器', false]]) {
+  const fn = makeFunction({ status: 502 });
+  const { dom, w } = await boot({ fn, wasOwner });
+  const hint = $(w, '#main .admin-hint');
+  if (wasOwner) check('函式出錯（502）：owner 看得到原因，而不是卡片默默消失', /管理會議暫時無法使用/.test(hint?.textContent || ''), hint?.textContent);
+  else check('函式出錯（502）：其他瀏覽器照舊什麼都不顯示', !hint);
   dom.window.close();
 }
 
