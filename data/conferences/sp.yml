@@ -1,0 +1,94 @@
+id: sp
+name: S&P
+full_name: IEEE Symposium on Security and Privacy
+areas: [SEC]
+rank:
+  source: ICORE2026
+  value: A*
+  icore_id: 750
+  checked_on: 2026-09-27
+sources:
+  - {tier: 1, adapter: ccfddl, ref: conference/SC/sp.yml}
+  - {tier: 3, adapter: wikicfp}
+editions:
+  - year: 2027
+    id: sp-2027
+    timezone: UTC-12
+    milestones:
+      - kind: abstract_cycle1
+        date: 2026-06-04
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+      - kind: submission_cycle1
+        date: 2026-06-11
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+      - kind: abstract_cycle2
+        date: 2026-11-10
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+      - kind: submission_cycle2
+        date: 2026-11-17
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+    link: https://sp2027.ieee-security.org/index.html
+    place: MONTREAL, CANADA
+    dates: May 17-19, 2027
+    status: announced
+    needs_review: true
+  - year: 2026
+    id: sp-2026
+    timezone: UTC-12
+    milestones:
+      - kind: abstract_cycle1
+        date: 2025-05-29
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+      - kind: submission_cycle1
+        date: 2025-06-05
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+      - {kind: notification, date: 2025-09-09, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=186415}
+      - kind: abstract_cycle2
+        date: 2025-11-06
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+      - kind: submission_cycle2
+        date: 2025-11-13
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+    link: https://www.ieee-security.org/TC/SP2026/
+    place: SAN FRANCISCO, CA
+    dates: MAY 18-21, 2026
+    start_date: 2026-05-18
+    end_date: 2026-05-21
+    status: past
+  - year: 2025
+    id: sp-2025
+    timezone: UTC-12
+    milestones:
+      - kind: submission_cycle1
+        date: 2024-06-06
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+      - kind: submission_cycle2
+        date: 2024-11-14
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+      - {kind: notification, date: 2025-03-10, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=178676}
+    link: https://www.ieee-security.org/TC/SP2025/
+    place: SAN FRANCISCO, CA
+    dates: MAY 12-15, 2025
+    start_date: 2025-05-01
+    end_date: 2025-05-02
+    status: past
