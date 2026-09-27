@@ -23,10 +23,10 @@ editions:
     start_date: 2028-01-10
     end_date: 2028-01-11
     milestones:
-      - {kind: submission, date: 2027-09-15, confidence: estimated, derived_from: vmcai-2027/submission}
-      - {kind: artifact_registration, date: 2027-09-17, confidence: estimated, derived_from: vmcai-2027/artifact_registration}
-      - {kind: artifact_submission, date: 2027-09-22, confidence: estimated, derived_from: vmcai-2027/artifact_submission}
-      - {kind: registration, date: 2027-09-22, confidence: estimated, derived_from: vmcai-2027/registration}
+      - {kind: submission, date: 2027-09-29, confidence: estimated, derived_from: vmcai-2027/submission}
+      - {kind: artifact_registration, date: 2027-09-24, confidence: estimated, derived_from: vmcai-2027/artifact_registration}
+      - {kind: artifact_submission, date: 2027-09-29, confidence: estimated, derived_from: vmcai-2027/artifact_submission}
+      - {kind: abstract, date: 2027-09-22, confidence: estimated, derived_from: vmcai-2027/abstract}
       - {kind: notification, date: 2027-11-05, confidence: estimated, derived_from: vmcai-2027/notification}
       - {kind: camera_ready, date: 2027-11-19, confidence: estimated, derived_from: vmcai-2027/camera_ready}
   - year: 2027
@@ -39,12 +39,16 @@ editions:
     end_date: 2027-01-12
     status: confirmed
     milestones:
-      - {kind: submission, date: 2026-09-16, confidence: confirmed}
-      - {kind: artifact_registration, date: 2026-09-18, confidence: confirmed}
-      - {kind: artifact_submission, date: 2026-09-23, confidence: confirmed}
-      - {kind: registration, confidence: confirmed, date: 2026-09-23, source_url: https://conf.researchr.org/dates/VMCAI-2027}
-      - {kind: notification, date: 2026-11-06, confidence: confirmed, note: paper and artifact}
-      - {kind: camera_ready, date: 2026-11-20, confidence: confirmed}
+      - {kind: abstract, confidence: confirmed, date: 2026-09-23, source_url: https://conf.researchr.org/dates/VMCAI-2027}
+      - {kind: artifact_registration, date: 2026-09-25, confidence: confirmed, source_url: https://conf.researchr.org/dates/VMCAI-2027}
+      - {kind: submission, date: 2026-09-30, confidence: confirmed, source_url: https://conf.researchr.org/dates/VMCAI-2027}
+      - {kind: artifact_submission, date: 2026-09-30, confidence: confirmed, source_url: https://conf.researchr.org/dates/VMCAI-2027}
+      - kind: notification
+        date: 2026-11-06
+        confidence: confirmed
+        note: paper and artifact
+        source_url: https://conf.researchr.org/dates/VMCAI-2027
+      - {kind: camera_ready, date: 2026-11-20, confidence: confirmed, source_url: https://conf.researchr.org/dates/VMCAI-2027}
     provenance:
       - {adapter: researchr, url: https://conf.researchr.org/dates/VMCAI-2027, fetched_at: 2026-08-23T00:00:00Z}
     note: Co-located with POPL 2027. At least one author must present in person.

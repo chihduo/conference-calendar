@@ -12,8 +12,9 @@ editions:
     milestones:
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: abstract, date: 2027-01-08}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: submission, date: 2027-01-11}
-      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: rebuttal_start, date: 2027-03-25}
-      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: early_rejection_notification, date: 2027-04-20}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: rebuttal_start, date: 2027-03-22}
+      - {kind: rebuttal_end, date: 2027-03-25, confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027}
+      - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: notification, date: 2027-04-20}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: revision, date: 2027-05-20}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: final_notification, date: 2027-06-17}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/issta-2027, kind: camera_ready, date: 2027-07-22}

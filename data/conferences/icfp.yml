@@ -14,6 +14,7 @@ editions:
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: rebuttal_start, date: 2027-04-19}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: rebuttal_end, date: 2027-04-22}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: notification, date: 2027-05-07}
+      - {kind: revision, date: 2027-06-01, confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: final_notification, date: 2027-06-11}
       - {confidence: confirmed, source_url: https://conf.researchr.org/dates/icfp-2027, kind: camera_ready, date: 2027-07-01}
     link: https://conf.researchr.org/home/icfp-2027
