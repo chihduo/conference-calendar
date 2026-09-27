@@ -7,9 +7,11 @@ on:
   workflow_dispatch:
   # A push made with GITHUB_TOKEN deliberately triggers no workflow, so the
   # nightly refresh would update the data and never rebuild the site.
-  # workflow_run is the documented way to chain across that boundary.
+  # workflow_run is the documented way to chain across that boundary. The
+  # issue-driven add and remove push the same way, and without them here a
+  # venue added from an issue waited for the next night to appear.
   workflow_run:
-    workflows: ["Refresh deadlines"]
+    workflows: ["Refresh deadlines", "Add conference", "Remove conference"]
     types: [completed]
 
 permissions:
@@ -23,7 +25,7 @@ concurrency:
 
 jobs:
   build:
-    # Never publish on top of a refresh that failed its guards.
+    # Never publish on top of a run that failed its guards.
     if: >-
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion == 'success'

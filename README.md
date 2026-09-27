@@ -307,11 +307,11 @@ fixture 是 `bd32c2c`（2026-09-24）當時的 `data/conferences`，只留測試
 |---|---|---|
 | `refresh.yml` | 每日 **03:17 UTC** + 手動 | 展開 wishlist → 抓所有來源 → 驗證 → 由 `deadline-bot` commit |
 | `keepalive.yml` | 每 **4 小時** + 手動 | 呼叫 `touch_heartbeat()`，避免免費專案因閒置被暫停 |
-| `deploy.yml` | push 到 main、refresh 完成、手動 | validate → lint:docs → build → `npm test` → 發佈到 Pages |
+| `deploy.yml` | push 到 main、refresh／新增／移除完成、手動 | validate → lint:docs → build → `npm test` → 發佈到 Pages |
 | `add-conference.yml` | 貼 `add-conference` 標籤的 issue、issue 回覆、手動 | 跑發現 cascade → commit → 在 issue 回報；有歧義就列候選等你回覆 |
 | `remove-conference.yml` | 貼 `remove-conference` 標籤的 issue、手動 | 先列出即將失去什麼 → 刪除或隱藏 → commit → 回報還原方式 |
 
-**deploy 是靠 `workflow_run` 接在 refresh 後面，不是靠 push 觸發。** GitHub 規定用 `GITHUB_TOKEN` 推的 commit 不會觸發任何 workflow（防無限迴圈），所以 bot 的資料 commit 雖然符合 `paths: ['data/**']` 卻不會重建網站——資料每晚前進、站台卻停在上次人工推送的版本。refresh 失敗時不部署，帶著沒過關的資料上線比不更新更糟。
+**deploy 是靠 `workflow_run` 接在 refresh 後面，不是靠 push 觸發。** GitHub 規定用 `GITHUB_TOKEN` 推的 commit 不會觸發任何 workflow（防無限迴圈），所以 bot 的資料 commit 雖然符合 `paths: ['data/**']` 卻不會重建網站——資料每晚前進、站台卻停在上次人工推送的版本。從 issue 新增或移除會議也是 bot 推的，所以同樣接在後面，否則要等到隔天才看得到。前一步失敗時不部署，帶著沒過關的資料上線比不更新更糟。
 
 驗證擋在部署前面：`npm run validate`（schema + 護欄）、`npm run lint:docs` 和 `npm test` 任一失敗就不發佈，網站維持上一次成功的版本，GitHub 會寄信通知。
 
