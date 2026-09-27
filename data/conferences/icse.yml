@@ -49,13 +49,23 @@ editions:
     id: icse-2026
     timezone: AoE
     milestones:
-      - kind: abstract
+      - kind: abstract_cycle1
         date: 2025-03-07
         time: '23:59:59'
         confidence: announced
         source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icse.yml
-      - kind: submission
+      - kind: submission_cycle1
         date: 2025-03-14
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icse.yml
+      - kind: abstract_cycle2
+        date: 2025-07-11
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icse.yml
+      - kind: submission_cycle2
+        date: 2025-07-18
         time: '23:59:59'
         confidence: announced
         source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icse.yml
@@ -70,13 +80,23 @@ editions:
     id: icse-2025
     timezone: AoE
     milestones:
-      - kind: abstract
+      - kind: abstract_cycle1
         date: 2024-03-15
         time: '23:59:59'
         confidence: announced
         source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icse.yml
-      - kind: submission
+      - kind: submission_cycle1
         date: 2024-03-22
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icse.yml
+      - kind: abstract_cycle2
+        date: 2024-07-26
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icse.yml
+      - kind: submission_cycle2
+        date: 2024-08-02
         time: '23:59:59'
         confidence: announced
         source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icse.yml
