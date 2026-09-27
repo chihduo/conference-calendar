@@ -51,6 +51,24 @@ export const baseKind = (k) => CYCLE_RE.exec(k)?.[1] ?? k;
 export const cycleOf  = (k) => Number(CYCLE_RE.exec(k)?.[2] ?? 0);
 export const inChain = (k) => KIND_META[baseKind(k)]?.chain === true;
 
+/* Once a venue turns out to run rounds, a flat deadline of the same kind is one
+   of those rounds seen through a source that cannot tell them apart: WikiCFP
+   lists each S&P round as its own event, and ccf-deadlines was long read one
+   entry deep - OOPSLA 2027 showed "Submission 10-14" twice, flat and as round 1.
+   Only what a person typed in, or pinned, survives. */
+export function supersededByRounds(ed) {
+  const bases = new Set(ed.milestones.filter((m) => CYCLE_RE.test(m.kind) && m.date).map((m) => baseKind(m.kind)));
+  return ed.milestones.filter((m) => !CYCLE_RE.test(m.kind) && bases.has(m.kind) && !m.locked &&
+    !(m.confidence === 'confirmed' && !m.source_url));
+}
+
+/* An id is a file name and the stem of every edition id, so it is [a-z0-9-]
+   only. The name keeps the acronym as the community writes it. Dropping "&"
+   lands where the sources already are: ccf-deadlines files S&P as sp.yml and
+   ICORE lists it as SP. */
+export const idFromAcronym = (acronym) => String(acronym).trim().toLowerCase()
+  .replace(/&/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
 const prettify = (k) => k.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
 export const kindLabel = (k) => {
   const m = CYCLE_RE.exec(k);

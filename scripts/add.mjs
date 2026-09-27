@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { CONF_DIR, saveConference, byDateThenKind, editionIssues, writeReviewQueue, readReviewQueue,
-         severityOf, estimateEdition, planningYear } from './lib.mjs';
+         severityOf, estimateEdition, planningYear, idFromAcronym, supersededByRounds } from './lib.mjs';
 import * as icore from './adapters/icore.mjs';
 import * as ccfddl from './adapters/ccfddl.mjs';
 import * as researchr from './adapters/researchr.mjs';
@@ -19,7 +19,7 @@ const DRY = process.argv.includes('--dry-run');
 /* Guessing a researchr id is cheap (a HEAD-ish GET) and the 404 is unambiguous,
    so try the shapes the site actually uses rather than requiring configuration. */
 async function findResearchr(acro, year) {
-  const lo = acro.toLowerCase(), up = acro.toUpperCase();
+  const lo = idFromAcronym(acro), up = lo.toUpperCase();
   for (const cand of [`${lo}-${year}`, `${up}-${year}`, `${lo}${year}`,
                       `${lo}-${year - 1}`, `${up}-${year - 1}`]) {
     const r = await researchr.fetchDates(cand, { name: acro, year: Number(/(\d{4})/.exec(cand)[1]) });
@@ -70,6 +70,7 @@ const AREA_HINT = [
   [/artificial intelligence|knowledge representation|machine learning|planning|reasoning|constraint/i, 'AI'],
   [/software engineering|testing|maintenance|requirements/i, 'SE'],
   [/logic|computation theory|semantics|deduction|automated reasoning|automata|concurrency/i, 'LOGIC'],
+  [/security|privacy|cryptograph/i, 'SEC'],
 ];
 /* A regex over conference titles is a guess, not knowledge. When nothing
    matches, say so instead of silently defaulting - a wrong area tag quietly
@@ -89,18 +90,21 @@ async function discover(acronym) {
   /* "Reported rather than guessed" is only useful if the report says what to do
      about it. Every condition that needs a human names the file and the field. */
   const act = (how) => { if (!report.next.includes(how)) report.next.push(how); };
-  const doc = { id: acronym.toLowerCase(), name: acronym.toUpperCase(), areas: ['FM'], sources: [], editions: [] };
+  const doc = { id: idFromAcronym(acronym), name: acronym.toUpperCase(), areas: ['FM'], sources: [], editions: [] };
 
   /* Tier 0 - rank */
   try {
     const ranks = await icore.loadRanks();
-    const hits = icore.lookup(ranks, acronym);
+    // ICORE writes IEEE S&P as "SP" - but EuroS&P with its "&" - so try both
+    const hits = [...new Set([acronym, acronym.replace(/&/g, '')])]
+      .map((k) => icore.lookup(ranks, k)).find((h) => h.length) || [];
     if (!hits.length) { report.layers.icore = 'not ranked'; doc.rank = { source: icore.EDITION, value: 'unranked' }; }
     else {
       const pick = hits.length > 1 ? hits.sort((a, b) => (b.value === 'A*') - (a.value === 'A*'))[0] : hits[0];
       doc.rank = icore.rankBlock(pick, { ambiguous: hits.length > 1 });
       doc.full_name = pick.title;
-      doc.name = pick.acronym || doc.name;      // keep the community's casing, e.g. NeurIPS
+      // keep the community's casing (NeurIPS), not a different spelling (SP for S&P)
+      if (pick.acronym?.toLowerCase() === acronym.toLowerCase()) doc.name = pick.acronym;
       const g = guessAreas(pick.title);
       doc.areas = g.areas;
       if (g.guessed) {
@@ -128,7 +132,7 @@ async function discover(acronym) {
 
   /* Tier 1 - ccf-deadlines */
   try {
-    const ref = await ccfddl.resolve(acronym);
+    const ref = await ccfddl.resolve(doc.id);
     if (!ref) report.layers.ccfddl = 'no file';
     else {
       doc.sources.push({ tier: 1, adapter: 'ccfddl', ref });
@@ -171,7 +175,8 @@ async function discover(acronym) {
 
   /* assemble */
   for (const e of editions.values()) {
-    e.milestones.sort(byDateThenKind);
+    const flat = supersededByRounds(e);
+    e.milestones = e.milestones.filter((m) => !flat.includes(m)).sort(byDateThenKind);
     e.status = e.year < TARGET_YEAR ? 'past'
       : e.milestones.some((m) => m.confidence === 'confirmed') ? 'confirmed' : 'announced';
     for (const m of e.milestones) { delete m.adapter; delete m.tier; delete m.note; }
@@ -256,10 +261,10 @@ const review = readReviewQueue();
 const dropPrior = (id) => { for (let i = review.length - 1; i >= 0; i--) if (review[i].conference === id) review.splice(i, 1); };
 let added = 0, skipped = 0, failed = 0;
 for (const acro of queued) {
-  const file = path.join(CONF_DIR, `${acro.toLowerCase()}.yml`);
+  const file = path.join(CONF_DIR, `${idFromAcronym(acro)}.yml`);
   if (fs.existsSync(file)) {
     console.log(`${acro}: already present, skipped`);
-    reports.push({ acronym: acro, id: acro.toLowerCase(), status: 'skipped', choices: [], next: [], notes: [] });
+    reports.push({ acronym: acro, id: idFromAcronym(acro), status: 'skipped', choices: [], next: [], notes: [] });
     skipped++; continue;
   }
 

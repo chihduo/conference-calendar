@@ -1,8 +1,12 @@
 name: Add conference
 
 on:
+  # `labeled` alone. An issue created from the template carries the label from
+  # the start, and GitHub then sends both `opened` and `labeled`: every issue
+  # ran twice and got two identical replies. `labeled` covers that case and a
+  # label added later by hand, which is also how a failed run is retried.
   issues:
-    types: [opened, labeled]
+    types: [labeled]
   issue_comment:
     types: [created]
   workflow_dispatch:
@@ -22,8 +26,8 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'issues' &&
-       github.event.issue.user.login == github.repository_owner &&
-       contains(github.event.issue.labels.*.name, 'add-conference')) ||
+       github.event.label.name == 'add-conference' &&
+       github.event.issue.user.login == github.repository_owner) ||
       (github.event_name == 'issue_comment' &&
        github.event.comment.user.login == github.repository_owner &&
        github.event.issue.state == 'open' &&
@@ -41,13 +45,16 @@ jobs:
           RAW: ${{ github.event.inputs.acronym || github.event.issue.title }}
         run: |
           # Whitelist, never sanitise-by-removal: anything unexpected fails the run.
-          CLEAN=$(printf '%s' "$RAW" | tr -d '\n' | grep -oE '^[A-Za-z][A-Za-z0-9+-]{1,15}$' || true)
+          # "&" is allowed because venues use it (S&P, EuroS&P); every later use
+          # of the acronym goes through an env var, and the id drops it.
+          CLEAN=$(printf '%s' "$RAW" | tr -d '\n' | grep -oE '^[A-Za-z][A-Za-z0-9&+-]{1,15}$' || true)
           if [ -z "$CLEAN" ]; then
             echo "::error::'$RAW' is not a plausible conference acronym"
+            printf '標題「%s」不像會議縮寫。標題只放縮寫本身：英文字母開頭、2 到 16 個字元，可以有數字和 & + -（例如 CAV、S&P、IJCAI-ECAI）。\n\n改好標題之後，把 `add-conference` 標籤拿掉再貼一次就會重跑。' "$RAW" > failure.md
             exit 1
           fi
           echo "acronym=$CLEAN" >> "$GITHUB_OUTPUT"
-          echo "id=$(printf '%s' "$CLEAN" | tr 'A-Z' 'a-z')" >> "$GITHUB_OUTPUT"
+          echo "id=$(node --input-type=module -e 'import { idFromAcronym } from "./scripts/lib.mjs"; console.log(idFromAcronym(process.argv[1]))' "$CLEAN")" >> "$GITHUB_OUTPUT"
 
       # A reply carries the answer to a question the bot asked earlier. The
       # options live in that earlier comment, so the thread is the state store -
@@ -86,44 +93,71 @@ jobs:
           [ "$CODE" -eq 0 ] || [ "$CODE" -eq 3 ]
 
       # Re-fetch with the corrected settings so the answer actually changes data.
+      # pipefail: without it `| tee` reports success whatever the script did.
       - name: Refresh the venue
         if: steps.resolve.outputs.code == '0'
-        run: npm run refresh -- ${{ steps.acro.outputs.id }} | tee add.log
+        run: |
+          set -o pipefail
+          npm run refresh -- ${{ steps.acro.outputs.id }} | tee add.log
 
       - name: Run the discovery cascade
         if: github.event_name != 'issue_comment'
-        run: npm run add -- '${{ steps.acro.outputs.acronym }}' | tee add.log
+        env:
+          ACRONYM: ${{ steps.acro.outputs.acronym }}
+        run: |
+          set -o pipefail
+          npm run add -- "$ACRONYM" | tee add.log
 
       - run: npm run validate
 
       - name: Commit
         if: steps.resolve.outputs.code != '3'
+        env:
+          ACRONYM: ${{ steps.acro.outputs.acronym }}
+          ISSUE: ${{ github.event.issue.number }}
         run: |
-          scripts/ci-commit.sh "feat(data): ${{ steps.acro.outputs.acronym }} via issue #${{ github.event.issue.number }}"
+          scripts/ci-commit.sh "feat(data): $ACRONYM${ISSUE:+ via issue #$ISSUE}"
 
       - name: Reply on the issue
         if: always() && github.event_name != 'workflow_dispatch'
         uses: actions/github-script@v7
+        env:
+          ACRONYM: ${{ steps.acro.outputs.acronym }}
+          ID: ${{ steps.acro.outputs.id }}
+          HANDLED: ${{ steps.reply.outputs.handled }}
+          RESOLVE_OUT: ${{ steps.resolve.outputs.out }}
+          RESOLVE_CODE: ${{ steps.resolve.outputs.code }}
+          JOB_STATUS: ${{ job.status }}
         with:
           script: |
             const fs = require('fs');
-            const acro = '${{ steps.acro.outputs.acronym }}';
-            const id = '${{ steps.acro.outputs.id }}';
-            const log = fs.existsSync('add.log') ? fs.readFileSync('add.log', 'utf8') : '';
-            const resolveOut = (${{ toJSON(steps.resolve.outputs.out) }} || '').toString();
-            const code = '${{ steps.resolve.outputs.code }}';
+            const read = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '');
+            const { ACRONYM: acro = '', ID: id = '', HANDLED: handled = '', JOB_STATUS: status = '' } = process.env;
+            const resolveOut = (process.env.RESOLVE_OUT || '').trim();
+            const code = process.env.RESOLVE_CODE || '';
+            const issue = { owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number };
+            const say = (body) => github.rest.issues.createComment({ ...issue, body });
+            const log = read('add.log').trim();
+            const details = log ? `\n\n<details><summary>完整輸出</summary>\n\n\`\`\`\n${log.slice(0, 55000)}\n\`\`\`\n</details>` : '';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
 
-            // Could not tell which option was meant - ask again, keep the thread open.
-            if (code === '3') {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
-                body: resolveOut.trim() || '看不懂這個回覆，請回覆選項編號。',
-              });
+            /* A step failed. This used to fall through to "全部自動解析完成" and
+               close the issue: the title S&P tripped the acronym check, nothing
+               ran, and the thread said it was done. Say what failed; stay open. */
+            if (status !== 'success') {
+              const why = read('failure.md').trim() || `執行途中出錯，資料沒有任何變更。原因看執行紀錄：${runUrl}`;
+              await say(`**沒有新增任何會議。**\n\n${why}${details}`);
               return;
             }
 
+            // A comment that answers nothing the bot asked needs no reply.
+            if (context.eventName === 'issue_comment' && handled !== 'true') return;
+
+            // Could not tell which option was meant - ask again, keep the thread open.
+            if (code === '3') { await say(resolveOut || '看不懂這個回覆，請回覆選項編號。'); return; }
+
             let report = [];
-            try { report = JSON.parse(fs.readFileSync('add-report.json', 'utf8')); } catch {}
+            try { report = JSON.parse(read('add-report.json') || '[]'); } catch {}
             const r = report.find((x) => (x.acronym || '').toUpperCase() === acro.toUpperCase());
 
             // Something is genuinely a pick-from-a-list: ask, and carry the options
@@ -131,36 +165,32 @@ jobs:
             if (r && r.status === 'needs-choice' && r.choices?.length) {
               const c = r.choices[0];
               const list = c.options.map((o, i) => `**${i + 1}.** ${o.label}`).join('\n');
-              await github.rest.issues.createComment({
-                owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
-                body: `已建立 \`data/conferences/${id}.yml\`，但有一處需要你決定。\n\n` +
-                      `### ${c.question}\n\n${list}\n\n` +
-                      `直接回覆編號（例如 \`1\`）即可，也可以回覆完整名稱。\n\n` +
-                      `<!-- cc-choices: ${JSON.stringify({ acronym: acro, id, choices: r.choices })} -->\n\n` +
-                      `<details><summary>完整輸出</summary>\n\n\`\`\`\n${log.trim().slice(0, 55000)}\n\`\`\`\n</details>`,
-              });
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner, repo: context.repo.repo,
-                issue_number: context.issue.number, labels: ['needs-choice'],
-              });
+              await say(`已建立 \`data/conferences/${id}.yml\`，但有一處需要你決定。\n\n` +
+                        `### ${c.question}\n\n${list}\n\n` +
+                        `直接回覆編號（例如 \`1\`）即可，也可以回覆完整名稱。\n\n` +
+                        `<!-- cc-choices: ${JSON.stringify({ acronym: acro, id, choices: r.choices })} -->` + details);
+              await github.rest.issues.addLabels({ ...issue, labels: ['needs-choice'] });
               return;   // leave the issue open, waiting on a human
             }
 
-            const steps = log.split('\n').filter((l) => /^\s+\d+\.\s/.test(l)).map((s) => s.trim());
-            const head = resolveOut.trim() ? resolveOut.trim() + '\n\n' : '';
-            const body = steps.length
-              ? `${head}**需要你處理 ${steps.length} 件事：**\n` + steps.map((s) => `- ${s}`).join('\n')
-              : `${head}**全部自動解析完成，不需要手動處理。**`;
-            await github.rest.issues.createComment({
-              owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
-              body: `${body}\n\n<details><summary>完整輸出</summary>\n\n\`\`\`\n${log.trim().slice(0, 55000)}\n\`\`\`\n</details>`,
-            });
+            const todo = log.split('\n').filter((l) => /^\s+\d+\.\s/.test(l)).map((s) => s.trim());
+            const todoText = todo.length ? `\n\n**需要你處理 ${todo.length} 件事：**\n` + todo.map((s) => `- ${s}`).join('\n') : '';
+
+            /* The headline says what happened to the data, read from the report.
+               A venue already listed, or one no source had dates for, is not "done". */
+            if (r?.status === 'rejected') {
+              await say(`**沒有新增 ${acro}**：沒有寫出任何檔案。${todoText}${details}`);
+              return;   // stays open: a person has to act
+            }
+            const head = r?.status === 'added' ? `**已新增 ${acro}** → \`data/conferences/${id}.yml\``
+              : r?.status === 'skipped' ? `**${acro} 已經在清單裡**（\`data/conferences/${id}.yml\`），沒有變更。`
+              : code === '0' ? resolveOut
+              : null;
+            if (!head) {
+              await say(`**沒有新增任何會議**：這次執行沒有留下結果。執行紀錄：${runUrl}${details}`);
+              return;
+            }
+            await say(`${head}${todoText || (code === '0' ? '\n\n不需要其他處理。' : '')}${details}`);
             // the question is answered; the label must stop saying otherwise
-            await github.rest.issues.removeLabel({
-              owner: context.repo.owner, repo: context.repo.repo,
-              issue_number: context.issue.number, name: 'needs-choice',
-            }).catch(() => {});
-            await github.rest.issues.update({
-              owner: context.repo.owner, repo: context.repo.repo,
-              issue_number: context.issue.number, state: 'closed',
-            });
+            await github.rest.issues.removeLabel({ ...issue, name: 'needs-choice' }).catch(() => {});
+            await github.rest.issues.update({ ...issue, state: 'closed' });

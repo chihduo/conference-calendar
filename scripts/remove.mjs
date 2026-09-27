@@ -12,7 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {
   CONF_DIR, loadYaml, saveConference, readReviewQueue, writeReviewQueue,
-  loadAcks, saveAcks,
+  loadAcks, saveAcks, idFromAcronym,
 } from './lib.mjs';
 
 const args = process.argv.slice(2);
@@ -22,7 +22,7 @@ const acronym = args.find((a) => !a.startsWith('--'));
 
 if (!acronym) { console.error('usage: remove.mjs <acronym> [--hide] [--dry-run]'); process.exit(2); }
 
-const id = acronym.toLowerCase();
+const id = idFromAcronym(acronym);
 const file = path.join(CONF_DIR, `${id}.yml`);
 if (!fs.existsSync(file)) {
   console.log(`找不到 ${acronym}（${path.relative(process.cwd(), file)} 不存在）。`);

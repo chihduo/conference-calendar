@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { DateTime } from 'luxon';
 import {
-  CONF_DIR, loadYaml, saveConference, writeReviewQueue, readReviewQueue, severityOf,
+  CONF_DIR, loadYaml, saveConference, writeReviewQueue, readReviewQueue, severityOf, supersededByRounds,
   CONFIDENCE_RANK, TIER_CONFIDENCE_CEILING, editionIssues, daysBetween, shift364, byDateThenKind, auditEstimates,
   applyAcks,
   baseKind, estimateEdition, CALL_KINDS,
@@ -254,7 +254,13 @@ async function refreshOne(file) {
         best.set(m.kind, m);
     }
 
+    /* A venue that runs rounds has no single deadline of that kind. A flat
+       candidate for it - WikiCFP lists each ICSE round as its own event - is one
+       round seen blurred, so it is neither written nor argued with. */
+    const roundBases = new Set([...ed.milestones.filter((m) => m.date), ...best.values()]
+      .filter((m) => /_cycle\d+$/.test(m.kind)).map((m) => baseKind(m.kind)));
     for (const [kind, cand] of best) {
+      if (roundBases.has(kind)) continue;
       const existing = ed.milestones.find((m) => m.kind === kind);
       const { action, why } = decide(existing, cand);
       if (action === 'skip') continue;
@@ -273,17 +279,12 @@ async function refreshOne(file) {
       else ed.milestones.push(next);
       changes.push(`${ed.id}/${kind}: ${why}`);
     }
-    /* Once a venue turns out to run rounds, the flat estimate it used to carry
-       is superseded - keeping both would show two "submission" dates. */
-    const cycleBases = new Set(ed.milestones
-      .filter((m) => /_cycle\d+$/.test(m.kind) && m.date)
-      .map((m) => m.kind.replace(/_cycle\d+$/, '')));
-    const orphans = ed.milestones.filter(
-      (m) => !/_cycle\d+$/.test(m.kind) && cycleBases.has(m.kind) &&
-             (m.confidence === 'estimated' || m.confidence === 'unknown'));
+    /* Once a venue turns out to run rounds, a flat value of the same kind is
+       superseded - keeping both would show two "submission" dates. */
+    const orphans = supersededByRounds(ed);
     if (orphans.length) {
       ed.milestones = ed.milestones.filter((m) => !orphans.includes(m));
-      changes.push(`${ed.id}: dropped ${orphans.length} estimate(s) superseded by per-round dates (${orphans.map((m) => m.kind).join(', ')})`);
+      changes.push(`${ed.id}: dropped ${orphans.length} flat value(s) superseded by per-round dates (${orphans.map((m) => m.kind).join(', ')})`);
     }
     ed.milestones.sort(byDateThenKind);
     for (const m of ed.milestones) if (m.derived_from === undefined) delete m.derived_from;

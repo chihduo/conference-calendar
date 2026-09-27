@@ -5,8 +5,10 @@ name: Remove conference
 # readable on its own rather than buried in a shared conditional.
 
 on:
+  # `labeled` alone: a template-created issue also fires `opened`, which ran
+  # every request twice (see add-conference.yml).
   issues:
-    types: [opened, labeled]
+    types: [labeled]
   workflow_dispatch:
     inputs:
       acronym:
@@ -25,8 +27,8 @@ jobs:
   remove:
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (github.event.issue.user.login == github.repository_owner &&
-       contains(github.event.issue.labels.*.name, 'remove-conference'))
+      (github.event.label.name == 'remove-conference' &&
+       github.event.issue.user.login == github.repository_owner)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,9 +41,10 @@ jobs:
         env:
           RAW: ${{ github.event.inputs.acronym || github.event.issue.title }}
         run: |
-          CLEAN=$(printf '%s' "$RAW" | tr -d '\n' | grep -oE '^[A-Za-z][A-Za-z0-9+-]{1,15}$' || true)
+          CLEAN=$(printf '%s' "$RAW" | tr -d '\n' | grep -oE '^[A-Za-z][A-Za-z0-9&+-]{1,15}$' || true)
           if [ -z "$CLEAN" ]; then
             echo "::error::'$RAW' is not a plausible conference acronym"
+            printf '標題「%s」不像會議縮寫。標題只放縮寫本身：英文字母開頭、2 到 16 個字元，可以有數字和 & + -（例如 CIAA、S&P）。\n\n改好標題之後，把 `remove-conference` 標籤拿掉再貼一次就會重跑。' "$RAW" > failure.md
             exit 1
           fi
           echo "acronym=$CLEAN" >> "$GITHUB_OUTPUT"
@@ -68,9 +71,11 @@ jobs:
 
       - name: Remove
         id: remove
+        env:
+          ACRONYM: ${{ steps.acro.outputs.acronym }}
         run: |
           set +e
-          OUT=$(npm run remove --silent -- '${{ steps.acro.outputs.acronym }}' ${{ steps.mode.outputs.flag }} 2>&1)
+          OUT=$(npm run remove --silent -- "$ACRONYM" ${{ steps.mode.outputs.flag }} 2>&1)
           CODE=$?
           set -e
           echo "$OUT"
@@ -83,16 +88,24 @@ jobs:
 
       - name: Commit
         if: steps.remove.outputs.code == '0'
+        env:
+          ACRONYM: ${{ steps.acro.outputs.acronym }}
+          ISSUE: ${{ github.event.issue.number }}
         run: |
-          scripts/ci-commit.sh "chore(data): remove ${{ steps.acro.outputs.acronym }} via issue #${{ github.event.issue.number }}"
+          scripts/ci-commit.sh "chore(data): remove $ACRONYM${ISSUE:+ via issue #$ISSUE}"
 
       - name: Reply on the issue
         if: always() && github.event_name == 'issues'
         uses: actions/github-script@v7
         with:
           script: |
+            const fs = require('fs');
             const out = (${{ toJSON(steps.remove.outputs.out) }} || '').toString().trim();
-            const ok = '${{ steps.remove.outputs.code }}' === '0';
+            // Only a clean run counts: a failed validate or commit after a
+            // successful removal still means nothing reached main.
+            const ok = '${{ steps.remove.outputs.code }}' === '0' && '${{ job.status }}' === 'success';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const why = fs.existsSync('failure.md') ? fs.readFileSync('failure.md', 'utf8').trim() : '';
             const hid = '${{ steps.mode.outputs.flag }}' === '--hide';
             // The wording has to follow the mode: telling someone who just hid a
             // venue that it was "removed", and then advising them to hide it, is
@@ -105,10 +118,12 @@ jobs:
                 ? '\n\n要讓它回來：把 `data/conferences/` 底下那個檔案的 `hidden: true` 拿掉即可。'
                 : '\n\n還原：`git revert` 這次的 commit，或到 commit 歷史把檔案取回。' +
                   '\n下次只想讓它不顯示的話，在 issue 內文寫 `hide`——檔案與資料會完整保留。';
+            // With no output there is nothing to quote; say why instead of an empty block.
+            const body = out ? `${head}\n\n\`\`\`\n${out.slice(0, 55000)}\n\`\`\`${undo}`
+                             : `${head}\n\n${why || `執行途中出錯。原因看執行紀錄：${runUrl}`}`;
             await github.rest.issues.createComment({
               owner: context.repo.owner, repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: `${head}\n\n\`\`\`\n${out.slice(0, 55000)}\n\`\`\`${undo}`,
+              issue_number: context.issue.number, body,
             });
             if (ok) await github.rest.issues.update({
               owner: context.repo.owner, repo: context.repo.repo,

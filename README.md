@@ -231,7 +231,7 @@ fixture 是 `bd32c2c`（2026-09-24）當時的 `data/conferences`，只留測試
 
 真實資料另外由 `test/live.test.mjs` 把關，而且只檢查任何正確的資料都該滿足的事：每個分頁都畫得出來、過程中沒有錯誤，就算每一屆、每種狀態都各追蹤一篇也一樣；每張投稿卡不是列出待辦日期，就是說明為什麼沒有。這些條件不會因為某個日期公布或過去而失效，所以它只會在資料真的讓頁面壞掉時擋下部署。
 
-六套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）、`npm run test:remove`（移除會議與善後）、`npm run test:researchr`（researchr 的標籤與日期解析，字串都抄自真實頁面）、`npm run test:live`（真實資料，要先 `npm run build`）。`npm test` 一次跑完，`deploy.yml` 也是。
+七套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）、`npm run test:remove`（移除會議與善後）、`npm run test:researchr`（researchr 的標籤與日期解析，字串都抄自真實頁面）、`npm run test:add`（新增會議：縮寫轉 id、ccf-deadlines 的分輪、分輪取代單一日期）、`npm run test:live`（真實資料，要先 `npm run build`）。`npm test` 一次跑完，`deploy.yml` 也是。
 
 同步層的**真實 OAuth 往返沒有辦法自動測**，需要實際專案憑證；`supabase/SETUP.md` 列出設定完該手動確認的幾件事。
 
@@ -247,6 +247,8 @@ fixture 是 `bd32c2c`（2026-09-24）當時的 `data/conferences`，只留測試
 
 第三條是**唯一能從手機完成**的路徑。它只接受 repo owner 開的 issue，而且縮寫會先過白名單正則才進 shell——公開 repo 上任何人都能開 issue。
 
+縮寫照社群的寫法填，例如 `S&P`：英文字母開頭、2 到 16 個字元，可以有數字和 `&` `+` `-`，不能有空格。檔名與 id 只能是 `[a-z0-9-]`，所以 `&` 會拿掉（`S&P` 存成 `sp.yml`），頁面上仍顯示 `S&P`。各來源用各自的寫法去查：ICORE 寫成 `SP`、ccf-deadlines 是 `sp.yml`、WikiCFP 則要用 `S&P` 才找得到近幾屆。
+
 `wishlist.txt` 是**待辦清單而不是紀錄**：解析成功的行會被移除，沒解析出來的留在原地並標上原因（`ZZQ  # no dates found by any source`）。留著的會在之後每晚重試，這是刻意的 ——太新而還沒被任何來源收錄的會議，過一陣子就會開始抓得到。
 
 抓不到就明說抓不到，不會寫出半殘的檔案——但**只說「抓不到」等於把人卡在原地**，所以每種無法自動解析的情況都會附上編號的「下一步」，指名要改哪個檔的哪個欄位：
@@ -261,6 +263,10 @@ fixture 是 `bd32c2c`（2026-09-24）當時的 `data/conferences`，只留測試
 | 所有來源都沒有日期 | 手寫一屆（格式見 `schema/conference.schema.json`），或寫 `scripts/adapters/custom/<id>.mjs` |
 
 從 issue 觸發時，這份清單會**放在回覆的最上面**，完整輸出收在 `<details>` 裡。
+
+回覆的第一行照實說資料發生了什麼：**已新增**、**已經在清單裡**，或是**沒有新增**並附上原因。只有真的有結果才關 issue，失敗或被拒時 issue 保持開著。以前不是這樣：任何一步失敗，回覆仍寫「全部自動解析完成」並關掉 issue。標題 `S&P` 沒通過白名單，什麼都沒跑，對話卻說完成了。
+
+要重跑，把 `add-conference` 標籤拿掉再貼一次。workflow 只聽 `labeled` 事件：從範本開的 issue 會同時送出 `opened` 和 `labeled`，兩個都聽的話每個 issue 會跑兩次、回覆兩次。移除會議也一樣。
 
 ### issue 是對話，不是單向回報
 
@@ -338,3 +344,7 @@ gh label create remove-conference --description "Remove the conference named in 
 有些會議一年收好幾輪（CSF 分 summer / fall / winter 三輪）。這種用 `<kind>_cycleN` 表示，例如 `submission_cycle2`、`notification_cycle2`。後綴是解析出來的而不是列舉的，所以五輪的會議也不必改程式。
 
 順序檢查會**分輪進行**——第 2 輪的投稿本來就早於第 1 輪的通知，跨輪比較會把正確的行事曆判成壞的。「我的投稿」也只顯示每種里程碑最近的那一個，不會把三輪的通知全堆上來。
+
+ccf-deadlines 把每一輪列成一個 timeline 項目（S&P、CCS、NDSS、USENIX Security、OOPSLA、ICSE 都是），匯入時依日期排成 `submission_cycleN`。只讀第一項的話，S&P 2027 看起來六月就截止了，其實十一月還有一輪。例外是一輪兩步：VMCAI 2027 列了「Paper Registration」和「Paper Submission」兩項。註解寫的是註冊或摘要、又沒提到輪次的那一項，當成同一輪的摘要。
+
+有了分輪之後，同類的單一日期就由分輪取代，因為它只是某一輪被分不出輪次的來源看到的樣子：WikiCFP 把 S&P 的每一輪當成獨立的活動，OOPSLA 2027 也曾把十月的截止日顯示兩次。只有手填或 `locked` 的單一日期會留下。
