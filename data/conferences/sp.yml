@@ -15,31 +15,56 @@ editions:
     id: sp-2027
     timezone: UTC-12
     milestones:
-      - kind: abstract_cycle1
-        date: 2026-06-04
-        time: '23:59:59'
-        confidence: announced
-        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+      - {kind: abstract_cycle1, date: 2026-06-04, time: '23:59:59', confidence: confirmed, source_url: https://sp2027.ieee-security.org/cfpapers.html}
       - kind: submission_cycle1
         date: 2026-06-11
         time: '23:59:59'
-        confidence: announced
-        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
-      - kind: abstract_cycle2
-        date: 2026-11-10
-        time: '23:59:59'
-        confidence: announced
-        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+        confidence: confirmed
+        source_url: https://sp2027.ieee-security.org/cfpapers.html
+      - kind: early_rejection_notification_cycle1
+        date: 2026-07-27
+        confidence: confirmed
+        source_url: https://sp2027.ieee-security.org/cfpapers.html
+      - kind: rebuttal_start_cycle1
+        date: 2026-08-20
+        confidence: confirmed
+        note: reviews released
+        source_url: https://sp2027.ieee-security.org/cfpapers.html
+      - kind: rebuttal_end_cycle1
+        date: 2026-08-27
+        confidence: confirmed
+        note: rebuttal text due
+        source_url: https://sp2027.ieee-security.org/cfpapers.html
+      - {kind: notification_cycle1, date: 2026-09-11, confidence: confirmed, source_url: https://sp2027.ieee-security.org/cfpapers.html}
+      - {kind: camera_ready_cycle1, date: 2026-10-16, confidence: confirmed, source_url: https://sp2027.ieee-security.org/cfpapers.html}
+      - {kind: abstract_cycle2, date: 2026-11-10, time: '23:59:59', confidence: confirmed, source_url: https://sp2027.ieee-security.org/cfpapers.html}
       - kind: submission_cycle2
         date: 2026-11-17
         time: '23:59:59'
-        confidence: announced
-        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SC/sp.yml
+        confidence: confirmed
+        source_url: https://sp2027.ieee-security.org/cfpapers.html
+      - kind: early_rejection_notification_cycle2
+        date: 2027-01-18
+        confidence: confirmed
+        source_url: https://sp2027.ieee-security.org/cfpapers.html
+      - kind: rebuttal_start_cycle2
+        date: 2027-02-11
+        confidence: confirmed
+        note: reviews released
+        source_url: https://sp2027.ieee-security.org/cfpapers.html
+      - kind: rebuttal_end_cycle2
+        date: 2027-02-16
+        confidence: confirmed
+        note: rebuttal text due
+        source_url: https://sp2027.ieee-security.org/cfpapers.html
+      - {kind: notification_cycle2, date: 2027-03-05, confidence: confirmed, source_url: https://sp2027.ieee-security.org/cfpapers.html}
+      - {kind: camera_ready_cycle2, date: 2027-04-08, confidence: confirmed, source_url: https://sp2027.ieee-security.org/cfpapers.html}
     link: https://sp2027.ieee-security.org/index.html
     place: MONTREAL, CANADA
-    dates: May 17-19, 2027
-    status: announced
-    needs_review: true
+    dates: May 17-20, 2027
+    status: confirmed
+    start_date: 2027-05-17
+    end_date: 2027-05-20
   - year: 2026
     id: sp-2026
     timezone: UTC-12
