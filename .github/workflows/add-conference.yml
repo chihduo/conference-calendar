@@ -94,8 +94,11 @@ jobs:
 
       # Re-fetch with the corrected settings so the answer actually changes data.
       # pipefail: without it `| tee` reports success whatever the script did.
+      # `outcome` first: when Resolve is skipped its code is null, and the
+      # expression language coerces null and '0' alike to 0 - this step ran
+      # before every issue-driven add.
       - name: Refresh the venue
-        if: steps.resolve.outputs.code == '0'
+        if: steps.resolve.outcome == 'success' && steps.resolve.outputs.code == '0'
         run: |
           set -o pipefail
           npm run refresh -- ${{ steps.acro.outputs.id }} | tee add.log
