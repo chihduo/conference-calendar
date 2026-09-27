@@ -231,7 +231,7 @@ fixture 是 `bd32c2c`（2026-09-24）當時的 `data/conferences`，只留測試
 
 真實資料另外由 `test/live.test.mjs` 把關，而且只檢查任何正確的資料都該滿足的事：每個分頁都畫得出來、過程中沒有錯誤，就算每一屆、每種狀態都各追蹤一篇也一樣；每張投稿卡不是列出待辦日期，就是說明為什麼沒有。這些條件不會因為某個日期公布或過去而失效，所以它只會在資料真的讓頁面壞掉時擋下部署。
 
-五套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）、`npm run test:remove`（移除會議與善後）、`npm run test:live`（真實資料，要先 `npm run build`）。`npm test` 一次跑完，`deploy.yml` 也是。
+六套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）、`npm run test:remove`（移除會議與善後）、`npm run test:researchr`（researchr 的標籤與日期解析，字串都抄自真實頁面）、`npm run test:live`（真實資料，要先 `npm run build`）。`npm test` 一次跑完，`deploy.yml` 也是。
 
 同步層的**真實 OAuth 往返沒有辦法自動測**，需要實際專案憑證；`supabase/SETUP.md` 列出設定完該手動確認的幾件事。
 

@@ -18,6 +18,18 @@ export function parseWhen(text) {
     if (!m) return null;
     return { from: `${yr}-${pad(m)}-${pad(d1)}`, to: `${yr}-${pad(m)}-${pad(d2)}` };
   }
+  /* Each end names its month: "Mon 30 Nov - Fri 4 Dec 2026", and ISSTA writes
+     even a same-month range this way ("Mon 22 Mar - Thu 25 Mar 2027"). The
+     single-date fallback below reads only the last date, which turned ISSTA
+     2027's rebuttal window into a start on its closing day and no end. */
+  const span = /^[A-Za-z]{3}\s+(\d{1,2})\s+([A-Za-z]{3})[a-z]*(?:\s+(\d{4}))?\s*-\s*[A-Za-z]{3}\s+(\d{1,2})\s+([A-Za-z]{3})[a-z]*\s+(\d{4})$/.exec(s);
+  if (span) {
+    const [, d1, mon1, yr1, d2, mon2, yr2] = span;
+    const m1 = MONTHS[mon1.toLowerCase()], m2 = MONTHS[mon2.toLowerCase()];
+    if (!m1 || !m2) return null;
+    const y1 = yr1 || (m1 > m2 ? Number(yr2) - 1 : yr2);   // "Mon 28 Dec - Fri 1 Jan 2027"
+    return { from: `${y1}-${pad(m1)}-${pad(d1)}`, to: `${yr2}-${pad(m2)}-${pad(d2)}` };
+  }
   const one = /(\d{1,2})\s+([A-Za-z]{3})[a-z]*\s+(\d{4})/.exec(s);
   if (!one) return null;
   const m = MONTHS[one[2].toLowerCase()];
@@ -29,10 +41,18 @@ export function parseWhen(text) {
 const RULES = [
   // qualifier-bearing labels first: these are separate milestones, not synonyms
   [/tool paper.*artifact|artifact.*tool paper/i, 'tool_artifact_submission'],
+  /* ISSTA's "Initial Notification (Including Early Reject)" is its first-round
+     decision, sent after the author response; early rejects merely go out with
+     it. As an early rejection it vanished from a submitted paper's to-do list. */
+  [/initial notif/i,                       'notification'],
   [/early.?reject/i,                       'early_rejection_notification'],
   [/artifact.*regist/i,                    'artifact_registration'],
   [/artifact/i,                            'artifact_submission'],
   [/abstract/i,                            'abstract'],
+  /* "Paper registration" (VMCAI, SAS) registers title and abstract ahead of the
+     full paper - the abstract deadline under another name. Left to the generic
+     /regist/ rule below, it became a registration for the conference. */
+  [/\b(paper|submission|title)s?\s+regist/i, 'abstract'],
   [/author response|rebuttal|response period/i, 'rebuttal'],
   /* These must precede the generic revision rule: ICSE labels a row
      "Camera-ready (of accepted major revision papers)", which is a camera-ready
@@ -43,7 +63,7 @@ const RULES = [
   [/camera.?ready.*revision|revision.*camera.?ready/i, 'camera_ready_after_revision'],
   [/camera.?ready|final version|final paper/i, 'camera_ready'],
   [/final (accept|notif|decision)/i,       'final_notification'],
-  [/major revision|revision/i,             'revision'],
+  [/major revision|revision|revised paper/i, 'revision'],   // ICFP: "Revised papers"
   [/early.*regist/i,                       'early_registration'],
   [/regist/i,                              'registration'],
   [/notification|acceptance|decision/i,    'notification'],
