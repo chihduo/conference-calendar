@@ -1,0 +1,47 @@
+id: ecai
+name: ECAI
+full_name: European Conference on Artificial Intelligence
+areas: [AI]
+dblp: ecai
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 473
+  checked_on: 2026-08-24
+note: There is no standalone ECAI 2026 - it was held jointly as IJCAI-ECAI 2026, so no immediately preceding edition exists to estimate 2027 from.
+sources:
+  - {tier: 3, adapter: wikicfp}
+  - {tier: 1, adapter: ccfddl, ref: conference/AI/ecai.yml}
+editions:
+  - year: 2027
+    id: ecai-2027
+    timezone: AoE
+    place: Athens, Greece
+    dates: TBD
+    status: announced
+    milestones:
+      - {kind: abstract, confidence: unknown}
+      - {kind: submission, confidence: unknown}
+      - {kind: notification, confidence: unknown}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2025
+    id: ecai-2025
+    timezone: UTC-12
+    status: announced
+    milestones:
+      - kind: abstract
+        date: 2025-04-29
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ecai.yml
+      - kind: submission
+        date: 2025-05-06
+        time: '23:59:59'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ecai.yml
+    link: https://ecai2025.org/deadlines/
+    place: Bologna, ITALY
+    dates: October 25-30, 2025
+    start_date: 2025-10-27
+    end_date: 2025-10-31

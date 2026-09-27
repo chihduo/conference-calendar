@@ -5,10 +5,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { DateTime } from 'luxon';
-import { ROOT, loadConferences, readReviewQueue, instantOf, kindLabel, byDateThenKind,
+import { ROOT, DATA_DIR, loadConferences, readReviewQueue, instantOf, kindLabel, byDateThenKind,
          auditEstimates, severityOf, applyAcks } from './lib.mjs';
 
-const DIST = path.join(ROOT, 'dist');
+const DIST = process.env.CC_DIST_DIR ? path.resolve(process.env.CC_DIST_DIR) : path.join(ROOT, 'dist');
 const SITE = path.join(ROOT, 'site');
 
 /* ---------- model ---------- */
@@ -171,7 +171,7 @@ const css = fs.readFileSync(path.join(SITE, 'style.css'), 'utf8');
    and the page behaves exactly as it did before any of this existed - which is
    also what keeps it working inside the artifact preview, where a strict CSP
    blocks every external host. */
-const cfgPath = path.join(ROOT, 'data', 'sync-config.json');
+const cfgPath = path.join(DATA_DIR, 'sync-config.json');
 const syncCfg = fs.existsSync(cfgPath) ? fs.readFileSync(cfgPath, 'utf8').trim() : 'null';
 const js  = `window.__SYNC_CONFIG__ = ${syncCfg};\n`
           + fs.readFileSync(path.join(SITE, 'sync.js'), 'utf8') + '\n'

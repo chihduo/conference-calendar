@@ -1,17 +1,17 @@
 #!/usr/bin/env node
-/* Browser-level regression tests, run against the built dist/index.html in a
-   real DOM. A hand-rolled stub is not enough here: it dispatches no events and
-   implements every API, so it happily passed code that was dead in a browser.
-   window.confirm is stubbed to return false throughout, which is exactly what a
-   sandboxed iframe without allow-modals does - the published artifact runs in
-   one, and that is how the delete button came to look broken.
+/* Browser-level regression tests, run against the fixture page (see page.mjs)
+   in a real DOM. A hand-rolled stub is not enough here: it dispatches no
+   events and implements every API, so it happily passed code that was dead in
+   a browser. window.confirm is stubbed to return false throughout, which is
+   exactly what a sandboxed iframe without allow-modals does - the published
+   artifact runs in one, and that is how the delete button came to look broken.
      npm run test:ui
 */
-import fs from 'node:fs';
 import { JSDOM } from 'jsdom';
+import { fixturePage, pinClock } from './page.mjs';
 
 function boot() {
-  const html = fs.readFileSync('dist/index.html', 'utf8');
+  const html = fixturePage();
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
     { runScripts: 'dangerously', url: 'https://example.org/' });
   const { window } = dom;
@@ -23,10 +23,8 @@ function boot() {
   window.confirm = () => false;
   window.alert = () => {};
   window.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
-  // Local-only mode: this suite is about the UI, and must not change behaviour
-  // just because data/sync-config.json exists in the checkout.
-  window.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]
-    .replace(/window\.__SYNC_CONFIG__ = [\s\S]*?;/, 'window.__SYNC_CONFIG__ = null;'));
+  pinClock(window);
+  window.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]);
   [...window.document.querySelectorAll('.tab')].find(t => t.textContent.includes('我的投稿')).click();
   return { dom, window };
 }
@@ -75,15 +73,15 @@ console.log('\n=== 刪光之後 ===');
 
 console.log('\n=== 與我無關的列要灰掉 ===');
 {
-  const html = fs.readFileSync('dist/index.html', 'utf8');
+  const html = fixturePage();
   const mk = (subs) => {
     const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
       { runScripts: 'dangerously', url: 'https://example.org/' });
     const w = dom.window; w.confirm = () => false;
     w.localStorage.setItem('cc-submissions', JSON.stringify({ schema: 1, submissions: subs }));
     w.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
-    w.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]
-      .replace(/window\.__SYNC_CONFIG__ = [\s\S]*?;/, 'window.__SYNC_CONFIG__ = null;'));
+    pinClock(w);
+    w.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]);
     return dom;
   };
   const rows = (w) => [...w.document.querySelectorAll('#main .row')].map((r) => ({
@@ -118,16 +116,14 @@ console.log('\n=== 與我無關的列要灰掉 ===');
 
 console.log('\n=== AoE 時鐘 ===');
 {
-  const html = fs.readFileSync('dist/index.html', 'utf8');
+  const html = fixturePage();
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
     { runScripts: 'dangerously', url: 'https://example.org/' });
   const w = dom.window;
   w.confirm = () => false;
   w.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
-  // Local-only mode: these suites are about the UI, and must not change
-  // behaviour just because data/sync-config.json exists in the checkout.
-  w.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]
-    .replace(/window\.__SYNC_CONFIG__ = [\s\S]*?;/, 'window.__SYNC_CONFIG__ = null;') + '\nglobalThis.__c={digitSVG,clockHTML,SEG_PATH};');
+  pinClock(w);
+  w.eval(html.match(/<script>([\s\S]*)<\/script>/)[1] + '\nglobalThis.__c={digitSVG,clockHTML,SEG_PATH};');
   const { digitSVG, clockHTML, SEG_PATH } = w.__c;
   const NAMES = Object.keys(SEG_PATH);
   const EXPECT = { 0:'abcdef',1:'bc',2:'abdeg',3:'abcdg',4:'bcfg',5:'acdfg',6:'acdefg',7:'abc',8:'abcdefg',9:'abcdfg' };
@@ -184,13 +180,14 @@ console.log('\n=== AoE 時鐘 ===');
 
 console.log('\n=== 主題預設 ===');
 {
-  const html = fs.readFileSync('dist/index.html', 'utf8');
+  const html = fixturePage();
   const mk = (pre) => {
     const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
       { runScripts: 'dangerously', url: 'https://example.org/' });
     if (pre) dom.window.localStorage.setItem('cc-theme', pre);
     dom.window.confirm = () => false;
     dom.window.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
+    pinClock(dom.window);
     dom.window.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]);
     return dom;
   };

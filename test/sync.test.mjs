@@ -5,10 +5,13 @@
    cache, the refusal to write while offline, and compare-and-set on a stale tab.
      npm run test:sync
 */
-import fs from 'node:fs';
 import { JSDOM } from 'jsdom';
+import { fixturePage, pinClock } from './page.mjs';
 
-const HTML = fs.readFileSync('dist/index.html', 'utf8');
+const HTML = fixturePage();
+/* boot() swaps CFG in for the literal `null`. Against a page built with a real
+   config that swap matched nothing, and the suite quietly ran on the real one. */
+if (!HTML.includes('window.__SYNC_CONFIG__ = null;')) throw new Error('fixture page should be built without a sync config');
 const CFG = { url: 'https://stub.supabase.co', anonKey: 'anon-key' };
 
 /** An in-memory stand-in for PostgREST + the save_submission RPC. */
@@ -49,11 +52,12 @@ function boot({ backend, signedIn = true, online = true, cache = null, legacy = 
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
     { runScripts: 'dangerously', url: 'https://example.org/site/' + hash });
   const w = dom.window;
+  pinClock(w);
   w.confirm = () => false;
   if (backend) w.fetch = backend.fetch;
   Object.defineProperty(w.navigator, 'onLine', { value: online, configurable: true });
   if (signedIn) w.localStorage.setItem('cc-session',
-    JSON.stringify({ access_token: 'tok', expires_at: Math.floor(Date.now() / 1000) + 3600 }));
+    JSON.stringify({ access_token: 'tok', expires_at: Math.floor(w.Date.now() / 1000) + 3600 }));
   if (cache) w.localStorage.setItem('cc-subs-cache', JSON.stringify(cache));
   if (legacy) w.localStorage.setItem('cc-submissions', JSON.stringify({ schema: 1, submissions: legacy }));
 

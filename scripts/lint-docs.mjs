@@ -8,8 +8,10 @@
 import fs from 'node:fs';
 import { JSDOM } from 'jsdom';
 const dom = new JSDOM('<!doctype html><body></body>', { pretendToBeVisual: true, url: 'https://example.org/' });
+/* Defined rather than assigned: Node 21+ ships its own global navigator as a
+   getter with no setter, and plain assignment to it throws. */
 for (const k of ['window','document','navigator','Element','SVGElement','HTMLElement','DOMPurify','MutationObserver','requestAnimationFrame','getComputedStyle'])
-  if (dom.window[k] !== undefined) global[k] = dom.window[k];
+  if (dom.window[k] !== undefined) Object.defineProperty(global, k, { value: dom.window[k], configurable: true, writable: true });
 global.self = dom.window;
 
 const mermaid = (await import('mermaid')).default;

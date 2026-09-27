@@ -17,7 +17,7 @@ npm run resolve ...    # 把 issue 對話裡選的答案套用到某個會議
 npm run audit          # 檢查推估值：快到期了還沒確認？基準是不是太舊？
 npm run ack            # 列出待確認的自動抓取結果；確認過的不再提示
 npm run remove CIAA    # 移除會議（--hide 只隱藏，可逆）
-npm test               # 用真的 DOM 對 dist/index.html 跑瀏覽器層測試
+npm test               # 瀏覽器層測試（固定的資料與時鐘），外加真實資料的冒煙測試
 npm run lint:docs      # 驗證文件：mermaid 圖、中文不硬斷行、中文標點用全形
 ```
 
@@ -215,13 +215,23 @@ sequenceDiagram
 
 ## 瀏覽器層測試
 
-`npm test` 用 jsdom 對**建好的** `dist/index.html` 派發真實事件，並把 `window.confirm` 固定成回傳 `false`。
+`npm test` 用 jsdom 載入**建好的**頁面、派發真實事件，並把 `window.confirm` 固定成回傳 `false`。
 
 那個 stub 是刻意的：發佈成 artifact 的頁面跑在 sandboxed iframe 裡，沒有 `allow-modals` 時瀏覽器會**靜默忽略** `confirm()` 並回傳 `false`，靠它把關的程式碼於是永遠不執行，而且不報錯。**所以頁面裡不使用任何 `confirm()` / `alert()` / `prompt()`**——刪除是兩段式按鈕、改標題是行內輸入框、錯誤訊息寫在頁面上。手寫的 DOM stub 抓不到這類問題，因為它不派發事件、而且每個 API 都有實作。
 
 `test/submissions.test.mjs` 顧的是另一類錯誤：**訊息說了假話**。`pending()` 回空集合有三種成因——會議還沒公布日期、日期公布了但已經過去、這個狀態本來就沒有待辦——三者需要三句不同的話。對 POPL 2027 說「還沒公布日期」是錯的：它的日期是官方確認的，只是 2026-07-09 就截止了。截止的情況還會給一顆「改投下一屆」按鈕，而下一屆往往正是 `rollForward` 推估出來的那個。
 
-三套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）。`npm test` 一次跑完，`deploy.yml` 也是。
+### 固定的資料、固定的時鐘
+
+介面測試用的頁面不是 `dist/index.html`，而是從 `test/fixtures/data` 另外建的一份，頁面裡的時鐘也釘在 `2026-09-24T12:00:00Z`（見 `test/page.mjs`）。
+
+兩者缺一不可。每晚的 refresh 會改寫 `data/`，對真實資料下的斷言其實是在斷言世界，而不是程式：ECAI 2027 本來是「還沒公布日期」的範例，2026-09-25 ccfddl 列出它的截稿日之後，每次部署都失敗。只凍結資料也不夠，因為時間會走：用真的時鐘，VMCAI 2027 過了 2026 年 11 月就從時間軸上消失、POPL 2028 在 2027 年 7 月截止，斷言一樣會過期。
+
+fixture 是 `bd32c2c`（2026-09-24）當時的 `data/conferences`，只留測試點名的六個會議，自己也要過 `CC_DATA_DIR=test/fixtures/data npm run validate`。要換新的 fixture，檔案和 `FIXTURE_NOW` 要一起換，並確認每個斷言的前提仍然成立。
+
+真實資料另外由 `test/live.test.mjs` 把關，而且只檢查任何正確的資料都該滿足的事：每個分頁都畫得出來、過程中沒有錯誤，就算每一屆、每種狀態都各追蹤一篇也一樣；每張投稿卡不是列出待辦日期，就是說明為什麼沒有。這些條件不會因為某個日期公布或過去而失效，所以它只會在資料真的讓頁面壞掉時擋下部署。
+
+五套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）、`npm run test:remove`（移除會議與善後）、`npm run test:live`（真實資料，要先 `npm run build`）。`npm test` 一次跑完，`deploy.yml` 也是。
 
 同步層的**真實 OAuth 往返沒有辦法自動測**，需要實際專案憑證；`supabase/SETUP.md` 列出設定完該手動確認的幾件事。
 
@@ -291,13 +301,13 @@ sequenceDiagram
 |---|---|---|
 | `refresh.yml` | 每日 **03:17 UTC** + 手動 | 展開 wishlist → 抓所有來源 → 驗證 → 由 `deadline-bot` commit |
 | `keepalive.yml` | 每 **4 小時** + 手動 | 呼叫 `touch_heartbeat()`，避免免費專案因閒置被暫停 |
-| `deploy.yml` | push 到 main、refresh 完成、手動 | validate → build → `npm test` → 發佈到 Pages |
+| `deploy.yml` | push 到 main、refresh 完成、手動 | validate → lint:docs → build → `npm test` → 發佈到 Pages |
 | `add-conference.yml` | 貼 `add-conference` 標籤的 issue、issue 回覆、手動 | 跑發現 cascade → commit → 在 issue 回報；有歧義就列候選等你回覆 |
 | `remove-conference.yml` | 貼 `remove-conference` 標籤的 issue、手動 | 先列出即將失去什麼 → 刪除或隱藏 → commit → 回報還原方式 |
 
 **deploy 是靠 `workflow_run` 接在 refresh 後面，不是靠 push 觸發。** GitHub 規定用 `GITHUB_TOKEN` 推的 commit 不會觸發任何 workflow（防無限迴圈），所以 bot 的資料 commit 雖然符合 `paths: ['data/**']` 卻不會重建網站——資料每晚前進、站台卻停在上次人工推送的版本。refresh 失敗時不部署，帶著沒過關的資料上線比不更新更糟。
 
-驗證擋在部署前面：`npm run validate`（schema + 護欄）和 `npm test`（兩套瀏覽器層測試）任一失敗就不發佈。
+驗證擋在部署前面：`npm run validate`（schema + 護欄）、`npm run lint:docs` 和 `npm test` 任一失敗就不發佈，網站維持上一次成功的版本，GitHub 會寄信通知。
 
 ### 從零重建時需要的 repo 設定
 

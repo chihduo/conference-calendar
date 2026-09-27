@@ -4,9 +4,12 @@ import yaml from 'js-yaml';
 import { DateTime } from 'luxon';
 
 export const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
-export const CONF_DIR = path.join(ROOT, 'data', 'conferences');
-export const RANK_DIR = path.join(ROOT, 'data', 'rankings');
-export const REVIEW_QUEUE = path.join(ROOT, 'data', '_review_queue.json');
+/* CC_DATA_DIR swaps in another data/ tree. The UI test suites build their page
+   from a frozen fixture this way, out of reach of the nightly refresh. */
+export const DATA_DIR = process.env.CC_DATA_DIR ? path.resolve(process.env.CC_DATA_DIR) : path.join(ROOT, 'data');
+export const CONF_DIR = path.join(DATA_DIR, 'conferences');
+export const RANK_DIR = path.join(DATA_DIR, 'rankings');
+export const REVIEW_QUEUE = path.join(DATA_DIR, '_review_queue.json');
 
 /* Milestone kinds are an open vocabulary. This table only supplies display order
    and a label; an unlisted kind still renders, sorted after everything known. */
@@ -208,7 +211,7 @@ export function firstDiff(a, b, path = '') {
   return { path: path || '/', before: a, after: b };
 }
 
-export const ACK_FILE = path.join(ROOT, 'data', '_acknowledged.json');
+export const ACK_FILE = path.join(DATA_DIR, '_acknowledged.json');
 
 /* A finding that cannot be dismissed becomes wallpaper, and then a genuinely new
    one goes unread. Most of what this queue reports is a stable fact rather than

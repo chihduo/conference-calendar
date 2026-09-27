@@ -1,0 +1,43 @@
+id: csf
+name: CSF
+full_name: IEEE Computer Security Foundations Symposium
+areas: [FM, SEC, LOGIC]
+dblp: csfw
+rank:
+  source: ICORE2026
+  value: A
+  icore_id: 599
+  checked_on: 2026-08-24
+note: >-
+  Rolling deadlines: three submission cycles a year (summer / fall / winter),
+  each with its own notification. A paper may be submitted to any cycle.
+sources:
+  - {tier: 3, adapter: wikicfp}
+  - {tier: 4, adapter: custom/csf, ref: 'https://csf2027.ieee-security.org/cfp.html', disabled: true}
+editions:
+  - year: 2027
+    id: csf-2027
+    link: https://csf2027.ieee-security.org/
+    timezone: AoE
+    place: Tokyo, Japan
+    dates: TBA, 2027
+    status: confirmed
+    milestones:
+      - {kind: submission_cycle1, date: 2026-08-03, confidence: confirmed, note: summer cycle}
+      - {kind: notification_cycle1, date: 2026-10-07, confidence: confirmed, note: summer cycle}
+      - {kind: submission_cycle2, date: 2026-10-15, confidence: confirmed, note: fall cycle}
+      - {kind: notification_cycle2, date: 2026-12-14, confidence: confirmed, note: fall cycle}
+      - {kind: submission_cycle3, date: 2027-01-28, confidence: confirmed, note: winter cycle}
+      - {kind: notification_cycle3, date: 2027-04-05, confidence: confirmed, note: winter cycle}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
+  - year: 2025
+    id: csf-2025
+    timezone: AoE
+    place: Santa Cruz, CA, USA
+    start_date: 2025-06-16
+    end_date: 2025-06-20
+    status: past
+    milestones:
+      - {kind: submission, date: 2025-02-04, confidence: announced, source_url: 'http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182373'}
+      - {kind: notification, date: 2025-04-08, confidence: announced, source_url: 'http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182373'}

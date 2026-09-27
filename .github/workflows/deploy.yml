@@ -3,7 +3,7 @@ name: Build and deploy
 on:
   push:
     branches: [main]
-    paths: ['data/**', 'site/**', 'scripts/**', 'schema/**', 'package*.json', '.github/workflows/deploy.yml']
+    paths: ['data/**', 'site/**', 'scripts/**', 'schema/**', 'test/**', 'package*.json', '.github/workflows/deploy.yml']
   workflow_dispatch:
   # A push made with GITHUB_TOKEN deliberately triggers no workflow, so the
   # nightly refresh would update the data and never rebuild the site.

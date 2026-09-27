@@ -4,21 +4,19 @@
    message: POPL 2027's dates are confirmed and past, not unpublished.
      npm run test:subs
 */
-import fs from 'node:fs';
 import { JSDOM } from 'jsdom';
+import { fixturePage, pinClock } from './page.mjs';
 
 function boot(subs) {
-  const html = fs.readFileSync('dist/index.html', 'utf8');
+  const html = fixturePage();
   const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
     { runScripts: 'dangerously', url: 'https://example.org/' });
   const { window } = dom;
   window.localStorage.setItem('cc-submissions', JSON.stringify({ schema: 1, submissions: subs }));
   window.confirm = () => false; window.alert = () => {};
   window.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
-  // Local-only mode: this suite is about the UI, and must not change behaviour
-  // just because data/sync-config.json exists in the checkout.
-  window.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]
-    .replace(/window\.__SYNC_CONFIG__ = [\s\S]*?;/, 'window.__SYNC_CONFIG__ = null;'));
+  pinClock(window);
+  window.eval(html.match(/<script>([\s\S]*)<\/script>/)[1]);
   [...window.document.querySelectorAll('.tab')].find(t => t.textContent.includes('我的投稿')).click();
   return { dom, window };
 }
@@ -37,7 +35,7 @@ console.log('=== 三種空集合成因要說三種話 ===');
   dom.window.close();
 }
 {
-  // ECAI 2027: milestones exist but carry no dates
+  // ECAI 2027 as the fixture froze it: milestones exist but carry no dates
   const { dom, window: w } = boot([{ id: 'a', paper: 'P', venue: 'ecai-2027', status: 'planned', history: [] }]);
   check('真的未公布 → 維持原訊息', /還沒公布/.test(noteOf(w)), noteOf(w));
   dom.window.close();
