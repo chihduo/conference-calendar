@@ -45,6 +45,39 @@ Supabase 已把金鑰改名：**`anon` → `sb_publishable_...`**、`service_rol
 
 **絕對不要填 `sb_secret_` 開頭的那把。** 它會繞過 RLS，放進公開 repo 等於把整個資料庫交出去。
 
+## 5. （選用）在網站上增刪會議
+
+需要先完成 1 到 4，網站要靠同一個 GitHub 登入認出你。做完之後，登入的你會在「依會議」看到「管理會議」，其他人什麼都看不到。不做這一步，網站完全照舊。
+
+**一、建一個只能動 issue 的 GitHub token。** GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token：
+
+- Repository access：**Only select repositories**，選 `chihduo/conference-calendar`
+- Permissions → Repository permissions：**Issues → Read and write**。Metadata 會自動變成 Read-only，其他全部維持 No access。
+- Expiration：選一年並記下日期。過期時網站會直接顯示「GitHub token 無效或已過期」。
+
+**二、把 token 存進 Supabase。** Dashboard → Edge Functions → Secrets → Add new secret，名稱填 `CC_GITHUB_TOKEN`，值貼上剛才的 token。token 只存在這裡，瀏覽器和 repo 都看不到。
+
+**三、部署函式。** Dashboard → Edge Functions → Deploy a new function → Via Editor，名稱填 `conference-requests`，內容整份貼上 `supabase/functions/conference-requests/index.ts`，按 Deploy。部署完到這支函式的 Details，把 **Enforce JWT Verification** 關掉：函式自己會向 Supabase Auth 確認登入、再比對 GitHub 帳號，閘道那一層只是重複的檢查。
+
+用 CLI 是同一件事：
+
+```bash
+npx supabase secrets set CC_GITHUB_TOKEN=github_pat_... --project-ref ingdodgwhapesmkzwbph
+npx supabase functions deploy conference-requests --project-ref ingdodgwhapesmkzwbph --no-verify-jwt
+```
+
+函式的程式碼以後改了，要再部署一次；網站本身照常由 `deploy.yml` 發佈。
+
+**四、確認。** 先確認函式在線上、而且會擋掉沒登入的請求，應該回 `{"error":"請先登入"}`：
+
+```bash
+URL=$(node -p "require('./data/sync-config.json').url")
+KEY=$(node -p "require('./data/sync-config.json').anonKey")
+curl -s -H "apikey: $KEY" "$URL/functions/v1/conference-requests"
+```
+
+然後重新整理網站、確認已登入，「依會議」最上面應該出現「管理會議」。沒有出現的話，網站只會安靜地維持原樣，原因通常是其中之一：函式沒部署成功（網站收到 404，當作沒有這個功能）、登入的不是 token 主人的 GitHub 帳號（403），或是 Enforce JWT Verification 沒關而閘道拒絕了登入。
+
 ## 免費方案會暫停
 
 Supabase 對免費專案有 **7 天無活動即暫停**的規則，而「活動」指的是**資料庫活動**，不是 API 呼叫、也不是你有沒有開 dashboard。官方的說法是「每天幾次對資料庫的請求」。
@@ -83,3 +116,5 @@ curl -s -H "apikey: $KEY" "$URL/rest/v1/heartbeat?select=last_seen,hits"
 `npm run test:sync` 用 stub 過的後端涵蓋 session 處理、唯讀快取、離線拒寫、CAS、 401 過期、以及登入導回時把 token 從網址列清掉——19 項。
 
 **真實的 GoTrue 授權往返沒有辦法在這裡測**，需要實際的專案憑證。第一次設定完請確認：登入後有導回、網址列沒有殘留 `access_token`、以及在第二台裝置上看得到同一份資料。
+
+網站增刪也一樣：`npm run test:function` 在 Node 裡跑真的函式，對的是 stub 過的 Supabase Auth 和 GitHub；`npm run test:admin` 則對 stub 過的函式測網站介面。真實的 token 和登入只有部署後才碰得到，第一次設定完請從網站新增一個會議，看卡片從「處理中」走到「完成」。

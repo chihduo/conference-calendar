@@ -231,21 +231,22 @@ fixture 是 `bd32c2c`（2026-09-24）當時的 `data/conferences`，只留測試
 
 真實資料另外由 `test/live.test.mjs` 把關，而且只檢查任何正確的資料都該滿足的事：每個分頁都畫得出來、過程中沒有錯誤，就算每一屆、每種狀態都各追蹤一篇也一樣；每張投稿卡不是列出待辦日期，就是說明為什麼沒有。這些條件不會因為某個日期公布或過去而失效，所以它只會在資料真的讓頁面壞掉時擋下部署。
 
-七套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）、`npm run test:remove`（移除會議與善後）、`npm run test:researchr`（researchr 的標籤與日期解析，字串都抄自真實頁面）、`npm run test:add`（新增會議：縮寫轉 id、ccf-deadlines 的分輪、分輪取代單一日期）、`npm run test:live`（真實資料，要先 `npm run build`）。`npm test` 一次跑完，`deploy.yml` 也是。
+九套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）、`npm run test:remove`（移除會議與善後）、`npm run test:researchr`（researchr 的標籤與日期解析，字串都抄自真實頁面）、`npm run test:add`（新增會議：縮寫轉 id、ccf-deadlines 的分輪、分輪取代單一日期）、`npm run test:function`（網站增刪用的 Edge Function，對 stub 過的 Supabase Auth 與 GitHub）、`npm run test:admin`（網站上的增刪介面）、`npm run test:live`（真實資料，要先 `npm run build`）。`npm test` 一次跑完，`deploy.yml` 也是。
 
 同步層的**真實 OAuth 往返沒有辦法自動測**，需要實際專案憑證；`supabase/SETUP.md` 列出設定完該手動確認的幾件事。
 
 ## 新增會議
 
-三種方式，共用同一支 `scripts/add.mjs`：
+四種方式，共用同一支 `scripts/add.mjs`：
 
 | 方式 | 怎麼做 | 何時生效 |
 |---|---|---|
 | **wishlist** | 在 `data/wishlist.txt` 加一行縮寫（可直接在 GitHub 網頁上編輯，不必 clone） | 當晚的 cron |
 | **手動觸發** | Actions → Add conference → Run workflow，填縮寫 | 立即 |
 | **開 issue** | 標題就是縮寫、貼 `add-conference` 標籤 | 立即，並在 issue 回報結果 |
+| **網站** | 登入後在「依會議」最上面輸入縮寫 | 立即，進度直接顯示在頁面上 |
 
-第三條是**唯一能從手機完成**的路徑。它只接受 repo owner 開的 issue，而且縮寫會先過白名單正則才進 shell——公開 repo 上任何人都能開 issue。
+後兩條都能從手機完成，而網站那條其實是替你開 issue，見下面的「在網站上增刪」。issue 只接受 repo owner 開的，而且縮寫會先過白名單正則才進 shell——公開 repo 上任何人都能開 issue。
 
 縮寫照社群的寫法填，例如 `S&P`：英文字母開頭、2 到 16 個字元，可以有數字和 `&` `+` `-`，不能有空格。檔名與 id 只能是 `[a-z0-9-]`，所以 `&` 會拿掉（`S&P` 存成 `sp.yml`），頁面上仍顯示 `S&P`。各來源用各自的寫法去查：ICORE 寫成 `SP`、ccf-deadlines 是 `sp.yml`、WikiCFP 則要用 `S&P` 才找得到近幾屆。
 
@@ -298,6 +299,42 @@ fixture 是 `bd32c2c`（2026-09-24）當時的 `data/conferences`，只留測試
 `--hide`（或在 issue 內文寫 `hide`）只設 `hidden: true`：檔案與資料完整保留，只是不顯示，把那一行拿掉就回來。**多數時候你要的是這個**——但預設仍是照標籤說的刪除，不擅自改成比較溫和的動作。
 
 刪除會一併清掉指向它的東西：`wishlist.txt` 那一行（否則今晚的 cron 會把它加回來）、待確認項目、確認紀錄。
+
+### 在網站上增刪
+
+登入之後，「依會議」最上面多一張「管理會議」卡：輸入縮寫送出，進度直接顯示在卡片裡（處理中、需要你決定、完成、沒有完成），選擇題直接按選項。每張會議卡也多了「隱藏」和「移除」，都要按兩次才會送出。別人登入網站看不到這些東西。
+
+網站自己做不了這件事：ICORE、researchr、WikiCFP 都不允許網頁直接讀取，結果也需要 commit。所以它沿用 issue 那條路，由 Supabase 上的一支 Edge Function 代你開 issue、讀 bot 的回覆：
+
+```mermaid
+sequenceDiagram
+    participant P as 網站
+    participant F as Edge Function
+    participant A as Supabase Auth
+    participant G as GitHub
+    participant W as add / remove workflow
+    P->>F: 新增 CCS（帶著登入 token）
+    F->>A: 這是誰？
+    A-->>F: GitHub 帳號 chihduo
+    F->>G: token 的主人是誰？
+    G-->>F: chihduo，一致才繼續
+    F->>G: 開 issue「CCS」並貼 add-conference 標籤
+    G->>W: labeled 事件
+    W->>G: 抓取、commit、在 issue 回覆
+    loop 每 6 秒，直到有結果
+        P->>F: 這筆進行到哪？
+        F->>G: 讀 issue 和回覆
+        F-->>P: 處理中、需要你決定、完成或沒有完成
+    end
+```
+
+安全性是兩道門，缺一不可。第一道是登入：身分由 Supabase Auth 確認。第二道是比對：登入的 GitHub 帳號必須是 token 的主人，這是向 GitHub 問來的，設定裡沒有寫死任何帳號。其他人就算登入了網站也只會拿到 403，連管理介面都不會出現。
+
+token 只存在 Supabase 的 Edge Function Secrets，瀏覽器和 repo 都看不到，而且只有這個 repo 的 Issues 讀寫權限：不能 push，也不能改 workflow。就算外洩，最壞也只是有人以你的名義開 issue、觸發新增或移除，兩者都在 git 裡，`git revert` 就回來了。
+
+規則仍然全在 workflow 那一端。函式只負責開 issue 和讀回覆；縮寫在函式和兩支 workflow 各檢查一次（`test/function.test.mjs` 會比對三者用的是同一個白名單），抓取、驗證、commit 都跟以前一樣，issue 也照樣留下完整紀錄。
+
+設定方式見 `supabase/SETUP.md` 的第 5 步，沒設定之前網站完全照舊。被隱藏的會議不會出現在網站上，所以也沒辦法從網站復原：要到 `data/conferences/` 把那個檔案的 `hidden: true` 拿掉。
 
 ## 自動化
 

@@ -23,6 +23,8 @@ function makeBackend(rows = []) {
     db, calls,
     expire: false,          // flip to make the next call return 401
     fetch: async (url, opts = {}) => {
+      // no Edge Function in this project: conference management stays off here
+      if (url.includes('/functions/v1/')) return { ok: false, status: 404, json: async () => ({}), text: async () => '' };
       calls.push({ url, method: opts.method || 'GET' });
       if (backend.expire) return { ok: false, status: 401, text: async () => 'JWT expired' };
       const res = (status, body) => ({ ok: status < 400, status, json: async () => body, text: async () => JSON.stringify(body) });

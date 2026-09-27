@@ -226,3 +226,20 @@ footer { margin-top: 38px; padding-top: 15px; border-top: 1px solid var(--line);
 .row.moot .dt b { color: var(--slate); font-weight: 500; }
 .row.moot .cd { color: var(--faint); }
 .row.moot .rank, .row.moot .area, .row.moot .conf-dot, .row.moot .est-mark { opacity: .45; }
+
+/* managing conferences - only ever drawn for the owner */
+.card.admin { border-left: 3px solid var(--petrol); }
+.admin-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+.admin-head .count, .admin-ctl .count, .req .count { margin: 0; }
+.admin-err { color: var(--rust); margin: 6px 0 0; }
+.req { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.req-head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; width: 100%; }
+.req-what { font-weight: 620; font-size: 13px; }
+.req-state { font: 600 12px var(--ui); color: var(--slate); }
+.req-waiting .req-state { color: var(--amber); }
+.req-needs-choice .req-state { color: var(--petrol); }
+.req-stuck .req-state { color: var(--rust); }
+.req-link { margin-left: auto; font: 500 12px var(--ui); color: var(--petrol); text-decoration: none; }
+.req-msg { width: 100%; font-size: 12.5px; color: var(--slate); white-space: pre-line; max-height: 12em; overflow: auto; }
+.req .chipset { width: 100%; }
+.admin-ctl { margin-left: auto; display: inline-flex; gap: 4px; align-items: center; }

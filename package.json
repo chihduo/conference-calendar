@@ -13,7 +13,7 @@
     "audit": "node scripts/audit.mjs",
     "test:ui": "node test/ui.test.mjs",
     "test:subs": "node test/submissions.test.mjs",
-    "test": "npm run test:ui --silent && npm run test:subs --silent && npm run test:sync --silent && npm run test:remove --silent && npm run test:researchr --silent && npm run test:add --silent && npm run test:live --silent",
+    "test": "npm run test:ui --silent && npm run test:subs --silent && npm run test:sync --silent && npm run test:remove --silent && npm run test:researchr --silent && npm run test:add --silent && npm run test:function --silent && npm run test:admin --silent && npm run test:live --silent",
     "resolve": "node scripts/resolve.mjs",
     "test:sync": "node test/sync.test.mjs",
     "ack": "node scripts/ack.mjs",
@@ -22,7 +22,9 @@
     "test:remove": "node test/remove.test.mjs",
     "test:live": "node test/live.test.mjs",
     "test:researchr": "node test/researchr.test.mjs",
-    "test:add": "node test/add.test.mjs"
+    "test:add": "node test/add.test.mjs",
+    "test:function": "node --no-warnings=ExperimentalWarning test/function.test.mjs",
+    "test:admin": "node test/admin.test.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",

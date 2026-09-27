@@ -216,7 +216,123 @@ function renderDeadlines(root, now) {
   }
 }
 
+/* ---------- managing conferences (owner only; the transport is admin.js) ---------- */
+const ACRONYM_RE = /^[A-Za-z][A-Za-z0-9&+-]{1,15}$/;      // the workflows' whitelist
+// idFromAcronym in scripts/lib.mjs: the name is the readable issue title, the
+// id the fallback should a hand-edited file ever break the mapping
+const idOfName = (s) => s.trim().toLowerCase().replace(/&/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const requestTitle = (c) => (idOfName(c.name) === c.id ? c.name : c.id);
+const REQ_KIND = { add: '新增', remove: '移除', hide: '隱藏' };
+const REQ_PHASE = { waiting: '處理中…（通常一兩分鐘）', 'needs-choice': '需要你決定', done: '完成', stuck: '沒有完成' };
+let adminDraft = '', adminError = null;
+const armed = new Map();                                // `${action}:${id}` -> disarm timer
+
+function renderAdmin(root) {
+  const box = el('div', 'card admin');
+  const head = el('div', 'admin-head');
+  head.appendChild(el('span', 'lbl', '管理會議'));
+  head.appendChild(el('span', 'count', `以 ${ADMIN.owner} 的身分送出，由 GitHub 上的 bot 抓取並 commit`));
+  box.appendChild(head);
+
+  const form = el('form', 'subform');
+  const input = el('input');
+  Object.assign(input, { type: 'text', id: 'admin-acronym', className: 'f-grow', maxLength: 16,
+                         placeholder: '縮寫，例如 CAV、S&P', value: adminDraft, autocomplete: 'off' });
+  input.oninput = () => { adminDraft = input.value; };
+  const go = el('button', 'chip on', '新增');
+  go.type = 'submit';
+  form.append(input, go);
+  form.onsubmit = (ev) => {
+    ev.preventDefault();
+    const v = input.value.trim();
+    adminError = !ACRONYM_RE.test(v) ? `「${v}」不像會議縮寫：英文字母開頭、2 到 16 個字元，可以有數字和 & + -`
+      : DATA.conferences.some((c) => c.id === idOfName(v)) ? `${v} 已經在清單裡了。`
+      : null;
+    if (adminError) { render(); return; }
+    adminDraft = '';
+    ADMIN.submit('add', v);
+    render();
+  };
+  box.appendChild(form);
+  const err = adminError || ADMIN.note;
+  if (err) box.appendChild(el('div', 'count admin-err', err));
+
+  // settled requests fade out after two days; open ones stay until dealt with
+  for (const r of ADMIN.requests.filter((r) => r.phase !== 'done' || Date.now() - Date.parse(r.created_at) < 2 * 86400e3))
+    box.appendChild(renderRequest(r));
+  root.appendChild(box);
+}
+
+function renderRequest(r) {
+  const row = el('div', 'req req-' + r.phase);
+  const top = el('div', 'req-head');
+  top.appendChild(el('span', 'req-what', `${REQ_KIND[r.kind] || r.kind} ${r.title}`));
+  top.appendChild(el('span', 'req-state', REQ_PHASE[r.phase] || r.phase));
+  const a = el('a', 'req-link', `#${r.issue}`);
+  Object.assign(a, { href: r.url, target: '_blank', rel: 'noopener', title: '在 GitHub 看完整對話' });
+  top.appendChild(a);
+  row.appendChild(top);
+
+  if (r.phase === 'needs-choice' && r.choices?.length) {
+    const q = r.choices[0];
+    if (r.message) row.appendChild(el('div', 'req-msg', r.message.split('\n')[0]));
+    row.appendChild(el('div', 'req-msg', q.question));
+    const opts = el('div', 'chipset');
+    q.options.forEach((o, i) => {
+      const b = el('button', 'chip', `${i + 1}. ${o.label}`);
+      b.onclick = () => ADMIN.reply(r.issue, String(i + 1));
+      opts.appendChild(b);
+    });
+    row.appendChild(opts);
+  } else if (r.message) {
+    // a success needs one line; a failure needs its reason, however long
+    row.appendChild(el('div', 'req-msg', r.phase === 'done' ? r.message.split('\n\n')[0] : r.message));
+  }
+  if (r.phase === 'done' && Date.now() - Date.parse(r.created_at) < 15 * 60e3) {
+    row.appendChild(el('span', 'count', '網站約一兩分鐘後更新。'));
+    const again = el('button', 'chip', '重新整理');
+    again.onclick = () => location.reload();
+    row.appendChild(again);
+  }
+  if (r.phase === 'stuck') {
+    const x = el('button', 'chip', '關掉這筆');
+    x.title = '結束這個請求（GitHub 上的 issue 會關閉）';
+    x.onclick = () => ADMIN.dismiss(r.issue);
+    row.appendChild(x);
+  }
+  return row;
+}
+
+/* Two steps, like deleting a submission: a modal confirm() is ignored in the
+   sandboxed iframe the artifact runs in, and one tap is too easy to make. */
+function adminControls(c) {
+  const box = el('span', 'admin-ctl');
+  const title = requestTitle(c);
+  const busy = ADMIN.requests.find((r) => r.title === title && r.kind !== 'add' && r.phase === 'waiting');
+  if (busy) { box.appendChild(el('span', 'count', `${REQ_KIND[busy.kind]}處理中…`)); return box; }
+  for (const [action, label, why] of [['hide', '隱藏', '從網站拿掉，檔案與資料保留，可以復原'],
+                                      ['remove', '移除', '刪掉這個會議的檔案；git 歷史裡還找得回來']]) {
+    const key = `${action}:${c.id}`;
+    const b = el('button', armed.has(key) ? 'chip danger' : 'chip', armed.has(key) ? `再按一次：${label}` : label);
+    b.title = why;
+    b.onclick = () => {
+      if (!armed.has(key)) {
+        armed.set(key, setTimeout(() => { armed.delete(key); render(); }, 4000));
+        render();
+        return;
+      }
+      clearTimeout(armed.get(key));
+      armed.delete(key);
+      ADMIN.submit(action, title);
+      render();
+    };
+    box.appendChild(b);
+  }
+  return box;
+}
+
 function renderConferences(root, now) {
+  if (ADMIN.state === 'owner') renderAdmin(root);
   const list = DATA.conferences.filter(passesFilter);
   root.appendChild(Object.assign(el('div', 'count'), { textContent: `${list.length} 個會議` }));
   if (!list.length) { root.appendChild(el('div', 'empty', '沒有符合條件的會議。')); return; }
@@ -226,6 +342,7 @@ function renderConferences(root, now) {
     const h = el('h3');
     h.appendChild(el('span', null, c.name));
     h.appendChild(badges(c));
+    if (ADMIN.state === 'owner') h.appendChild(adminControls(c));
     card.appendChild(h);
     if (c.full_name) card.appendChild(el('div', 'fname', c.full_name));
     if (c.note) card.appendChild(el('div', 'note', c.note));
@@ -435,9 +552,11 @@ async function pushChanges(prev, next) {
   return syncPending;
 }
 
+let adminPending = Promise.resolve();
 async function initSync() {
   syncPending = (async () => {
   SYNC.init();
+  if (SYNC.status() === 'live') adminPending = ADMIN.probe();
   if (SYNC.status() === 'off') { subsMem = localLoad(); return; }
   subsMem = SYNC.readCache();          // instant, possibly stale, never written back
   render();
@@ -837,6 +956,7 @@ const VIEWS = [['deadlines', '截稿時間軸'], ['conferences', '依會議'], [
 
 function render(opts = {}) {
   const now = new Date();
+  const typing = document.activeElement?.id === 'admin-acronym';
   $('#tabs').replaceChildren(...VIEWS.map(([id, label]) => {
     const b = el('button', 'tab' + (state.view === id ? ' on' : ''), label);
     b.onclick = () => { state.view = id; render(); };
@@ -852,6 +972,9 @@ function render(opts = {}) {
 
   if (opts.keepFocus === 'search') {
     const s = $('input[type=search]'); if (s) { s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
+  }
+  if (typing) {
+    const a = $('#admin-acronym'); if (a) { a.focus(); a.setSelectionRange(a.value.length, a.value.length); }
   }
 }
 
@@ -939,6 +1062,7 @@ $('#gen').textContent = DATA.generated_at.slice(0, 10);
 $('#count').textContent = String(DATA.conferences.length);
 initTheme();
 initClock();
+ADMIN.onChange(() => { if (state.view === 'conferences') render(); });
 initSync();
 render();
 setInterval(() => { if (state.view === 'deadlines') render(); }, 60000);
