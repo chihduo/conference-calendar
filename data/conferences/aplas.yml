@@ -38,10 +38,11 @@ editions:
     timezone: AoE
     milestones:
       - kind: submission
-        date: 2025-05-31
+        date: 2025-06-07
         time: '23:59:59'
         confidence: announced
         source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/aplas.yml
+        needs_review: true
     link: https://conf.researchr.org/home/aplas-2025
     place: Bengaluru, India
     dates: October 27-30, 2025
