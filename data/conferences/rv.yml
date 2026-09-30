@@ -42,10 +42,11 @@ editions:
     timezone: AoE
     milestones:
       - kind: submission
-        date: 2025-05-30
-        time: '23:59:59'
+        date: 2025-06-06
+        time: '23:59:00'
         confidence: announced
         source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/rv.yml
+        needs_review: true
       - {kind: notification, date: 2025-07-11, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=185605}
       - {kind: camera_ready, date: 2025-07-27, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=185605}
     link: https://rv25.isec.tugraz.at/

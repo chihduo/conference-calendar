@@ -48,7 +48,12 @@ editions:
     id: icst-2025
     timezone: AoE
     milestones:
-      - {kind: abstract, date: 2024-09-24, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182844}
+      - kind: abstract
+        date: 2024-09-25
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/icst.yml
+        time: '23:59:59'
+        needs_review: true
       - {kind: submission, date: 2024-10-02, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182844}
       - {kind: notification, date: 2024-12-18, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182844}
       - {kind: camera_ready, date: 2025-01-22, confidence: announced, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=182844}
@@ -56,3 +61,5 @@ editions:
     start_date: 2025-03-31
     end_date: 2025-04-04
     status: past
+    link: https://conf.researchr.org/home/icst-2025
+    dates: April 2-4, 2025
