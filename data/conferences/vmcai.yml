@@ -69,3 +69,16 @@ editions:
     dates: January 12-13, 2026
     start_date: 2026-01-12
     end_date: 2026-01-13
+  - year: 2025
+    id: vmcai-2025
+    timezone: AoE
+    status: announced
+    milestones:
+      - kind: submission
+        date: 2024-10-01
+        time: '23:59:00'
+        confidence: announced
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/SE/vmcai.yml
+    link: https://conf.researchr.org/home/VMCAI-2025
+    place: Denver, Colorado, USA
+    dates: January 20-21, 2025
