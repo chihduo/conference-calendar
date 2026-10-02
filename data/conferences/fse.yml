@@ -14,6 +14,24 @@ sources:
   - {tier: 2, adapter: researchr, ref: fse-2027}
   - {tier: 1, adapter: ccfddl, ref: conference/SE/fse.yml}
 editions:
+  - year: 2028
+    id: fse-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: Jul 10-14, 2028 (estimated)
+    start_date: 2028-07-10
+    end_date: 2028-07-14
+    milestones:
+      - {kind: submission, date: 2027-10-01, confidence: estimated, derived_from: fse-2027/submission}
+      - {kind: rebuttal_start, date: 2027-12-13, confidence: estimated, derived_from: fse-2027/rebuttal_start}
+      - {kind: rebuttal_end, date: 2027-12-17, confidence: estimated, derived_from: fse-2027/rebuttal_end}
+      - {kind: notification, date: 2028-01-21, confidence: estimated, derived_from: fse-2027/notification}
+      - {kind: revision, date: 2028-03-03, confidence: estimated, derived_from: fse-2027/revision}
+      - {kind: final_notification, date: 2028-03-29, confidence: estimated, derived_from: fse-2027/final_notification}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: fse-2027
     link: https://conf.researchr.org/home/fse-2027
