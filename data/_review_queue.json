@@ -6,7 +6,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "submission (2026-09-15) precedes abstract (2027-02-03)",
-    "seen_at": "2026-10-05T10:30:07.518Z"
+    "seen_at": "2026-10-06T10:21:33.368Z"
   },
   {
     "conference": "icaps",
@@ -15,7 +15,7 @@
     "reason": "guard",
     "severity": "acknowledged",
     "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
-    "seen_at": "2026-10-05T10:30:07.518Z"
+    "seen_at": "2026-10-06T10:21:33.368Z"
   },
   {
     "conference": "icaps",
@@ -24,7 +24,7 @@
     "reason": "guard",
     "severity": "acknowledged",
     "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
-    "seen_at": "2026-10-05T10:30:07.518Z"
+    "seen_at": "2026-10-06T10:21:33.368Z"
   },
   {
     "conference": "icfp",
@@ -33,7 +33,7 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"ICFP 2022\" is \"https://icfp22.sigplan.org/\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-10-05T10:30:07.518Z"
+    "seen_at": "2026-10-06T10:21:33.368Z"
   },
   {
     "conference": "iclr",
@@ -42,7 +42,7 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"ICLR 2025\" is \"Call for Workshops\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-10-05T10:30:07.518Z"
+    "seen_at": "2026-10-06T10:21:33.368Z"
   },
   {
     "conference": "sas",
@@ -51,7 +51,7 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"SAS 2026\" is \"Animate Experience - The 37th Annual Conference of the Society for Animation Studies\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-10-05T10:30:07.518Z"
+    "seen_at": "2026-10-06T10:21:33.368Z"
   },
   {
     "conference": "vmcai",
@@ -60,6 +60,6 @@
     "reason": "multiple-candidates",
     "severity": "action",
     "detail": "researchr offers 3 dates for \"artifact_submission\" (2026-10-07 \"Artifact Smoke Test Notification\"; 2026-10-10 \"Artifact Smoke Test Response\"; 2026-09-30 \"Artifact Submission\") - not written",
-    "seen_at": "2026-10-05T10:30:07.518Z"
+    "seen_at": "2026-10-06T10:21:33.368Z"
   }
 ]
