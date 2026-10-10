@@ -15,8 +15,18 @@ editions:
     start_date: 2027-08-14
     end_date: 2027-08-20
     milestones:
-      - {kind: abstract, date: 2027-01-11, confidence: estimated, derived_from: ijcai-2026/abstract}
-      - {kind: submission, date: 2027-01-18, confidence: estimated, derived_from: ijcai-2026/submission}
+      - kind: abstract
+        date: 2027-01-04
+        confidence: announced
+        time: '23:59:00'
+        needs_review: true
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
+      - kind: submission
+        date: 2027-01-11
+        confidence: announced
+        time: '23:59:00'
+        needs_review: true
+        source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
       - {kind: notification, date: 2027-04-28, confidence: estimated, derived_from: ijcai-2026/notification}
       - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
