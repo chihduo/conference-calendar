@@ -4,6 +4,20 @@ areas: [LOGIC]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: stacs-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: Mar 6-10, 2028 (estimated)
+    start_date: 2028-03-06
+    end_date: 2028-03-10
+    milestones:
+      - {kind: submission, date: 2027-10-10, confidence: estimated, derived_from: stacs-2027/submission}
+      - {kind: notification, date: 2027-12-21, confidence: estimated, derived_from: stacs-2027/notification}
+      - {kind: camera_ready, confidence: unknown}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: stacs-2027
     timezone: AoE
