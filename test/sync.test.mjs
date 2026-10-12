@@ -5,6 +5,7 @@
    cache, the refusal to write while offline, and compare-and-set on a stale tab.
      npm run test:sync
 */
+import './clock-ahead.mjs';
 import { JSDOM } from 'jsdom';
 import { fixturePage, pinClock } from './page.mjs';
 

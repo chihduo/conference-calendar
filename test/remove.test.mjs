@@ -6,6 +6,7 @@
    Uses a throwaway fixture and restores every file it touches.
      npm run test:remove
 */
+import './clock-ahead.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';

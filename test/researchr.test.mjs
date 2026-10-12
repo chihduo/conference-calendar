@@ -9,6 +9,7 @@
    The rest pin the neighbours those fixes could have broken.
      npm run test:researchr
 */
+import './clock-ahead.mjs';
 import { labelToKind, parseWhen } from '../scripts/adapters/researchr.mjs';
 
 let pass = 0, total = 0;

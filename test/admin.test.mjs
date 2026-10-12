@@ -6,8 +6,9 @@
    owner, and that nothing is sent without a second tap.
      npm run test:admin
 */
+import './clock-ahead.mjs';
 import { JSDOM } from 'jsdom';
-import { fixturePage, pinClock } from './page.mjs';
+import { fixturePage, pinClock, FIXTURE_NOW } from './page.mjs';
 
 const HTML = fixturePage();
 const CFG = { url: 'https://stub.supabase.co', anonKey: 'anon-key' };
@@ -39,7 +40,7 @@ function makeFunction({ status = 200, requests = [], onPost } = {}) {
       if (onPost) { const r = onPost(body); if (r) return r; }
       if (['add', 'remove', 'hide'].includes(body.action)) {
         const r = { issue: ++next, url: `https://github.com/i/${next}`, title: body.acronym, kind: body.action,
-                    phase: 'waiting', created_at: new Date().toISOString(), message: '', choices: null };
+                    phase: 'waiting', created_at: FIXTURE_NOW, message: '', choices: null };
         issues.set(r.issue, r);
         return res(201, r);
       }
@@ -153,8 +154,8 @@ console.log('\n=== 新增 ===');
   check('已經在清單裡的也不送', /已經在清單裡/.test($(w, '.admin-err')?.textContent) && posts(fn).length === 0, $(w, '.admin-err')?.textContent);
 
   fn.script.set(201, [
-    { issue: 201, url: 'u', title: 'S&P', kind: 'add', phase: 'waiting', created_at: new Date().toISOString(), message: '' },
-    { issue: 201, url: 'u', title: 'S&P', kind: 'add', phase: 'done', created_at: new Date().toISOString(),
+    { issue: 201, url: 'u', title: 'S&P', kind: 'add', phase: 'waiting', created_at: FIXTURE_NOW, message: '' },
+    { issue: 201, url: 'u', title: 'S&P', kind: 'add', phase: 'done', created_at: FIXTURE_NOW,
       message: '已新增 S&P → data/conferences/sp.yml\n\n完整輸出略' },
   ]);
   submit('S&P');
@@ -176,8 +177,8 @@ console.log('\n=== 新增 ===');
   input.focus();
   input.value = 'EuroS';
   input.dispatchEvent(new w.Event('input'));
-  fn.script.set(201, [{ issue: 201, url: 'u', title: 'X', kind: 'add', phase: 'done', created_at: new Date().toISOString(), message: 'ok' }]);
-  fn.issues.set(201, { issue: 201, url: 'u', title: 'X', kind: 'add', phase: 'waiting', created_at: new Date().toISOString(), message: '' });
+  fn.script.set(201, [{ issue: 201, url: 'u', title: 'X', kind: 'add', phase: 'done', created_at: FIXTURE_NOW, message: 'ok' }]);
+  fn.issues.set(201, { issue: 201, url: 'u', title: 'X', kind: 'add', phase: 'waiting', created_at: FIXTURE_NOW, message: '' });
   await T.ADMIN.probe();                             // picks up #201 and starts watching it
   await until(() => /完成/.test(rowOf(w, '新增 X')?.textContent || ''));
   const again = $(w, '#admin-acronym');
@@ -198,7 +199,7 @@ console.log('\n=== 新增 ===');
 
 console.log('\n=== 選擇題與卡住的請求 ===');
 {
-  const now = new Date().toISOString();
+  const now = FIXTURE_NOW;
   const fn = makeFunction({ requests: [
     { issue: 150, url: 'u', title: 'FSE', kind: 'add', phase: 'needs-choice', created_at: now,
       message: '已建立 data/conferences/fse.yml，但有一處需要你決定。\n\nICORE 裡有 2 筆…',

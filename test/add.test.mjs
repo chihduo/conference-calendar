@@ -8,6 +8,7 @@
        blurred - OOPSLA 2027 showed its October deadline twice.
      npm run test:add
 */
+import './clock-ahead.mjs';
 import { idFromAcronym, supersededByRounds } from '../scripts/lib.mjs';
 import { milestonesOf } from '../scripts/adapters/ccfddl.mjs';
 

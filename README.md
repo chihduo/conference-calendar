@@ -231,6 +231,8 @@ sequenceDiagram
 
 fixture 是 `bd32c2c`（2026-09-24）當時的 `data/conferences`，只留測試點名的六個會議，自己也要過 `CC_DATA_DIR=test/fixtures/data npm run validate`。要換新的 fixture，檔案和 `FIXTURE_NOW` 要一起換，並確認每個斷言的前提仍然成立。
 
+這兩件事單靠自律守不住：時鐘被釘住之後，又有一個新測試在不知不覺中讀了真實日期。Edge Function 的測試用固定日期開 issue，函式卻拿真實的今天去篩「最近 14 天」，寫好時通過，兩週後部署就失敗了。所以每套 fixture 測試現在第一行都會 import `test/clock-ahead.mjs`，整套在「400 天後」執行；依賴今天日期的測試會在寫好的當天就失敗，而不是幾週後變成一封部署失敗的通知信。只有讀真實資料的 `test/live.test.mjs` 刻意不這麼做。
+
 真實資料另外由 `test/live.test.mjs` 把關，而且只檢查任何正確的資料都該滿足的事：每個分頁都畫得出來、過程中沒有錯誤，就算每一屆、每種狀態都各追蹤一篇也一樣；每張投稿卡不是列出待辦日期，就是說明為什麼沒有。這些條件不會因為某個日期公布或過去而失效，所以它只會在資料真的讓頁面壞掉時擋下部署。
 
 九套可以分開跑：`npm run test:ui`（介面與時鐘）、`npm run test:subs`（我的投稿）、`npm run test:sync`（同步層，對 stub 過的後端）、`npm run test:remove`（移除會議與善後）、`npm run test:researchr`（researchr 的標籤與日期解析，字串都抄自真實頁面）、`npm run test:add`（新增會議：縮寫轉 id、ccf-deadlines 的分輪、分輪取代單一日期）、`npm run test:function`（網站增刪用的 Edge Function，對 stub 過的 Supabase Auth 與 GitHub）、`npm run test:admin`（網站上的增刪介面）、`npm run test:live`（真實資料，要先 `npm run build`）。`npm test` 一次跑完，`deploy.yml` 也是。

@@ -6,6 +6,7 @@
    bot replies reads back as a request's state.
      npm run test:function
 */
+import './clock-ahead.mjs';
 import fs from 'node:fs';
 import { makeHandler, summarize } from '../supabase/functions/conference-requests/index.ts';
 
@@ -63,7 +64,8 @@ function world({ caller = OWNER.id, tokenOk = true } = {}) {
     comments.set(n, list); issues.get(n).comments = list.length;
   };
   const env = (k) => ({ SUPABASE_URL: 'https://proj.supabase.co', CC_GITHUB_TOKEN: 'pat' })[k];
-  const handler = makeHandler({ env, fetch });
+  // the world's own clock, which its issues are stamped with; never the real one
+  const handler = makeHandler({ env, fetch, now: () => clock });
   const call = async (method, { path = '', auth = 'Bearer good-jwt', origin = 'https://chihduo.github.io', body } = {}) => {
     const r = await handler(new Request(`https://proj.supabase.co/functions/v1/conference-requests${path}`, {
       method, body: body ? JSON.stringify(body) : undefined,

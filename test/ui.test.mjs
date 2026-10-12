@@ -7,6 +7,7 @@
    artifact runs in one, and that is how the delete button came to look broken.
      npm run test:ui
 */
+import './clock-ahead.mjs';
 import { JSDOM } from 'jsdom';
 import { fixturePage, pinClock } from './page.mjs';
 

@@ -4,6 +4,7 @@
    message: POPL 2027's dates are confirmed and past, not unpublished.
      npm run test:subs
 */
+import './clock-ahead.mjs';
 import { JSDOM } from 'jsdom';
 import { fixturePage, pinClock } from './page.mjs';
 

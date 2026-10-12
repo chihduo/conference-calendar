@@ -17,8 +17,10 @@
    read/write on this one repository and nothing else.
 
    One file with no imports, so it pastes into the dashboard editor as is.
-   makeHandler takes env and fetch so test/function.test.mjs can drive the
-   real handler under Node. */
+   makeHandler takes env, fetch and the clock so test/function.test.mjs can
+   drive the real handler under Node. The clock matters: with the real one,
+   the suite's fixed-date issues fell out of the 14-day window two weeks after
+   it was written, and the deploy failed. */
 
 const LABELS = { add: 'add-conference', remove: 'remove-conference' };
 const ACRONYM = /^[A-Za-z][A-Za-z0-9&+-]{1,15}$/;        // the workflows' own whitelist
@@ -71,7 +73,9 @@ export function summarize(issue: any, comments: any[]) {
   };
 }
 
-export function makeHandler({ env, fetch }: { env: (key: string) => string | undefined; fetch: typeof globalThis.fetch }) {
+export function makeHandler({ env, fetch, now = () => Date.now() }: {
+  env: (key: string) => string | undefined; fetch: typeof globalThis.fetch; now?: () => number;
+}) {
   const repo = () => env('CC_REPO') || 'chihduo/conference-calendar';
   const origins = () => new Set((env('CC_ALLOWED_ORIGINS') || 'https://chihduo.github.io').split(',').map((s) => s.trim()));
   let tokenOwner: { id: number; login: string } | null = null;
@@ -132,7 +136,7 @@ export function makeHandler({ env, fetch }: { env: (key: string) => string | und
   async function recent() {
     const lists = await Promise.all(Object.values(LABELS).map((l) =>
       gh(`/repos/${repo()}/issues?labels=${l}&state=all&sort=created&direction=desc&per_page=6`)));
-    const since = Date.now() - RECENT_DAYS * 86400e3;
+    const since = now() - RECENT_DAYS * 86400e3;
     const issues = lists.flat()
       .filter((i: any) => !i.pull_request && Date.parse(i.created_at) > since)
       .sort((a: any, b: any) => b.number - a.number).slice(0, 6);
