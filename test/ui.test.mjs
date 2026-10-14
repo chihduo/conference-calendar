@@ -179,6 +179,42 @@ console.log('\n=== AoE 時鐘 ===');
   dom.window.close();
 }
 
+console.log('\n=== 倒數字串放得進時間軸的欄位 ===');
+{
+  /* jsdom has no layout, but this column needs none: the countdown is set in
+     the monospace face, where Chrome measures a CJK character at exactly 1em
+     and anything else at 0.6em ("剩 19 小時" 62.1px, "今天 · 剩 19 小時"
+     105.8px at 11.5px, measured 2026-10-15). The second one is the string
+     that ran over the conference name in the 78px column. Column and font
+     size are read from the page's own CSS, so changing either is checked. */
+  const html = fixturePage();
+  const dom = new JSDOM('<!doctype html><html><head></head><body></body></html>',
+    { runScripts: 'dangerously', url: 'https://example.org/' });
+  const w = dom.window;
+  w.confirm = () => false;
+  w.document.body.innerHTML = html.replace(/<script>[\s\S]*<\/script>/, '');
+  pinClock(w);
+  w.eval(html.match(/<script>([\s\S]*)<\/script>/)[1] + '\nglobalThis.__cd = countdown;');
+  const css = html.match(/<style>([\s\S]*?)<\/style>/)[1];
+  const column = Number(/\.row \{[^}]*grid-template-columns: \S+ (\d+)px/.exec(css)[1]);
+  const em = Number(/\.cd \{[^}]*font-size: ([\d.]+)px/.exec(css)[1]);
+  const width = (s) => [...s].reduce((n, ch) => n + (/[　-鿿＀-￯]/.test(ch) ? 1 : 0.6) * em, 0);
+
+  // everything countdown() can say: minutes and hours left today, earlier today, tomorrow, days ahead and ago
+  const now = new w.Date(2026, 9, 14, 0, 30);          // 00:30 local, so 23 hours on is still today
+  const say = (ms) => w.__cd(new w.Date(now.getTime() + ms), now).txt;
+  const H = 3600e3, D = 86400e3;
+  const outs = new Set([say(-60e3)]);
+  for (let m = 1; m < 60; m++) outs.add(say(m * 60e3));
+  for (let h = 1; h < 24; h++) outs.add(say(h * H));
+  for (const d of [1, 2, 9, 10, 14, 15, 99, 100, 999]) { outs.add(say(d * D)); outs.add(say(-d * D)); }
+  const widest = [...outs].sort((a, b) => width(b) - width(a))[0];
+  check('每一種倒數字串都放得進時間軸的倒數欄', width(widest) <= column,
+        `最寬「${widest}」${width(widest).toFixed(1)}px，欄寬 ${column}px，共 ${outs.size} 種`);
+  check('最後一天只顯示剩幾小時', say(19 * H + 60e3) === '剩 19 小時', say(19 * H + 60e3));
+  dom.window.close();
+}
+
 console.log('\n=== 主題預設 ===');
 {
   const html = fixturePage();

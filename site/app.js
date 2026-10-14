@@ -83,11 +83,13 @@ function countdown(t, now) {
   if (days === 0) {
     /* On the final day a bare "today" is not actionable - two hours and twenty
        hours are different situations - so this is the one place an hour count
-       earns its keep. */
+       earns its keep. Hours alone: they only ever appear on the day itself, and
+       "今天 · 剩 19 小時" measured 106px in the timeline's 78px column and ran
+       over the conference name. */
     if (ms <= 0) return { txt: '今天稍早', cls: '', days };
     const hrs = Math.floor(ms / 3600000);
     if (hrs < 1) return { txt: `剩 ${Math.max(1, Math.floor(ms / 60000))} 分`, cls: 'cd urgent', days };
-    return { txt: `今天 · 剩 ${hrs} 小時`, cls: 'cd urgent', days };
+    return { txt: `剩 ${hrs} 小時`, cls: 'cd urgent', days };
   }
   if (days === 1) return { txt: '明天', cls: 'cd urgent', days };
   if (days <= 14) return { txt: `${days} 天`, cls: 'cd near', days };
