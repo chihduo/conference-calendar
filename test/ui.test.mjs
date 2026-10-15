@@ -107,11 +107,16 @@ console.log('\n=== 與我無關的列要灰掉 ===');
         icse.length > 0 && !icse.some((r) => r.cls.includes('moot')), `${icse.length} 列`);
   d.window.close();
 
-  // a venue still taking submissions in a later round must not be greyed
+  /* Rounds are judged one at a time. This once read "a later round still open
+     keeps the whole edition bright", and S&P 2027's round-1 camera-ready
+     stayed bright in October though round 1 had closed in June. */
   d = mk([]);
   const csf = rows(d.window).filter((r) => /CSF 2027/.test(r.txt));
-  check('滾動截稿：還有下一輪可投時整屆都不灰',
-        csf.length > 0 && !csf.some((r) => r.cls.includes('moot')), `${csf.length} 列`);
+  const csfRow = (n, kind) => csf.find((r) => r.txt.includes(kind) && r.txt.includes(`第 ${n} 輪`));
+  check('滾動截稿：已截止那一輪的後續日期變灰', !!csfRow(1, 'Notification')?.cls.includes('moot'),
+        csfRow(1, 'Notification')?.txt);
+  check('還能投的那幾輪照常', [2, 3].every((n) => ['Submission', 'Notification'].every((k) =>
+        csfRow(n, k) && !csfRow(n, k).cls.includes('moot'))), csf.map((r) => r.txt.replace('CSF 2027 ', '')).join(' / '));
   d.window.close();
 }
 

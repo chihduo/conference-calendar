@@ -169,11 +169,15 @@ function renderDeadlines(root, now) {
        it. Once the call has closed and you are not tracking a paper here, the
        row is someone else's schedule - greyed rather than hidden, because
        knowing when a venue announces is still worth a glance. Rows for a venue
-       still accepting submissions stay bright: you could yet be in it. */
-    const moot = !isPast && !mine.length && !callOpen(e, now) && !CALL_KINDS.has(baseKind(m.kind));
+       still accepting submissions stay bright: you could yet be in it.
+       A round is judged on its own call. S&P 2027's round-1 camera-ready stayed
+       bright because round 2 was still open, though nobody can enter round 1
+       any more. A milestone tied to no round asks about the whole edition. */
+    const round = cycleOf(m.kind);
+    const moot = !isPast && !mine.length && !callOpen(e, now, round) && !CALL_KINDS.has(baseKind(m.kind));
 
     const row = el('div', 'row' + sev + (mine.length ? ' mine' : '') + (moot ? ' moot' : ''));
-    if (moot) row.title = '投稿已截止，而你沒有追蹤這個會議的論文';
+    if (moot) row.title = `${round ? `第 ${round} 輪的` : ''}投稿已截止，而你沒有追蹤這個會議的論文`;
 
     const dt = el('div', 'dt');
     dt.innerHTML = fmtDate(m);
@@ -599,6 +603,7 @@ function editionsIndex() {
 /* Rolling-deadline venues express rounds as `<kind>_cycleN`; the relevance map
    is written in base kinds so it does not need a row per cycle. */
 const baseKind = (k) => /^(.+)_cycle\d+$/.exec(k)?.[1] ?? k;
+const cycleOf = (k) => Number(/_cycle(\d+)$/.exec(k)?.[1] || 0);
 
 /** Milestones that matter for this submission right now, soonest first.
     Only the nearest future one of each kind: with three cycles running, every
@@ -635,9 +640,10 @@ function pendingReason(sub, now) {
   return { kind: 'none' };
 }
 
-/** Is this edition still accepting submissions? */
-const callOpen = (ed, now) =>
-  ed.milestones.some((m) => m.iso && CALL_KINDS.has(baseKind(m.kind)) && new Date(m.iso) > now);
+/** Is this edition still accepting submissions? Given a round, is that round? */
+const callOpen = (ed, now, round = 0) =>
+  ed.milestones.some((m) => m.iso && CALL_KINDS.has(baseKind(m.kind)) &&
+    (!round || cycleOf(m.kind) === round) && new Date(m.iso) > now);
 
 /** The nearest edition of the same conference whose call is still open. */
 function nextOpenEdition(confId, now) {
