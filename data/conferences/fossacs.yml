@@ -4,6 +4,23 @@ areas: [LOGIC, FM]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: fossacs-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: Apr 10-13, 2028 (estimated)
+    start_date: 2028-04-10
+    end_date: 2028-04-13
+    milestones:
+      - {kind: submission, date: 2027-10-14, confidence: estimated, derived_from: fossacs-2027/submission}
+      - {kind: rebuttal_start, date: 2027-12-06, confidence: estimated, derived_from: fossacs-2027/rebuttal_start}
+      - {kind: rebuttal_end, date: 2027-12-08, confidence: estimated, derived_from: fossacs-2027/rebuttal_end}
+      - {kind: notification, date: 2027-12-21, confidence: estimated, derived_from: fossacs-2027/notification}
+      - {kind: voluntary_artifact_submission, date: 2028-01-10, confidence: estimated, derived_from: fossacs-2027/voluntary_artifact_submission}
+      - {kind: camera_ready, date: 2028-01-24, confidence: estimated, derived_from: fossacs-2027/camera_ready}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: fossacs-2027
     link: https://etaps.org/2027/

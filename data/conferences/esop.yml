@@ -4,6 +4,27 @@ areas: [PL, FM]
 sources:
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: esop-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: Apr 10-13, 2028 (estimated)
+    start_date: 2028-04-10
+    end_date: 2028-04-13
+    milestones:
+      - {kind: submission_cycle1, date: 2027-05-27, confidence: estimated, derived_from: esop-2027/submission_cycle1}
+      - {kind: rebuttal_start_cycle1, date: 2027-07-19, confidence: estimated, derived_from: esop-2027/rebuttal_start_cycle1}
+      - {kind: rebuttal_end_cycle1, date: 2027-07-21, confidence: estimated, derived_from: esop-2027/rebuttal_end_cycle1}
+      - {kind: notification_cycle1, date: 2027-08-05, confidence: estimated, derived_from: esop-2027/notification_cycle1}
+      - {kind: submission_cycle2, date: 2027-10-14, confidence: estimated, derived_from: esop-2027/submission_cycle2}
+      - {kind: rebuttal_start_cycle2, date: 2027-12-06, confidence: estimated, derived_from: esop-2027/rebuttal_start_cycle2}
+      - {kind: rebuttal_end_cycle2, date: 2027-12-08, confidence: estimated, derived_from: esop-2027/rebuttal_end_cycle2}
+      - {kind: notification_cycle2, date: 2027-12-21, confidence: estimated, derived_from: esop-2027/notification_cycle2}
+      - {kind: voluntary_artifact_submission, date: 2028-01-10, confidence: estimated, derived_from: esop-2027/voluntary_artifact_submission}
+      - {kind: camera_ready, date: 2028-01-24, confidence: estimated, derived_from: esop-2027/camera_ready}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: esop-2027
     link: https://etaps.org/2027/
