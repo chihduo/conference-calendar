@@ -6,7 +6,7 @@
     "reason": "multiple-candidates",
     "severity": "action",
     "detail": "researchr offers 2 dates for \"submission\" (2026-10-15 \"Spotlights Submission\"; 2026-05-21 \"Full papers due\") - not written",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "icalp",
@@ -15,7 +15,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "submission (2026-09-15) precedes abstract (2027-02-03)",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "icaps",
@@ -24,7 +24,7 @@
     "reason": "guard",
     "severity": "acknowledged",
     "detail": "abstract: 2024-10-25 is after the conference start 2024-09-09",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "icaps",
@@ -33,7 +33,7 @@
     "reason": "guard",
     "severity": "acknowledged",
     "detail": "submission: 2024-11-01 is after the conference start 2024-09-09",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "icfp",
@@ -42,7 +42,7 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"ICFP 2022\" is \"https://icfp22.sigplan.org/\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "iclr",
@@ -51,7 +51,7 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"ICLR 2025\" is \"Call for Workshops\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "icse",
@@ -60,7 +60,7 @@
     "reason": "wrong-venue",
     "severity": "action",
     "detail": "WikiCFP \"ICSE 2026\" is \"2026 3rd International Conference on Intelligent Communication, Sensing and Electromagnetics\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "kr",
@@ -69,7 +69,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "notification (2027-04-12) precedes submission (2027-04-28)",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "lics",
@@ -77,8 +77,8 @@
     "kind": "abstract",
     "reason": "estimate-unconfirmed",
     "severity": "action",
-    "detail": "estimated 2027-01-14 is 86 day(s) away and still unconfirmed - check the official CFP",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "detail": "estimated 2027-01-14 is 85 day(s) away and still unconfirmed - check the official CFP",
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "sas",
@@ -87,7 +87,7 @@
     "reason": "wrong-venue",
     "severity": "acknowledged",
     "detail": "WikiCFP \"SAS 2026\" is \"Animate Experience - The 37th Annual Conference of the Society for Animation Studies\" (similarity 0) - discarded, not the same conference",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   },
   {
     "conference": "vmcai",
@@ -96,6 +96,6 @@
     "reason": "multiple-candidates",
     "severity": "action",
     "detail": "researchr offers 3 dates for \"artifact_submission\" (2026-10-10 \"Artifact Smoke Test Response\"; 2026-10-07 \"Artifact Smoke Test Notification\"; 2026-09-30 \"Artifact Submission\") - not written",
-    "seen_at": "2026-10-20T08:35:01.595Z"
+    "seen_at": "2026-10-21T08:36:50.074Z"
   }
 ]
