@@ -27,8 +27,12 @@ editions:
         time: '23:59:00'
         needs_review: true
         source_url: https://raw.githubusercontent.com/ccfddl/ccf-deadlines/main/conference/AI/ijcai.yml
-      - {kind: notification, date: 2027-04-28, confidence: estimated, derived_from: ijcai-2026/notification}
-      - {kind: camera_ready, confidence: unknown}
+      - kind: notification
+        date: 2027-04-21
+        confidence: announced
+        needs_review: true
+        source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=203943
+      - {kind: camera_ready, confidence: announced, date: 2027-05-07, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=203943}
       - {kind: registration, confidence: unknown}
     link: https://www.ijcai.org/node/8
   - year: 2026
