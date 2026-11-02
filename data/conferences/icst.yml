@@ -12,6 +12,22 @@ sources:
   - {tier: 2, adapter: researchr, ref: icst-2027, track: Research Papers}
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: icst-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: May 15-19, 2028 (estimated)
+    start_date: 2028-05-15
+    end_date: 2028-05-19
+    milestones:
+      - {kind: submission, date: 2027-11-01, confidence: estimated, derived_from: icst-2027/submission}
+      - {kind: notification, date: 2027-12-21, confidence: estimated, derived_from: icst-2027/notification}
+      - {kind: revision, date: 2028-01-30, confidence: estimated, derived_from: icst-2027/revision}
+      - {kind: final_notification, date: 2028-02-19, confidence: estimated, derived_from: icst-2027/final_notification}
+      - {kind: camera_ready, date: 2028-03-16, confidence: estimated, derived_from: icst-2027/camera_ready}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: icst-2027
     timezone: AoE
