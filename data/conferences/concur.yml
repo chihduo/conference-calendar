@@ -20,6 +20,7 @@ editions:
       - {kind: notification, date: 2027-06-14, confidence: estimated, derived_from: concur-2026/notification}
       - {kind: camera_ready, date: 2027-06-28, confidence: estimated, derived_from: concur-2026/camera_ready}
       - {kind: registration, confidence: unknown}
+    link: https://www.cs.vu.nl/~wanf/profactivities.html
   - year: 2026
     id: concur-2026
     timezone: AoE
