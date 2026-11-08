@@ -6,7 +6,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "aplas",
@@ -15,7 +15,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "ase",
@@ -24,7 +24,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "atva",
@@ -33,7 +33,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "atva",
@@ -42,7 +42,7 @@
     "reason": "multiple-candidates",
     "severity": "action",
     "detail": "researchr offers 2 dates for \"submission\" (2026-10-15 \"Spotlights Submission\"; 2026-05-21 \"Full papers due\") - not written",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "cav",
@@ -51,7 +51,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "ciaa",
@@ -60,7 +60,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "concur",
@@ -69,7 +69,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "cp",
@@ -78,7 +78,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "cpp",
@@ -87,7 +87,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "csf",
@@ -96,7 +96,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "csl",
@@ -105,7 +105,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "ecai",
@@ -114,7 +114,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "esop",
@@ -123,7 +123,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "fm",
@@ -132,7 +132,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "fmcad",
@@ -141,7 +141,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "fossacs",
@@ -150,7 +150,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "fse",
@@ -159,7 +159,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icalp",
@@ -168,7 +168,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icalp",
@@ -177,7 +177,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "submission (2026-09-15) precedes abstract (2027-02-03)",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icaps",
@@ -186,7 +186,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icfem",
@@ -195,7 +195,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icfp",
@@ -204,7 +204,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "iclp",
@@ -213,7 +213,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "iclr",
@@ -222,7 +222,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icml",
@@ -231,7 +231,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icml",
@@ -239,8 +239,8 @@
     "kind": "abstract",
     "reason": "estimate-unconfirmed",
     "severity": "action",
-    "detail": "estimated 2027-01-23 is 77 day(s) away and still unconfirmed - check the official CFP",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "detail": "estimated 2027-01-23 is 76 day(s) away and still unconfirmed - check the official CFP",
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icml",
@@ -248,8 +248,8 @@
     "kind": "submission",
     "reason": "estimate-unconfirmed",
     "severity": "action",
-    "detail": "estimated 2027-01-28 is 82 day(s) away and still unconfirmed - check the official CFP",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "detail": "estimated 2027-01-28 is 81 day(s) away and still unconfirmed - check the official CFP",
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icse",
@@ -258,7 +258,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "icst",
@@ -267,7 +267,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "ifm",
@@ -276,7 +276,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "ijcai",
@@ -285,7 +285,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "ijcar",
@@ -294,7 +294,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "ijcar",
@@ -302,8 +302,8 @@
     "kind": "abstract",
     "reason": "estimate-unconfirmed",
     "severity": "action",
-    "detail": "estimated 2027-02-05 is 90 day(s) away and still unconfirmed - check the official CFP",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "detail": "estimated 2027-02-05 is 89 day(s) away and still unconfirmed - check the official CFP",
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "issta",
@@ -312,7 +312,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "kr",
@@ -321,7 +321,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "kr",
@@ -330,7 +330,7 @@
     "reason": "guard",
     "severity": "action",
     "detail": "notification (2027-04-12) precedes submission (2027-04-28)",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "lics",
@@ -339,7 +339,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "lics",
@@ -347,8 +347,8 @@
     "kind": "abstract",
     "reason": "estimate-unconfirmed",
     "severity": "action",
-    "detail": "estimated 2027-01-14 is 68 day(s) away and still unconfirmed - check the official CFP",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "detail": "estimated 2027-01-14 is 67 day(s) away and still unconfirmed - check the official CFP",
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "lics",
@@ -356,8 +356,8 @@
     "kind": "submission",
     "reason": "estimate-unconfirmed",
     "severity": "action",
-    "detail": "estimated 2027-01-21 is 75 day(s) away and still unconfirmed - check the official CFP",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "detail": "estimated 2027-01-21 is 74 day(s) away and still unconfirmed - check the official CFP",
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "lpar",
@@ -366,7 +366,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "neurips",
@@ -375,7 +375,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "oopsla",
@@ -384,7 +384,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "pldi",
@@ -393,7 +393,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "popl",
@@ -402,7 +402,16 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
+  },
+  {
+    "conference": "popl",
+    "edition": "popl-2027",
+    "kind": "camera_ready",
+    "reason": "conflict",
+    "severity": "action",
+    "detail": "hand-entered 2026-11-20 vs 2026-11-23 from researchr (3d) - confirm which is right",
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "rv",
@@ -411,7 +420,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "sas",
@@ -420,7 +429,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "sat",
@@ -429,7 +438,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "sefm",
@@ -438,7 +447,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "sp",
@@ -447,7 +456,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "stacs",
@@ -456,7 +465,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "tacas",
@@ -465,7 +474,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "uai",
@@ -474,7 +483,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "vmcai",
@@ -483,7 +492,7 @@
     "reason": "fetch-failed",
     "severity": "action",
     "detail": "wikicfp: fetch failed",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   },
   {
     "conference": "vmcai",
@@ -492,6 +501,6 @@
     "reason": "multiple-candidates",
     "severity": "action",
     "detail": "researchr offers 3 dates for \"artifact_submission\" (2026-10-10 \"Artifact Smoke Test Response\"; 2026-10-07 \"Artifact Smoke Test Notification\"; 2026-09-30 \"Artifact Submission\") - not written",
-    "seen_at": "2026-11-07T10:14:50.279Z"
+    "seen_at": "2026-11-08T10:25:57.726Z"
   }
 ]
