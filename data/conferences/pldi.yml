@@ -6,6 +6,22 @@ sources:
   - {tier: 2, adapter: researchr, ref: pldi-2027, track: PLDI Research Papers}
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: pldi-2028
+    timezone: AoE
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: TBD
+    milestones:
+      - {kind: submission, date: 2027-11-11, confidence: estimated, derived_from: pldi-2027/submission}
+      - {kind: rebuttal_start, date: 2028-02-15, confidence: estimated, derived_from: pldi-2027/rebuttal_start}
+      - {kind: rebuttal_end, date: 2028-02-17, confidence: estimated, derived_from: pldi-2027/rebuttal_end}
+      - {kind: notification, date: 2028-03-02, confidence: estimated, derived_from: pldi-2027/notification}
+      - {kind: revision, date: 2028-03-21, confidence: estimated, derived_from: pldi-2027/revision}
+      - {kind: final_notification, date: 2028-03-30, confidence: estimated, derived_from: pldi-2027/final_notification}
+      - {kind: camera_ready, date: 2028-04-13, confidence: estimated, derived_from: pldi-2027/camera_ready}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: pldi-2027
     timezone: AoE
