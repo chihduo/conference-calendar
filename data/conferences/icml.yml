@@ -15,9 +15,17 @@ editions:
     start_date: 2027-07-05
     end_date: 2027-07-11
     milestones:
-      - {kind: abstract, date: 2027-01-23, confidence: estimated, derived_from: icml-2026/abstract}
-      - {kind: submission, date: 2027-01-28, confidence: estimated, derived_from: icml-2026/submission}
-      - {kind: notification, confidence: unknown}
+      - kind: abstract
+        date: 2027-01-14
+        confidence: announced
+        needs_review: true
+        source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=204226
+      - kind: submission
+        date: 2027-01-22
+        confidence: announced
+        needs_review: true
+        source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=204226
+      - {kind: notification, confidence: announced, date: 2027-06-03, source_url: http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=204226}
       - {kind: camera_ready, confidence: unknown}
       - {kind: registration, confidence: unknown}
     link: https://icml.cc/Conferences/2027
