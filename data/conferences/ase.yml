@@ -20,12 +20,18 @@ editions:
     dates: Oct 11-15, 2027 (estimated)
     start_date: 2027-10-11
     end_date: 2027-10-15
-    status: estimated
+    status: confirmed
     milestones:
-      - {kind: submission, date: 2027-03-25, confidence: estimated, derived_from: ase-2026/submission}
-      - {kind: notification, date: 2027-06-17, confidence: estimated, derived_from: ase-2026/notification}
-      - {kind: camera_ready, date: 2027-08-02, confidence: estimated, derived_from: ase-2026/camera_ready}
+      - {kind: submission, date: 2027-03-10, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: rebuttal_start, date: 2027-05-12, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: early_rejection_notification, date: 2027-05-12, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: rebuttal_end, date: 2027-05-17, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: notification, date: 2027-06-08, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: revision, date: 2027-07-08, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: final_notification, date: 2027-07-27, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: camera_ready, date: 2027-08-11, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
       - {kind: registration, confidence: unknown}
+    link: https://conf.researchr.org/home/ase-2027
   - year: 2026
     id: ase-2026
     link: https://conf.researchr.org/home/ase-2026
