@@ -11,6 +11,37 @@ sources:
   - {tier: 1, adapter: ccfddl, ref: conference/SC/sp.yml}
   - {tier: 3, adapter: wikicfp}
 editions:
+  - year: 2028
+    id: sp-2028
+    timezone: UTC-12
+    place: TBD
+    status: estimated
+    needs_review: true
+    dates: May 15-18, 2028 (estimated)
+    start_date: 2028-05-15
+    end_date: 2028-05-18
+    milestones:
+      - {kind: abstract_cycle1, date: 2027-06-03, confidence: estimated, derived_from: sp-2027/abstract_cycle1}
+      - {kind: submission_cycle1, date: 2027-06-10, confidence: estimated, derived_from: sp-2027/submission_cycle1}
+      - kind: early_rejection_notification_cycle1
+        date: 2027-07-26
+        confidence: estimated
+        derived_from: sp-2027/early_rejection_notification_cycle1
+      - {kind: rebuttal_start_cycle1, date: 2027-08-19, confidence: estimated, derived_from: sp-2027/rebuttal_start_cycle1}
+      - {kind: rebuttal_end_cycle1, date: 2027-08-26, confidence: estimated, derived_from: sp-2027/rebuttal_end_cycle1}
+      - {kind: notification_cycle1, date: 2027-09-10, confidence: estimated, derived_from: sp-2027/notification_cycle1}
+      - {kind: camera_ready_cycle1, date: 2027-10-15, confidence: estimated, derived_from: sp-2027/camera_ready_cycle1}
+      - {kind: abstract_cycle2, date: 2027-11-09, confidence: estimated, derived_from: sp-2027/abstract_cycle2}
+      - {kind: submission_cycle2, date: 2027-11-16, confidence: estimated, derived_from: sp-2027/submission_cycle2}
+      - kind: early_rejection_notification_cycle2
+        date: 2028-01-17
+        confidence: estimated
+        derived_from: sp-2027/early_rejection_notification_cycle2
+      - {kind: rebuttal_start_cycle2, date: 2028-02-10, confidence: estimated, derived_from: sp-2027/rebuttal_start_cycle2}
+      - {kind: rebuttal_end_cycle2, date: 2028-02-15, confidence: estimated, derived_from: sp-2027/rebuttal_end_cycle2}
+      - {kind: notification_cycle2, date: 2028-03-03, confidence: estimated, derived_from: sp-2027/notification_cycle2}
+      - {kind: camera_ready_cycle2, date: 2028-04-06, confidence: estimated, derived_from: sp-2027/camera_ready_cycle2}
+      - {kind: registration, confidence: unknown}
   - year: 2027
     id: sp-2027
     timezone: UTC-12
