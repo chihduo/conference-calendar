@@ -23,10 +23,10 @@ editions:
     status: confirmed
     milestones:
       - {kind: submission, date: 2027-03-10, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
-      - {kind: rebuttal_start, date: 2027-05-12, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
-      - {kind: early_rejection_notification, date: 2027-05-12, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
-      - {kind: rebuttal_end, date: 2027-05-17, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
-      - {kind: notification, date: 2027-06-08, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: rebuttal_start, date: 2027-05-19, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: early_rejection_notification, date: 2027-05-19, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: rebuttal_end, date: 2027-05-24, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
+      - {kind: notification, date: 2027-06-10, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
       - {kind: revision, date: 2027-07-08, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
       - {kind: final_notification, date: 2027-07-27, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
       - {kind: camera_ready, date: 2027-08-11, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
