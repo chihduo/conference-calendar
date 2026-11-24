@@ -22,6 +22,7 @@ editions:
     end_date: 2027-10-15
     status: confirmed
     milestones:
+      - {kind: abstract, date: 2027-03-04, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
       - {kind: submission, date: 2027-03-10, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
       - {kind: rebuttal_start, date: 2027-05-19, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
       - {kind: early_rejection_notification, date: 2027-05-19, confidence: confirmed, source_url: https://conf.researchr.org/dates/ase-2027}
